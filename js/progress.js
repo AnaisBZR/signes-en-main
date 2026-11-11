@@ -91,10 +91,12 @@ const Progression = {
 };
 
 // Réglages de l'apprenant, rangés à part : « Réinitialiser ma progression » ne les efface pas.
-//  - gaucher : vidéos et photos retournées comme dans un miroir, directions inversées.
+//  - gaucher : vidéos et photos retournées comme dans un miroir, directions inversées ;
+//  - theme : « clair » (par défaut), « sombre » (gris-vert doux) ou « auto » (comme l'appareil).
 const Reglages = {
   CLE: "lsf-reglages",
-  DEFAUT: { gaucher: false },
+  DEFAUT: { gaucher: false, theme: "clair" },
+  THEMES: ["clair", "sombre", "auto"],
   lire() {
     try { return { ...this.DEFAUT, ...JSON.parse(localStorage.getItem(this.CLE) || "{}") }; }
     catch { return { ...this.DEFAUT }; }
@@ -105,7 +107,8 @@ const Reglages = {
     try { localStorage.setItem(this.CLE, JSON.stringify(r)); } catch { /* navigation privée */ }
     return r;
   },
-  get gaucher() { return !!this.lire().gaucher; }
+  get gaucher() { return !!this.lire().gaucher; },
+  get theme() { const t = this.lire().theme; return this.THEMES.includes(t) ? t : "clair"; }
 };
 
 // Sauvegarde : la progression ne vit que dans ce navigateur. Pour ne pas la perdre (historique
@@ -164,7 +167,10 @@ const Sauvegarde = {
     const s = this.verifier(sauvegarde);
     const p = mode === "remplacer" ? s.progression : this.fusionner(Progression.lire(), s.progression);
     Progression.sauver(p);
-    if (mode === "remplacer") Reglages.changer("gaucher", !!s.reglages.gaucher);
+    if (mode === "remplacer") {
+      Reglages.changer("gaucher", !!s.reglages.gaucher);
+      if (Reglages.THEMES.includes(s.reglages.theme)) Reglages.changer("theme", s.reglages.theme);
+    }
     return p;
   },
 

@@ -59,7 +59,7 @@ function pageDictionnaire(param) {
     </div>
     <div class="recherche">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-      <input id="champ-recherche" type="search" placeholder="Chercher un mot ou une catégorie (ex. : bonjour, animaux…)" value="${echapper(etat.q)}" autocomplete="off">
+      <input id="champ-recherche" type="search" aria-label="Chercher un mot ou une catégorie" placeholder="Chercher un mot ou une catégorie (ex. : bonjour, animaux…)" value="${echapper(etat.q)}" autocomplete="off">
     </div>
     <div class="puces" id="puces">
       <button class="puce" data-cat="">Toutes</button>
@@ -180,14 +180,26 @@ const boutonGaucher = (classe = "") => `
   <button class="btn-gaucher ${classe}" aria-pressed="${Reglages.gaucher}"
     title="Retourner les vidéos comme dans un miroir, pour signer de la main gauche">Mode gaucher</button>`;
 
-/** Lecteur vidéo réutilisable (vraie vidéo LSF + crédits). */
-function htmlVideo(v, { autoplay = true } = {}) {
+/**
+ * Sources d'une vidéo Wikimedia : l'original (WebM), puis la version MP4 que Wikimedia
+ * fabrique automatiquement, pour les iPhone et iPad qui lisent mal le WebM.
+ * Le navigateur prend la première qu'il sait lire ; si aucune ne marche, voir videoEnPanne().
+ */
+function sourcesVideo(url) {
+  const m = url.match(/^(https:\/\/upload\.wikimedia\.org\/wikipedia\/commons)\/(\w\/\w\w\/([^/?#]+))$/);
+  const mp4 = m ? `${m[1]}/transcoded/${m[2]}/${m[3]}.360p.mpeg4.mov` : "";
+  return `<source src="${echapper(url)}" type="video/webm">${mp4 ? `<source src="${echapper(mp4)}" type="video/mp4">` : ""}`;
+}
+
+/** Lecteur vidéo réutilisable (vraie vidéo LSF + crédits). label : ce que lit un lecteur d'écran. */
+function htmlVideo(v, { autoplay = true, label = "Vidéo du signe" } = {}) {
   // En mode gaucher, l'image est retournée : les commandes du navigateur le seraient aussi
   // (barre de temps à l'envers), on les remplace donc par les nôtres (.video-lecture).
   const gaucher = Reglages.gaucher;
   return `
     <div class="video-lsf">
-      <video src="${echapper(v.url)}" ${autoplay ? "autoplay" : ""} muted loop playsinline ${gaucher ? "" : "controls"} preload="metadata"></video>
+      <video ${autoplay ? "autoplay" : ""} muted loop playsinline ${gaucher ? "" : "controls"} preload="metadata"
+        aria-label="${echapper(label)}" data-page="${echapper(v.page)}">${sourcesVideo(v.url)}</video>
       <div class="video-barre">
         <div class="video-lecture">
           <button class="lire" aria-label="Pause">❚❚</button>
@@ -266,7 +278,7 @@ function pageMot(k) {
       </div>` : ""}`;
 
   const zone = document.getElementById("zone-video");
-  const montrer = n => { zone.innerHTML = htmlVideo(e.videos[n]); brancherVitesses(zone); };
+  const montrer = n => { zone.innerHTML = htmlVideo(e.videos[n], { label: `Vidéo du signe « ${e.mot} »` }); brancherVitesses(zone); };
   montrer(0);
   app.querySelectorAll(".signeurs .puce").forEach(b => (b.onclick = () => {
     app.querySelectorAll(".signeurs .puce").forEach(x => x.classList.toggle("actif", x === b));

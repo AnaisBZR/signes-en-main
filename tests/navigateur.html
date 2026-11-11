@@ -53,7 +53,7 @@
       try {
         // On ne télécharge pas les vidéos pendant le test (des centaines de chargements inutiles) :
         // leur adresse est retirée dès qu'elles apparaissent, avant que le navigateur ne la lise.
-        new w.MutationObserver(() => w.document.querySelectorAll("video[src]").forEach(v => { v.dataset.src = v.getAttribute("src"); v.removeAttribute("src"); }))
+        new w.MutationObserver(() => w.document.querySelectorAll("video[src], video source[src]").forEach(v => { v.dataset.src = v.getAttribute("src"); v.removeAttribute("src"); }))
           .observe(w.document.body, { childList: true, subtree: true });
 
         const T = w.eval("THEMES"), D = w.eval("Dico");

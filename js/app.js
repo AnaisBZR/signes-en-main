@@ -51,6 +51,8 @@ function majCompteurs() {
  * On met à jour la page en place, sans la recharger (un quiz en cours n'est pas perdu).
  */
 function appliquerReglages() {
+  document.documentElement.dataset.theme = Reglages.theme;
+  document.querySelectorAll('input[name="theme"]').forEach(r => (r.checked = r.value === Reglages.theme));
   const gaucher = Reglages.gaucher;
   document.documentElement.classList.toggle("gaucher", gaucher);
   document.querySelectorAll(".btn-gaucher").forEach(b => b.setAttribute("aria-pressed", gaucher));
@@ -65,13 +67,53 @@ function basculerGaucher() {
 document.addEventListener("click", ev => { if (ev.target.closest(".btn-gaucher")) basculerGaucher(); });
 appliquerReglages();
 
+/**
+ * Vidéo qui ne charge pas (coupure réseau, fichier retiré…) : au lieu d'un cadre vide,
+ * on explique et on propose de réessayer. L'erreur arrive sur la dernière <source>
+ * quand le navigateur a essayé toutes les versions (WebM puis MP4).
+ */
+document.addEventListener("error", ev => {
+  const s = ev.target;
+  if (s.tagName === "SOURCE" && s === s.parentElement?.lastElementChild) videoEnPanne(s.parentElement);
+}, true);
+
+function videoEnPanne(video) {
+  if (video.previousElementSibling?.classList.contains("video-erreur")) return;
+  const panne = document.createElement("div");
+  panne.className = "video-erreur";
+  panne.setAttribute("role", "alert");
+  const petite = !!video.closest(".choix-video");
+  panne.innerHTML = petite ? "<span>Vidéo indisponible</span>" : `
+    <strong>La vidéo n'a pas pu se charger.</strong>
+    <span>${navigator.onLine ? "La connexion est peut-être lente, ou la vidéo momentanément indisponible." : "Vous semblez hors ligne : vérifiez votre connexion internet."}</span>
+    <div class="hero-actions">
+      <button class="btn">Réessayer</button>
+      ${video.dataset.page ? `<a class="btn btn-second" href="${echapper(video.dataset.page)}" target="_blank" rel="noopener">Voir sur Wikimedia Commons</a>` : ""}
+    </div>`;
+  video.hidden = true;
+  video.before(panne);
+  panne.querySelector("button")?.addEventListener("click", () => { panne.remove(); video.hidden = false; video.load(); });
+}
+
+// Bandeau « hors ligne » : les vidéos viennent d'internet, mais la progression reste enregistrée.
+function majHorsLigne() {
+  const b = document.getElementById("hors-ligne");
+  if (b) b.hidden = navigator.onLine;
+}
+window.addEventListener("online", () => {
+  majHorsLigne();
+  document.querySelectorAll(".video-erreur .btn:not(a)").forEach(b => b.click()); // la connexion revient : on relance
+});
+window.addEventListener("offline", majHorsLigne);
+majHorsLigne();
+
 /** Thème à travailler ensuite : le premier qui n'est pas entièrement appris. */
 const themeSuivant = () => THEMES.find(t => t.entrees.some(e => !Progression.estAppris(e.k))) || THEMES[0];
 const nbAppris = t => t.entrees.filter(e => Progression.estAppris(e.k)).length;
 const icone = nom => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONES[nom] || ""}</svg>`;
 
 /** Petite vidéo muette en boucle (quiz « choisis la bonne vidéo », vignettes). */
-const miniVideo = (v, autres = "") => `<video src="${echapper(v.url)}" muted loop playsinline autoplay preload="auto" ${autres}></video>`;
+const miniVideo = (v, autres = "") => `<video muted loop playsinline autoplay preload="auto" data-page="${echapper(v.page)}" ${autres}>${sourcesVideo(v.url)}</video>`;
 
 // ---------------------------------------------------------------------
 // Accueil
@@ -137,7 +179,7 @@ function pageAccueil() {
     </section>`;
   if (bonjour) {
     const zone = document.getElementById("video-accueil");
-    zone.innerHTML = htmlVideo(bonjour.videos[0]);
+    zone.innerHTML = htmlVideo(bonjour.videos[0], { label: "Vidéo du signe « Bonjour »" });
     brancherVitesses(zone);
   }
 }
@@ -268,7 +310,7 @@ function pageSigne(themeId, k) {
     </div>`;
 
   const zone = document.getElementById("zone-video");
-  const montrer = n => { zone.innerHTML = htmlVideo(e.videos[n]); brancherVitesses(zone); };
+  const montrer = n => { zone.innerHTML = htmlVideo(e.videos[n], { label: `Vidéo du signe « ${e.mot} »` }); brancherVitesses(zone); };
   montrer(0);
   app.querySelectorAll(".signeurs .puce").forEach(b => (b.onclick = () => {
     app.querySelectorAll(".signeurs .puce").forEach(x => x.classList.toggle("actif", x === b));
@@ -342,15 +384,15 @@ function pageQuiz(source) {
           <div id="zone-video"></div>
           <div class="choix">${choix.map(c => `<button class="btn-choix" data-k="${echapper(c.k)}">${echapper(c.mot)}</button>`).join("")}</div>
         </div>
-        <div id="retour-quiz"></div>`;
+        <div id="retour-quiz" role="status" aria-live="polite"></div>`;
       const zone = document.getElementById("zone-video");
-      zone.innerHTML = htmlVideo(q.video);
+      zone.innerHTML = htmlVideo(q.video, { label: "Vidéo du signe à deviner" });
       brancherVitesses(zone);
     } else {
       app.innerHTML = `${entete}
         <p class="consigne">Quelle vidéo montre « <strong>${echapper(q.e.mot)}</strong> » ?</p>
-        <div class="choix-videos">${choix.map(c => `<button class="choix-video" data-k="${echapper(c.k)}">${miniVideo(auHasard(c.videos))}</button>`).join("")}</div>
-        <div id="retour-quiz"></div>`;
+        <div class="choix-videos">${choix.map((c, i) => `<button class="choix-video" data-k="${echapper(c.k)}" aria-label="Vidéo ${i + 1}">${miniVideo(auHasard(c.videos))}</button>`).join("")}</div>
+        <div id="retour-quiz" role="status" aria-live="polite"></div>`;
     }
     app.querySelectorAll("[data-k]").forEach(b => (b.onclick = () => {
       const juste = b.dataset.k === q.e.k;
@@ -415,7 +457,8 @@ function htmlBoites(boites) {
 // ---------------------------------------------------------------------
 // Alphabet dactylologique
 // ---------------------------------------------------------------------
-const ALPHA = window.ALPHABET || [];
+// (adresses sans les paramètres de suivi « ?utm_… » ajoutés par Wikimedia)
+const ALPHA = (window.ALPHABET || []).map(a => ({ ...a, image: a.image.split("?")[0] }));
 const lettre = l => ALPHA.find(a => a.lettre === l);
 const sansAccents = s => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toUpperCase();
 
@@ -433,17 +476,25 @@ function pageAlphabet(mode) {
       ${boutonGaucher("btn btn-second")}
     </div>
     <div class="alphabet">${ALPHA.map(a => `
-      <button class="lettre" data-l="${a.lettre}"><img src="${echapper(a.image)}" alt="Lettre ${a.lettre} en LSF" loading="lazy"><strong>${a.lettre}</strong></button>`).join("")}
+      <button class="lettre" data-l="${a.lettre}"><img src="${echapper(a.image)}" alt="Lettre ${a.lettre} en LSF" loading="lazy" decoding="async" width="200" height="150"><strong>${a.lettre}</strong></button>`).join("")}
     </div>
     <p class="credits">Photos : Wikimedia Commons (${[...new Set(ALPHA.map(a => a.auteur))].map(echapper).join(", ")}), licence CC BY-SA 3.0.</p>
     <div class="zoom" id="zoom" hidden></div>`;
   const zoom = document.getElementById("zoom");
   app.querySelectorAll(".lettre").forEach(b => (b.onclick = () => {
     const a = lettre(b.dataset.l);
-    zoom.innerHTML = `<div class="zoom-carte"><img src="${echapper(a.image.replace(/\/\d+px-/, "/640px-"))}" alt=""><strong>${a.lettre}</strong><a href="${echapper(a.page)}" target="_blank" rel="noopener" class="petit">Source</a></div>`;
+    zoom.innerHTML = `<div class="zoom-carte" role="dialog" aria-modal="true" aria-label="Lettre ${a.lettre}"><img src="${echapper(a.image)}" alt="Lettre ${a.lettre} en LSF"><strong>${a.lettre}</strong><a href="${echapper(a.page)}" target="_blank" rel="noopener" class="petit">Source</a>
+      <button class="btn btn-second" id="fermer-zoom">Fermer</button></div>`;
     zoom.hidden = false;
+    document.getElementById("fermer-zoom").focus();
+    zoom.dataset.depuis = a.lettre;
   }));
-  zoom.onclick = () => (zoom.hidden = true);
+  const fermer = () => {
+    zoom.hidden = true;
+    app.querySelector(`.lettre[data-l="${zoom.dataset.depuis}"]`)?.focus();
+  };
+  zoom.onclick = ev => { if (!ev.target.closest("a")) fermer(); };
+  zoom.onkeydown = ev => { if (ev.key === "Escape") fermer(); };
 }
 
 function quizAlphabet() {
@@ -466,10 +517,10 @@ function quizAlphabet() {
       <span class="surtitre">Quiz des lettres</span>
       <p class="consigne">Quelle lettre est représentée ?</p>
       <div class="quiz">
-        <div class="lettre-grande"><img src="${echapper(q.image.replace(/\/\d+px-/, "/640px-"))}" alt=""></div>
+        <div class="lettre-grande"><img src="${echapper(q.image)}" alt="Lettre de l'alphabet à deviner" width="200" height="150"></div>
         <div class="choix choix-lettres">${choix.map(c => `<button class="btn-choix" data-l="${c.lettre}">${c.lettre}</button>`).join("")}</div>
       </div>
-      <div id="retour-quiz"></div>`;
+      <div id="retour-quiz" role="status" aria-live="polite"></div>`;
     app.querySelectorAll("[data-l]").forEach(b => (b.onclick = () => {
       const juste = b.dataset.l === q.lettre;
       if (juste) score++;
@@ -503,7 +554,7 @@ function exerciceEpeler() {
         <button class="btn btn-second" id="lent">Plus lent</button>
       </div>
       <form class="reponse-epeler" id="form-epeler">
-        <input id="saisie" autocomplete="off" placeholder="Tapez le mot…" required>
+        <input id="saisie" autocomplete="off" placeholder="Tapez le mot…" aria-label="Le mot épelé" required>
         <button class="btn" type="submit">Vérifier</button>
       </form>
       <p id="resultat-epeler"></p>
@@ -515,7 +566,7 @@ function exerciceEpeler() {
     const etape = () => {
       app.querySelectorAll(".pastilles span").forEach(p => p.classList.toggle("actif", +p.dataset.i === i));
       if (i >= lettres.length) { zone.innerHTML = `<span class="fin-mot">?</span>`; return; }
-      zone.innerHTML = `<img src="${echapper(lettre(lettres[i]).image.replace(/\/\d+px-/, "/640px-"))}" alt="">`;
+      zone.innerHTML = `<img src="${echapper(lettre(lettres[i]).image)}" alt="Lettre ${i + 1} sur ${lettres.length}" width="200" height="150">`;
       i++;
       minuteurEpeler = setTimeout(etape, vitesse);
     };
@@ -563,10 +614,19 @@ function pageProgression() {
         <span class="petit">Les vidéos et les photos sont retournées comme dans un miroir : vous voyez les signes faits avec la main gauche.
         Les directions des descriptions (« vers votre droite ») sont inversées aussi.</span></span>
     </label>
+    <fieldset class="reglage reglage-theme">
+      <legend><strong>Apparence</strong></legend>
+      <div class="choix-theme">
+        ${[["clair", "Clair"], ["sombre", "Sombre doux"], ["auto", "Comme l'appareil"]].map(([v, nom]) => `
+          <label><input type="radio" name="theme" value="${v}" ${Reglages.theme === v ? "checked" : ""}><span>${nom}</span></label>`).join("")}
+      </div>
+      <span class="petit">« Sombre doux » : un gris-vert reposant pour le soir, sans noir pur.</span>
+    </fieldset>
     <h2 id="sauvegarde">Sauvegarde</h2>
     ${htmlSauvegarde()}
     <button class="btn btn-second" id="reset">Réinitialiser ma progression</button>`;
   document.getElementById("opt-gaucher").onchange = basculerGaucher;
+  app.querySelectorAll('input[name="theme"]').forEach(r => (r.onchange = () => { Reglages.changer("theme", r.value); appliquerReglages(); }));
   brancherSauvegarde();
   if (location.hash.endsWith("/sauvegarde")) document.getElementById("sauvegarde").scrollIntoView();
   document.getElementById("reset").onclick = () => {
@@ -675,13 +735,39 @@ function page404() {
 // ---------------------------------------------------------------------
 // Routeur
 // ---------------------------------------------------------------------
+let premiereVisite = true;
 function route() {
   clearTimeout(minuteurEpeler);
   const [, page, p1, p2] = (location.hash || "#/").slice(1).split("/");
   const rubrique = { theme: "lecons", signe: "lecons", mot: "dictionnaire", quiz: "reviser" }[page] || page || "";
-  document.querySelectorAll(".topbar nav a").forEach(a => a.classList.toggle("actif", a.getAttribute("href") === "#/" + rubrique));
+  document.querySelectorAll(".topbar nav a").forEach(a => {
+    const ici = a.getAttribute("href") === "#/" + rubrique;
+    a.classList.toggle("actif", ici);
+    if (ici) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
+  });
   window.scrollTo(0, 0);
   majCompteurs();
+  afficherPage(page, p1, p2);
+  annoncerPage(!premiereVisite);
+  premiereVisite = false;
+}
+
+/**
+ * Après chaque changement de page : titre de l'onglet, et (sauf au premier chargement)
+ * focus sur le titre de la page, pour que les lecteurs d'écran et la navigation au
+ * clavier repartent du début du nouveau contenu.
+ */
+function annoncerPage(deplacerFocus) {
+  const h1 = app.querySelector("h1"), sur = app.querySelector(".surtitre");
+  const nom = (h1 && !h1.closest(".hero") ? h1.textContent : "") || (app.querySelector(".quiz-tete") && sur ? sur.textContent : "");
+  document.title = nom.trim() ? `${nom.trim()} · Signes en main` : "Signes en main";
+  if (!deplacerFocus) return;
+  const cible = h1 || app;
+  cible.setAttribute("tabindex", "-1");
+  cible.focus({ preventScroll: true });
+}
+
+function afficherPage(page, p1, p2) {
   switch (page) {
     case "": case undefined: return pageAccueil();
     case "lecons": return pageLecons();

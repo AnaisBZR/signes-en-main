@@ -4,15 +4,23 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Signes en main</title>
+  <meta name="description" content="Apprendre la Langue des Signes Française (LSF) avec de vraies vidéos de personnes qui signent : leçons, quiz, révisions et dictionnaire.">
+  <meta name="theme-color" content="#f5f3ee">
+  <script>
+    // Apparence choisie (clair / sombre doux / auto), appliquée avant l'affichage pour éviter un éclair blanc
+    try { document.documentElement.dataset.theme = JSON.parse(localStorage.getItem("lsf-reglages") || "{}").theme || "clair"; } catch (e) {}
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=4614ccb3">
+  <link rel="stylesheet" href="css/style.css?v=799c48a2">
 </head>
 <body>
+  <a class="lien-evitement" href="#app" onclick="event.preventDefault(); const h = document.querySelector('#app h1') || document.getElementById('app'); h.setAttribute('tabindex', '-1'); h.focus();">Aller au contenu</a>
+  <div class="bandeau-hors-ligne" id="hors-ligne" role="status" hidden>Vous êtes hors ligne : les vidéos ne peuvent pas se charger. Votre progression, elle, reste bien enregistrée.</div>
   <header class="topbar">
     <a href="#/" class="logo"><span class="logo-mark">S</span>Signes en main</a>
-    <nav>
+    <nav aria-label="Navigation principale">
       <a href="#/">Accueil</a>
       <a href="#/lecons">Leçons</a>
       <a href="#/alphabet">Alphabet</a>
@@ -20,7 +28,7 @@
       <a href="#/reviser">Réviser</a>
       <a href="#/progression">Progression</a>
     </nav>
-    <div class="compteurs" id="compteurs"></div>
+    <div class="compteurs" id="compteurs" role="group" aria-label="Ma progression"></div>
   </header>
 
   <main id="app"></main>
@@ -32,12 +40,12 @@
 
   <!-- Pas de modules : le site s'ouvre aussi en double-cliquant sur index.html (vidéos lues en ligne) -->
   <script src="js/data.js?v=5a6aa943"></script>
-  <script src="js/progress.js?v=20ba675c"></script>
+  <script src="js/progress.js?v=0dd97e8f"></script>
   <script src="js/dictionnaire.js?v=caa1ed23"></script>
   <script src="js/alphabet.js?v=194b3d35"></script>
   <script src="js/descriptions.js?v=2bc87ac4"></script>
-  <script src="js/page-dictionnaire.js?v=ac47c98c"></script>
-  <script src="js/app.js?v=de2644fc"></script>
+  <script src="js/page-dictionnaire.js?v=533ef41e"></script>
+  <script src="js/app.js?v=79c65507"></script>
   <script>
     // Si les fichiers du site n'ont pas pu être chargés (page ouverte en « aperçu » dans un
     // autre logiciel), on explique comment l'ouvrir au lieu d'afficher une page blanche.
