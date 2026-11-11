@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Signes en main</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css?v=4365ed8b">
+</head>
+<body>
+  <header class="topbar">
+    <a href="#/" class="logo"><span class="logo-mark">S</span>Signes en main</a>
+    <nav>
+      <a href="#/">Accueil</a>
+      <a href="#/lecons">Leçons</a>
+      <a href="#/alphabet">Alphabet</a>
+      <a href="#/dictionnaire">Dictionnaire</a>
+      <a href="#/reviser">Réviser</a>
+      <a href="#/progression">Progression</a>
+    </nav>
+    <div class="compteurs" id="compteurs"></div>
+  </header>
+
+  <main id="app"></main>
+
+  <footer class="footer">
+    Apprendre la Langue des Signes Française (LSF) · Vidéos de signeurs sous licences libres (Wikimedia Commons :
+    Lingua Libre, Elix, Laura Jauvert…) · <a href="studio/">Studio 3D (expérimental)</a>
+  </footer>
+
+  <!-- Pas de modules : le site s'ouvre aussi en double-cliquant sur index.html (vidéos lues en ligne) -->
+  <script src="js/data.js?v=5a6aa943"></script>
+  <script src="js/progress.js?v=5d9111af"></script>
+  <script src="js/dictionnaire.js?v=caa1ed23"></script>
+  <script src="js/alphabet.js?v=194b3d35"></script>
+  <script src="js/descriptions.js?v=2bc87ac4"></script>
+  <script src="js/page-dictionnaire.js?v=43521cba"></script>
+  <script src="js/app.js?v=9f82012e"></script>
+  <script>
+    // Si les fichiers du site n'ont pas pu être chargés (page ouverte en « aperçu » dans un
+    // autre logiciel), on explique comment l'ouvrir au lieu d'afficher une page blanche.
+    if (typeof route === "undefined") {
+      document.getElementById("app").innerHTML =
+        '<div style="max-width:560px;margin:40px auto;padding:24px;border:2px solid #5b6ee1;border-radius:16px;font-family:system-ui,sans-serif;line-height:1.5">' +
+        '<h1 style="margin-top:0">Le site n\'a pas pu se charger</h1>' +
+        '<p>Cette page est ouverte dans un aperçu qui ne charge pas les fichiers du site.</p>' +
+        '<p><strong>Pour l\'ouvrir :</strong> dans le dossier du projet, double-cliquez sur <strong>« Ouvrir le site.bat »</strong> ' +
+        '(ou sur <strong>index.html</strong>) depuis l\'Explorateur de fichiers Windows.</p></div>';
+    }
+  </script>
+</body>
+</html>

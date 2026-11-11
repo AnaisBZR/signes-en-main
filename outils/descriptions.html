@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>Outil – descriptions automatiques</title>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 20px; background: #f6f7fb; color: #1d2333; }
+    video { width: 360px; border-radius: 8px; background: #000; }
+    #journal { font: 12px/1.45 ui-monospace, monospace; white-space: pre-wrap; max-height: 70vh; overflow: auto; background: #fff; padding: 10px; border-radius: 8px; }
+    .ligne { display: flex; gap: 20px; align-items: flex-start; }
+  </style>
+</head>
+<body>
+  <h1>Descriptions automatiques des signes</h1>
+  <p>Paramètres d'adresse : <code>?mots=bonjour,merci</code> (liste), <code>?tout</code> (les signes des leçons), <code>&amp;envoyer</code> (enregistrer les résultats).</p>
+  <div class="ligne">
+    <video id="video" crossorigin="anonymous" muted playsinline></video>
+    <div id="journal"></div>
+  </div>
+  <div id="galerie"></div>
+  <style>.vignettes { margin: 10px 0; font-size: 13px } .vignettes canvas { margin: 4px 4px 0 0; border-radius: 4px }</style>
+
+  <script src="../js/data.js"></script>
+  <script src="../js/dictionnaire.js"></script>
+  <script src="../js/page-dictionnaire.js"></script>
+  <script type="module">
+    // (adresse unique à chaque chargement : jamais de version en cache de l'analyseur)
+    const { decrireVideo } = await import("./decrire.js?t=" + Date.now());
+    const params = new URLSearchParams(location.search);
+    const journal = document.getElementById("journal");
+    const video = document.getElementById("video");
+    const ecrire = t => { journal.textContent += t + "\n"; journal.scrollTop = 1e9; };
+
+    let mots = params.has("tout")
+      ? [...new Set(window.LSF_DATA.themes.flatMap(t => t.mots))]
+      : (params.get("mots") || "bonjour,merci,oui,non").split(",");
+    const debut = +(params.get("depuis") || 0);
+    mots = mots.slice(debut);
+    window.ETAT = { fait: 0, total: mots.length, resultats: {}, fini: false };
+
+    for (const mot of mots) {
+      const e = Dico.trouver(mot);
+      if (!e) { ecrire(`✗ ${mot} : absent du dictionnaire`); continue; }
+      const v = e.videos[0];
+      try {
+        video.src = v.url;
+        await new Promise((ok, ko) => { video.onloadeddata = ok; video.onerror = () => ko(new Error("vidéo illisible")); });
+        const d = await decrireVideo(video, { fps: 12 });
+        const res = { k: e.k, mot: e.mot, video: v.url, ...d };
+        window.ETAT.resultats[e.k] = res;
+        ecrire(`✓ ${e.mot}\n   ${JSON.stringify(d)}`);
+        if (params.has("images") && d.tDebut != null) {
+          // vignettes du début et de la fin du signe, pour vérifier à l'œil
+          const bloc = document.createElement("div");
+          bloc.className = "vignettes";
+          bloc.innerHTML = `<strong>${e.mot}</strong> — ${d.forme} · ${d.emplacement} → ${d.emplacementFin || ""} · ${d.mouvement} · ${(d.visage || []).join(", ")}<br>`;
+          for (const t of [d.tDebut, (d.tDebut + d.tFin) / 2, d.tFin]) {
+            video.currentTime = t;
+            await new Promise(ok => (video.onseeked = ok));
+            const c = document.createElement("canvas");
+            c.width = 160; c.height = Math.round(160 * video.videoHeight / video.videoWidth);
+            c.getContext("2d").drawImage(video, 0, 0, c.width, c.height);
+            bloc.appendChild(c);
+          }
+          document.getElementById("galerie").appendChild(bloc);
+        }
+        if (params.has("envoyer")) {
+          await fetch("http://127.0.0.1:8767/", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(res) });
+        }
+      } catch (err) {
+        ecrire(`✗ ${e.mot} : ${err.message}`);
+        if (params.has("envoyer")) {
+          await fetch("http://127.0.0.1:8767/", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ k: e.k, mot: e.mot, erreur: err.message }) }).catch(() => {});
+        }
+      }
+      window.ETAT.fait++;
+    }
+    window.ETAT.fini = true;
+    ecrire("— terminé —");
+  </script>
+</body>
+</html>

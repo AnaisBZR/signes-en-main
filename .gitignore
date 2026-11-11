@@ -1,0 +1,19 @@
+# Projet séparé, très lourd (environnement Python, modèles d'IA) : non versionné ici
+reel2toon/
+
+# Fichiers produits par les outils (régénérables)
+animateur-video/telechargements/
+__pycache__/
+*.pyc
+.venv/
+
+# Fichiers système
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# Rapport de vérification des vidéos (régénéré à chaque vérification)
+data/verification-videos.txt
+
+# Jeton personnel Hugging Face : secret, ne jamais le versionner ni le publier
+animateur-video/config-ia.json

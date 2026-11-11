@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>Tests du site dans le navigateur</title>
+  <style>
+    body { font: 15px/1.5 system-ui, sans-serif; margin: 24px; background: #f5f3ee; color: #1f2b2f; }
+    h1 { margin: 0 0 4px; }
+    #resume { font-weight: 700; margin: 12px 0; }
+    #resume.ok { color: #226a45; } #resume.ko { color: #9c412d; }
+    #journal { font: 12px/1.5 ui-monospace, monospace; white-space: pre-wrap; background: #fff; padding: 12px; border-radius: 10px; max-height: 50vh; overflow: auto; }
+    iframe { width: 100%; height: 420px; border: 1px solid #e5e0d6; border-radius: 10px; margin-top: 12px; background: #fff; }
+  </style>
+</head>
+<body>
+  <h1>Tests du site dans le navigateur</h1>
+  <p>Ouvre chaque page du site et vérifie qu'elle s'affiche sans erreur. Votre progression est mise de côté pendant le test, puis remise à l'identique.</p>
+  <div id="resume">Test en cours…</div>
+  <div id="journal"></div>
+  <iframe id="site" src="../index.html"></iframe>
+
+  <script>
+    const CLE = "lsf-progression-v2";
+    const journal = document.getElementById("journal");
+    const ecrire = t => { journal.textContent += t + "\n"; journal.scrollTop = 1e9; };
+    const attendre = ms => new Promise(r => setTimeout(r, ms));
+    const cadre = document.getElementById("site");
+    window.RESULTAT = { fini: false, echecs: [], total: 0 };
+
+    function problemesQuiz(t, msg) { RESULTAT.echecs.push({ hash: t.id, problemes: [msg] }); ecrire(`✗ ${t.id} : ${msg}`); }
+
+    async function verifier(hash, controle) {
+      const w = cadre.contentWindow;
+      w.__erreurs = [];
+      w.location.hash = hash;
+      await attendre(120);
+      const doc = w.document, app = doc.getElementById("app");
+      const problemes = [...w.__erreurs];
+      if (!app || app.innerHTML.trim().length < 50) problemes.push("page vide");
+      if (doc.querySelector("#app h1")?.textContent === "Page introuvable") problemes.push("page introuvable (404)");
+      if (controle) { try { const p = controle(doc, w); if (p) problemes.push(p); } catch (e) { problemes.push(e.message); } }
+      RESULTAT.total++;
+      if (problemes.length) { RESULTAT.echecs.push({ hash, problemes }); ecrire(`✗ ${hash} : ${problemes.join(" ; ")}`); }
+      return doc;
+    }
+
+    cadre.addEventListener("load", async () => {
+      const sauvegarde = localStorage.getItem(CLE);
+      localStorage.removeItem(CLE);
+      const w = cadre.contentWindow;
+      w.addEventListener("error", e => (w.__erreurs || []).push(e.message));
+      w.addEventListener("unhandledrejection", e => (w.__erreurs || []).push(String(e.reason)));
+      try {
+        // On ne télécharge pas les vidéos pendant le test (des centaines de chargements inutiles) :
+        // leur adresse est retirée dès qu'elles apparaissent, avant que le navigateur ne la lise.
+        new w.MutationObserver(() => w.document.querySelectorAll("video[src]").forEach(v => { v.dataset.src = v.getAttribute("src"); v.removeAttribute("src"); }))
+          .observe(w.document.body, { childList: true, subtree: true });
+
+        const T = w.eval("THEMES"), D = w.eval("Dico");
+        const pages = ["#/", "#/lecons", "#/alphabet", "#/alphabet/quiz", "#/alphabet/epeler", "#/dictionnaire",
+          "#/dictionnaire/q=bonjour", "#/reviser", "#/progression", "#/quiz/tout"];
+        for (const p of pages) await verifier(p);
+        ecrire(`Pages principales : ${pages.length} vérifiées`);
+
+        for (const t of T) {
+          await verifier(`#/theme/${t.id}`, d => d.querySelectorAll(".ligne-signe").length === t.entrees.length ? null : "liste des signes incomplète");
+          for (const e of t.entrees) await verifier(`#/signe/${t.id}/${encodeURIComponent(e.k)}`, d => d.querySelector("video") ? null : "pas de vidéo");
+        }
+        ecrire(`Thèmes et fiches des leçons vérifiés`);
+
+        // Un quiz complet par thème : on répond à chaque question (la première réponse proposée)
+        for (const t of T) {
+          const d = await verifier(`#/quiz/${t.id}`);
+          for (let i = 0; i < 30 && d.querySelector("#app [data-k]"); i++) {
+            d.querySelector("#app [data-k]:not([disabled])")?.click();
+            await attendre(30);
+            const suite = d.getElementById("suivant");
+            if (!suite) { problemesQuiz(t, "pas de bouton Continuer après une réponse"); break; }
+            suite.click();
+            await attendre(60);
+          }
+          if (!d.querySelector(".score-carte")) { RESULTAT.echecs.push({ hash: `#/quiz/${t.id}`, problemes: ["le quiz ne se termine pas"] }); ecrire(`✗ quiz ${t.id} : ne se termine pas`); }
+        }
+        ecrire(`Quiz des ${T.length} thèmes joués jusqu'au bout`);
+
+        // Toutes les fiches du dictionnaire
+        for (const e of D.entrees) await verifier(`#/mot/${encodeURIComponent(e.k)}`, d => d.querySelector("video") ? null : "pas de vidéo");
+        ecrire(`${D.entrees.length} fiches du dictionnaire vérifiées`);
+
+        // Une adresse inconnue doit afficher la page « introuvable » (et pas une page blanche)
+        w.location.hash = "#/une-page-qui-nexiste-pas"; await attendre(120);
+        if (w.document.querySelector("#app h1")?.textContent !== "Page introuvable") problemesQuiz({ id: "404" }, "pas de page « introuvable »");
+      } catch (e) {
+        RESULTAT.echecs.push({ hash: "(test)", problemes: [e.message] });
+        ecrire("✗ Le test lui-même a planté : " + e.message);
+      } finally {
+        if (sauvegarde === null) localStorage.removeItem(CLE); else localStorage.setItem(CLE, sauvegarde);
+        cadre.contentWindow.location.hash = "#/";
+        RESULTAT.fini = true;
+        const r = document.getElementById("resume");
+        r.className = RESULTAT.echecs.length ? "ko" : "ok";
+        r.textContent = RESULTAT.echecs.length
+          ? `${RESULTAT.echecs.length} problème(s) sur ${RESULTAT.total} pages testées`
+          : `Tout fonctionne : ${RESULTAT.total} pages testées sans erreur.`;
+      }
+    }, { once: true });
+  </script>
+</body>
+</html>
