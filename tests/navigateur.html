@@ -20,7 +20,7 @@
   <iframe id="site" src="../index.html"></iframe>
 
   <script>
-    const CLES = ["lsf-progression-v2", "lsf-reglages", "lsf-derniere-sauvegarde"]; // mises de côté pendant le test
+    const CLES = ["lsf-progression-v2", "lsf-reglages", "lsf-derniere-sauvegarde", "lsf-records"]; // mises de côté pendant le test
     const journal = document.getElementById("journal");
     const ecrire = t => { journal.textContent += t + "\n"; journal.scrollTop = 1e9; };
     const attendre = ms => new Promise(r => setTimeout(r, ms));
@@ -58,7 +58,9 @@
 
         const T = w.eval("THEMES"), D = w.eval("Dico");
         const pages = ["#/", "#/lecons", "#/alphabet", "#/alphabet/quiz", "#/alphabet/epeler", "#/dictionnaire",
-          "#/dictionnaire/q=bonjour", "#/reviser", "#/progression", "#/quiz/tout"];
+          "#/dictionnaire/q=bonjour", "#/reviser", "#/progression", "#/quiz/tout",
+          "#/entrainement", "#/entrainement/sprint/tout", "#/entrainement/paires/famille", "#/entrainement/ecrire/couleurs",
+          "#/entrainement/epeler", "#/entrainement/comprendre", "#/entrainement/construire", "#/entrainement/defi", "#/entrainement/prenom"];
         for (const p of pages) await verifier(p);
         ecrire(`Pages principales : ${pages.length} vérifiées`);
 

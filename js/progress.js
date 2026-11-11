@@ -87,6 +87,64 @@ const Progression = {
     while (jours.has(this.jour(-n))) n++;
     return n;
   },
+  /** Activité sans signe précis (épeler, phrases…) : compte quand même pour la série de jours. */
+  activite() {
+    const p = this.lire();
+    this.noterActivite(p);
+    this.sauver(p);
+  },
+  reinitialiser() {
+    this.sauver(this.vide());
+    if (typeof Records !== "undefined") Records.reinitialiser();
+  }
+};
+
+// Records des exercices (page « S'entraîner ») et défis du jour réussis.
+//  sens « max » : plus c'est haut, mieux c'est ; « min » : plus c'est bas (ex. nombre de coups).
+const Records = {
+  CLE: "lsf-records",
+  SENS: { sprint: "max", paires: "min", ecrire: "max", epeler: "max", comprendre: "max", construire: "max" },
+  vide() { return { meilleurs: {}, defis: {} }; },
+  lire() {
+    try {
+      const r = JSON.parse(localStorage.getItem(this.CLE));
+      return r && r.meilleurs && r.defis ? r : this.vide();
+    } catch { return this.vide(); }
+  },
+  sauver(r) { try { localStorage.setItem(this.CLE, JSON.stringify(r)); } catch { /* navigation privée */ } },
+  meilleur(nom) { return this.lire().meilleurs[nom] ?? null; },
+  /** Enregistre un score ; renvoie true si c'est un nouveau record. */
+  noter(nom, valeur) {
+    const r = this.lire(), ancien = r.meilleurs[nom];
+    const mieux = ancien == null || (this.SENS[nom] === "min" ? valeur < ancien : valeur > ancien);
+    if (mieux) { r.meilleurs[nom] = valeur; this.sauver(r); }
+    return mieux && ancien != null;
+  },
+  defiDuJour() { return this.lire().defis[Progression.jour()] ?? null; },
+  noterDefi(score) {
+    const r = this.lire(), auj = Progression.jour();
+    r.defis[auj] = Math.max(score, r.defis[auj] ?? 0);
+    this.sauver(r);
+  },
+  nbDefis() { return Object.keys(this.lire().defis).length; },
+  /** Fusion de deux jeux de records (sauvegarde) : on garde le meilleur de chaque. */
+  fusionner(a, b) {
+    const r = { meilleurs: { ...a.meilleurs }, defis: { ...a.defis } };
+    for (const [nom, v] of Object.entries(b.meilleurs)) {
+      const x = r.meilleurs[nom];
+      r.meilleurs[nom] = x == null ? v : (this.SENS[nom] === "min" ? Math.min(x, v) : Math.max(x, v));
+    }
+    for (const [j, s] of Object.entries(b.defis)) r.defis[j] = Math.max(s, r.defis[j] ?? 0);
+    return r;
+  },
+  /** Nettoie des records lus dans une sauvegarde. */
+  verifier(r) {
+    const propre = this.vide();
+    if (!r || typeof r !== "object") return propre;
+    for (const [nom, v] of Object.entries(r.meilleurs || {})) if (nom in this.SENS && Number.isFinite(+v) && +v >= 0) propre.meilleurs[nom] = +v;
+    for (const [j, s] of Object.entries(r.defis || {})) if (/^\d{4}-\d{2}-\d{2}$/.test(j) && Number.isFinite(+s)) propre.defis[j] = Math.max(0, Math.min(10, +s));
+    return propre;
+  },
   reinitialiser() { this.sauver(this.vide()); }
 };
 
@@ -123,7 +181,7 @@ const Sauvegarde = {
 
   creer() {
     return { app: this.APP, version: this.VERSION, date: new Date().toISOString(),
-      progression: Progression.lire(), reglages: Reglages.lire() };
+      progression: Progression.lire(), reglages: Reglages.lire(), records: Records.lire() };
   },
   nomFichier() { return `signes-en-main-sauvegarde-${Progression.jour()}.json`; },
 
@@ -143,7 +201,8 @@ const Sauvegarde = {
     const quiz = { bonnes: Math.max(0, +p.quiz?.bonnes || 0), total: Math.max(0, +p.quiz?.total || 0) };
     const jours = [...new Set((Array.isArray(p.jours) ? p.jours : []).filter(j => this.JOUR.test(j)))].sort();
     const reglages = { ...Reglages.DEFAUT, ...(s.reglages && typeof s.reglages === "object" ? s.reglages : {}) };
-    return { app: this.APP, version: this.VERSION, date: s.date, progression: { cartes, quiz, jours }, reglages };
+    return { app: this.APP, version: this.VERSION, date: s.date, progression: { cartes, quiz, jours }, reglages,
+      records: Records.verifier(s.records) };
   },
 
   /**
@@ -167,6 +226,7 @@ const Sauvegarde = {
     const s = this.verifier(sauvegarde);
     const p = mode === "remplacer" ? s.progression : this.fusionner(Progression.lire(), s.progression);
     Progression.sauver(p);
+    Records.sauver(mode === "remplacer" ? s.records : Records.fusionner(Records.lire(), s.records));
     if (mode === "remplacer") {
       Reglages.changer("gaucher", !!s.reglages.gaucher);
       if (Reglages.THEMES.includes(s.reglages.theme)) Reglages.changer("theme", s.reglages.theme);

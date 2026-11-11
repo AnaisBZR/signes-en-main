@@ -10,7 +10,9 @@ window.DESCRIPTIONS = {
 "taillePx": 80,
 "emplacement": "au niveau du menton",
 "emplacementFin": "devant la poitrine",
-"mouvement": "vers le bas"
+"mouvement": "vers le bas",
+"tDebut": 1.17,
+"tFin": 1.83
 },
 "salut": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/9/94/LL-Q33302_%28fsl%29-Taliba31-salut.webm",
@@ -24,7 +26,9 @@ window.DESCRIPTIONS = {
 "mouvement": "la main reste presque immobile (signe tenu)",
 "visage": [
 "sourcils levés"
-]
+],
+"tDebut": 1,
+"tFin": 1.33
 },
 "au revoir": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/b/b0/LL-Q33302_%28fsl%29-Hugo_en_r%C3%A9sidence-au_revoir.webm",
@@ -35,7 +39,9 @@ window.DESCRIPTIONS = {
 "taillePx": 68,
 "emplacement": "à côté du visage (joue)",
 "emplacementFin": "à côté du visage (joue)",
-"mouvement": "la main reste presque immobile (signe tenu)"
+"mouvement": "la main reste presque immobile (signe tenu)",
+"tDebut": 0.92,
+"tFin": 1.75
 },
 "a bientot": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/c/cb/LL-Q33302_%28fsl%29-Laura_Jauvert-%C3%80_bient%C3%B4t.webm",
@@ -48,7 +54,9 @@ window.DESCRIPTIONS = {
 "emplacement": "au niveau du nez",
 "emplacementFin": "au niveau du menton",
 "mouvement": "la main reste presque immobile (signe tenu)",
-"deuxMains": "l'autre main reste immobile, elle sert de base"
+"deuxMains": "l'autre main reste immobile, elle sert de base",
+"tDebut": 0.25,
+"tFin": 0.67
 },
 "bonsoir": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/0/00/LL-Q33302_%28fsl%29-Laura_Jauvert-Bonsoir.webm",
@@ -62,7 +70,9 @@ window.DESCRIPTIONS = {
 "mouvement": "vers le bas",
 "visage": [
 "la bouche articule le mot"
-]
+],
+"tDebut": 1.5,
+"tFin": 2.33
 },
 "bonne journee": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/c/c2/LL-Q33302_%28fsl%29-Laura_Jauvert-Bonne_journ%C3%A9e.webm",
@@ -78,7 +88,9 @@ window.DESCRIPTIONS = {
 "deuxMains": "les deux mains bougent",
 "visage": [
 "la bouche articule le mot"
-]
+],
+"tDebut": 1.5,
+"tFin": 3.25
 },
 "ca va": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/5/53/LL-Q33302_%28fsl%29-Laura_Jauvert-%C3%87a_va.webm",
@@ -94,7 +106,9 @@ window.DESCRIPTIONS = {
 "deuxMains": "l'autre main reste immobile, elle sert de base",
 "visage": [
 "la bouche articule le mot"
-]
+],
+"tDebut": 1.83,
+"tFin": 2.25
 },
 "merci": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/f/f1/LL-Q33302_%28fsl%29-Hugo_en_r%C3%A9sidence-merci.webm",
@@ -110,7 +124,9 @@ window.DESCRIPTIONS = {
 "sourire",
 "sourcils froncés",
 "yeux plissés"
-]
+],
+"tDebut": 1.08,
+"tFin": 1.83
 },
 "s'il vous plait": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/5/57/LL-Q33302_%28fsl%29-Hugo_en_r%C3%A9sidence-s%27il_vous_plait.webm",
@@ -124,7 +140,9 @@ window.DESCRIPTIONS = {
 "mouvement": "vers le bas",
 "visage": [
 "sourcils levés"
-]
+],
+"tDebut": 1.08,
+"tFin": 1.83
 },
 "de rien": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/c/c4/LL-Q33302_%28fsl%29-Hugo_en_r%C3%A9sidence-de_rien.webm",
@@ -135,7 +153,9 @@ window.DESCRIPTIONS = {
 "taillePx": 67,
 "emplacement": "au niveau du menton",
 "emplacementFin": "au niveau des épaules",
-"mouvement": "vers le bas"
+"mouvement": "vers le bas",
+"tDebut": 0.92,
+"tFin": 1.58
 },
 "pardon": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/d/dd/LL-Q33302_%28fsl%29-Hugo_en_r%C3%A9sidence-pardon.webm",
@@ -151,7 +171,9 @@ window.DESCRIPTIONS = {
 "deuxMains": "les deux mains bougent",
 "visage": [
 "la bouche articule le mot"
-]
+],
+"tDebut": 0.92,
+"tFin": 2.08
 },
 "bon appetit": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/7/75/LL-Q33302_%28fsl%29-Laura_Jauvert-Bon_app%C3%A9tit.webm",
@@ -164,7 +186,9 @@ window.DESCRIPTIONS = {
 "emplacement": "à hauteur de la taille",
 "emplacementFin": "à hauteur de la taille",
 "mouvement": "la main reste presque immobile (signe tenu)",
-"deuxMains": "l'autre main reste immobile, elle sert de base"
+"deuxMains": "l'autre main reste immobile, elle sert de base",
+"tDebut": 0.83,
+"tFin": 1.33
 },
 "moi": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/a/a2/LL-Q33302_%28fsl%29-Laura_Jauvert-Moi.webm",
@@ -178,7 +202,9 @@ window.DESCRIPTIONS = {
 "visage": [
 "la bouche articule le mot",
 "yeux plissés"
-]
+],
+"tDebut": 0,
+"tFin": 0.25
 },
 "toi": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/f/ff/LL-Q33302_%28fsl%29-Laura_Jauvert-Toi.webm",
@@ -192,7 +218,9 @@ window.DESCRIPTIONS = {
 "mouvement": "la main reste presque immobile (signe tenu)",
 "visage": [
 "la bouche articule le mot"
-]
+],
+"tDebut": 0,
+"tFin": 0.75
 },
 "prenom": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/f/f5/LL-Q33302_%28fsl%29-Laura_Jauvert-Pr%C3%A9nom.webm",
@@ -208,7 +236,9 @@ window.DESCRIPTIONS = {
 "deuxMains": "l'autre main reste immobile, elle sert de base",
 "visage": [
 "la bouche articule le mot"
-]
+],
+"tDebut": 1.42,
+"tFin": 2.75
 },
 "non": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/9/94/LL-Q33302_%28fsl%29-Laura_Jauvert-Non.webm",
@@ -223,7 +253,9 @@ window.DESCRIPTIONS = {
 "visage": [
 "la bouche articule le mot",
 "sourcils levés"
-]
+],
+"tDebut": 1.58,
+"tFin": 3.08
 },
 "je suis d'accord": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/f/fc/LL-Q33302_%28fsl%29-Laura_Jauvert-Je_suis_d%27accord.webm",
@@ -236,7 +268,9 @@ window.DESCRIPTIONS = {
 "emplacement": "à hauteur de la taille",
 "emplacementFin": "à hauteur de la taille",
 "mouvement": "la main reste presque immobile (signe tenu)",
-"deuxMains": "l'autre main reste immobile, elle sert de base"
+"deuxMains": "l'autre main reste immobile, elle sert de base",
+"tDebut": 0.58,
+"tFin": 1.08
 },
 "pas d'accord": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/a/a0/Pas_d%27accord.webm",
@@ -252,7 +286,9 @@ window.DESCRIPTIONS = {
 "deuxMains": "l'autre main reste immobile, elle sert de base",
 "visage": [
 "la bouche articule le mot"
-]
+],
+"tDebut": 1.42,
+"tFin": 1.83
 },
 "je veux": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/2/2a/Je_veux.webm",
@@ -268,7 +304,9 @@ window.DESCRIPTIONS = {
 "deuxMains": "l'autre main reste immobile, elle sert de base",
 "visage": [
 "la bouche articule le mot"
-]
+],
+"tDebut": 1.42,
+"tFin": 2.17
 },
 "je ne veux pas": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/5/50/Je_ne_veux_pas.webm",
@@ -281,7 +319,9 @@ window.DESCRIPTIONS = {
 "emplacement": "à hauteur de la taille",
 "emplacementFin": "à hauteur de la taille",
 "mouvement": "la main reste presque immobile (signe tenu)",
-"deuxMains": "les deux mains bougent ensemble, dans le même sens"
+"deuxMains": "les deux mains bougent ensemble, dans le même sens",
+"tDebut": 0.67,
+"tFin": 1.42
 },
 "j'aime": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/6/64/J%27aime.webm",
@@ -292,7 +332,9 @@ window.DESCRIPTIONS = {
 "taillePx": 115,
 "emplacement": "sous le menton, au niveau du cou",
 "emplacementFin": "au niveau des épaules",
-"mouvement": "la main reste presque immobile (signe tenu)"
+"mouvement": "la main reste presque immobile (signe tenu)",
+"tDebut": 1.5,
+"tFin": 2
 },
 "je n'aime pas": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/2/2d/Je_n%27aime_pas.webm",
@@ -306,7 +348,9 @@ window.DESCRIPTIONS = {
 "mouvement": "petit mouvement",
 "visage": [
 "la bouche articule le mot"
-]
+],
+"tDebut": 1.17,
+"tFin": 1.58
 },
 "je peux": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/7/73/Je_peux.webm",
@@ -322,7 +366,9 @@ window.DESCRIPTIONS = {
 "deuxMains": "les deux mains bougent en miroir",
 "visage": [
 "la bouche articule le mot"
-]
+],
+"tDebut": 1.42,
+"tFin": 2.25
 },
 "je ne peux pas": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/f/f8/Je_ne_peux_pas.webm",
@@ -336,7 +382,9 @@ window.DESCRIPTIONS = {
 "mouvement": "vers le haut",
 "visage": [
 "la bouche articule le mot"
-]
+],
+"tDebut": 1.17,
+"tFin": 2.33
 },
 "pas grave": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/8/86/LL-Q33302_%28fsl%29-Laura_Jauvert-Pas_grave.webm",
@@ -350,7 +398,9 @@ window.DESCRIPTIONS = {
 "mouvement": "vers sa droite",
 "visage": [
 "sourcils levés"
-]
+],
+"tDebut": 1.33,
+"tFin": 2.58
 },
 "super": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/5/57/LL-Q33302_%28fsl%29-Laura_Jauvert-Super.webm",
@@ -365,7 +415,9 @@ window.DESCRIPTIONS = {
 "visage": [
 "la bouche articule le mot",
 "sourire"
-]
+],
+"tDebut": 0.67,
+"tFin": 1.33
 },
 "qui ?": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/a/a8/LL-Q33302_%28fsl%29-Laura_Jauvert-Qui_%3F.webm",
@@ -379,7 +431,9 @@ window.DESCRIPTIONS = {
 "mouvement": "vers sa droite",
 "visage": [
 "sourire"
-]
+],
+"tDebut": 0.92,
+"tFin": 2.08
 },
 "quoi ?": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/8/8e/LL-Q33302_%28fsl%29-Laura_Jauvert-Quoi_%3F.webm",
@@ -395,7 +449,9 @@ window.DESCRIPTIONS = {
 "deuxMains": "l'autre main reste immobile, elle sert de base",
 "visage": [
 "la bouche articule le mot"
-]
+],
+"tDebut": 1.33,
+"tFin": 1.92
 },
 "ou ?": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/4/47/LL-Q33302_%28fsl%29-Laura_Jauvert-O%C3%B9_%3F.webm",
@@ -411,7 +467,9 @@ window.DESCRIPTIONS = {
 "deuxMains": "les deux mains bougent en miroir",
 "visage": [
 "la bouche articule le mot"
-]
+],
+"tDebut": 1.5,
+"tFin": 2.17
 },
 "quand ?": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/7/77/LL-Q33302_%28fsl%29-Laura_Jauvert-Quand_%3F.webm",
@@ -428,7 +486,9 @@ window.DESCRIPTIONS = {
 "visage": [
 "la bouche articule le mot",
 "sourcils levés"
-]
+],
+"tDebut": 1,
+"tFin": 2.08
 },
 "comment": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/a/a3/LL-Q33302_%28fsl%29-Laura_Jauvert-Comment.webm",
@@ -444,7 +504,9 @@ window.DESCRIPTIONS = {
 "deuxMains": "les deux mains bougent ensemble, dans le même sens",
 "visage": [
 "la bouche articule le mot"
-]
+],
+"tDebut": 1.08,
+"tFin": 2.25
 },
 "pourquoi ?": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/1/11/LL-Q33302_%28fsl%29-Laura_Jauvert-Pourquoi_%3F.webm",
@@ -461,7 +523,9 @@ window.DESCRIPTIONS = {
 "visage": [
 "la bouche articule le mot",
 "sourcils levés"
-]
+],
+"tDebut": 1.33,
+"tFin": 2.33
 },
 "combien": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/f/f3/LL-Q33302_%28fsl%29-Laura_Jauvert-Combien.webm",
@@ -477,7 +541,9 @@ window.DESCRIPTIONS = {
 "deuxMains": "les deux mains bougent en miroir",
 "visage": [
 "la bouche articule le mot"
-]
+],
+"tDebut": 0.25,
+"tFin": 0.83
 },
 "famille": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/9/90/LL-Q33302_%28fsl%29-Laura_Jauvert-Famille.webm",
@@ -493,7 +559,9 @@ window.DESCRIPTIONS = {
 "deuxMains": "l'autre main reste immobile, elle sert de base",
 "visage": [
 "sourire"
-]
+],
+"tDebut": 0.75,
+"tFin": 1.17
 },
 "maman": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/e/e4/Maman.webm",
@@ -507,7 +575,9 @@ window.DESCRIPTIONS = {
 "mouvement": "la main reste presque immobile (signe tenu)",
 "visage": [
 "la bouche articule le mot"
-]
+],
+"tDebut": 0,
+"tFin": 1.42
 },
 "papa": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/8/85/LL-Q33302_%28fsl%29-Laura_Jauvert-Papa.webm",
@@ -518,7 +588,9 @@ window.DESCRIPTIONS = {
 "taillePx": 106,
 "emplacement": "sous le menton, au niveau du cou",
 "emplacementFin": "au niveau du nez",
-"mouvement": "vers le haut et vers l'avant"
+"mouvement": "vers le haut et vers l'avant",
+"tDebut": 0.75,
+"tFin": 1.5
 },
 "frere": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/7/7e/LL-Q33302_%28fsl%29-Laura_Jauvert-Fr%C3%A8re.webm",
@@ -529,7 +601,9 @@ window.DESCRIPTIONS = {
 "taillePx": 154,
 "emplacement": "devant la bouche",
 "emplacementFin": "sous le menton, au niveau du cou",
-"mouvement": "vers sa droite"
+"mouvement": "vers sa droite",
+"tDebut": 0,
+"tFin": 0.83
 },
 "soeur": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/3/3d/LL-Q33302_%28fsl%29-Laura_Jauvert-Soeur.webm",
@@ -540,7 +614,9 @@ window.DESCRIPTIONS = {
 "taillePx": 96,
 "emplacement": "au niveau des épaules",
 "emplacementFin": "au niveau des épaules",
-"mouvement": "la main reste presque immobile (signe tenu)"
+"mouvement": "la main reste presque immobile (signe tenu)",
+"tDebut": 0.67,
+"tFin": 1.17
 },
 "enfant": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/6/6c/LL-Q33302_%28fsl%29-Laura_Jauvert-Enfant.webm",
@@ -554,7 +630,9 @@ window.DESCRIPTIONS = {
 "mouvement": "petit mouvement",
 "visage": [
 "la bouche articule le mot"
-]
+],
+"tDebut": 0,
+"tFin": 1.58
 },
 "bebe": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/7/70/LL-Q33302_%28fsl%29-Laura_Jauvert-B%C3%A9b%C3%A9.webm",
@@ -565,7 +643,9 @@ window.DESCRIPTIONS = {
 "taillePx": 102,
 "emplacement": "devant la poitrine",
 "emplacementFin": "devant la poitrine",
-"mouvement": "la main reste presque immobile (signe tenu)"
+"mouvement": "la main reste presque immobile (signe tenu)",
+"tDebut": 1.25,
+"tFin": 1.92
 },
 "fils": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/7/71/LL-Q33302_%28fsl%29-Laura_Jauvert-Fils.webm",
@@ -576,7 +656,9 @@ window.DESCRIPTIONS = {
 "taillePx": 144,
 "emplacement": "devant la bouche",
 "emplacementFin": "devant la poitrine",
-"mouvement": "vers le bas"
+"mouvement": "vers le bas",
+"tDebut": 0,
+"tFin": 0.83
 },
 "fille": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/a/ab/LL-Q33302_%28fsl%29-Laura_Jauvert-Fille.webm",
@@ -587,7 +669,9 @@ window.DESCRIPTIONS = {
 "taillePx": 110,
 "emplacement": "devant la bouche",
 "emplacementFin": "au niveau du menton",
-"mouvement": "mouvement circulaire"
+"mouvement": "mouvement circulaire",
+"tDebut": 1.17,
+"tFin": 2.42
 },
 "grand-mere": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/8/84/LL-Q33302_%28fsl%29-Laura_Jauvert-Grand-m%C3%A8re.webm",
@@ -598,7 +682,9 @@ window.DESCRIPTIONS = {
 "taillePx": 88,
 "emplacement": "au niveau du menton",
 "emplacementFin": "au niveau du menton",
-"mouvement": "va-et-vient répété (3 fois environ)"
+"mouvement": "va-et-vient répété (3 fois environ)",
+"tDebut": 0,
+"tFin": 2.08
 },
 "grand-pere": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/8/83/LL-Q33302_%28fsl%29-Laura_Jauvert-Grand-p%C3%A8re.webm",
@@ -609,7 +695,9 @@ window.DESCRIPTIONS = {
 "taillePx": 85,
 "emplacement": "au niveau du menton",
 "emplacementFin": "au niveau du menton",
-"mouvement": "vers sa gauche"
+"mouvement": "vers sa gauche",
+"tDebut": 1.08,
+"tFin": 2.33
 },
 "cousin": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/3/39/Cousin_Nm_2_1_1_-_Elix.webm",
@@ -622,7 +710,9 @@ window.DESCRIPTIONS = {
 "emplacement": "au niveau des épaules",
 "emplacementFin": "au niveau des épaules",
 "mouvement": "la main reste presque immobile (signe tenu)",
-"deuxMains": "l'autre main reste immobile, elle sert de base"
+"deuxMains": "l'autre main reste immobile, elle sert de base",
+"tDebut": 2.25,
+"tFin": 2.83
 },
 "oncle": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/6/61/LL-Q33302_%28fsl%29-Laura_Jauvert-Oncle.webm",
@@ -638,7 +728,9 @@ window.DESCRIPTIONS = {
 "deuxMains": "l'autre main reste immobile, elle sert de base",
 "visage": [
 "la bouche articule le mot"
-]
+],
+"tDebut": 1.17,
+"tFin": 1.83
 },
 "tante": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/2/20/LL-Q33302_%28fsl%29-Laura_Jauvert-Tante.webm",
@@ -651,7 +743,9 @@ window.DESCRIPTIONS = {
 "emplacement": "sous le menton, au niveau du cou",
 "emplacementFin": "sous le menton, au niveau du cou",
 "mouvement": "la main reste presque immobile (signe tenu)",
-"deuxMains": "l'autre main reste immobile, elle sert de base"
+"deuxMains": "l'autre main reste immobile, elle sert de base",
+"tDebut": 0.75,
+"tFin": 1.5
 },
 "content": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/5/56/LL-Q33302_%28fsl%29-Laura_Jauvert-Content.webm",
@@ -665,7 +759,9 @@ window.DESCRIPTIONS = {
 "mouvement": "petit mouvement",
 "visage": [
 "la bouche articule le mot"
-]
+],
+"tDebut": 1.08,
+"tFin": 2.42
 },
 "triste": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/7/7f/LL-Q33302_%28fsl%29-Laura_Jauvert-Triste.webm",
@@ -679,7 +775,9 @@ window.DESCRIPTIONS = {
 "mouvement": "petit mouvement",
 "visage": [
 "sourcils froncés"
-]
+],
+"tDebut": 1.17,
+"tFin": 2.17
 },
 "fatigue": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/8/82/LL-Q33302_%28fsl%29-Laura_Jauvert-Fatigu%C3%A9.webm",
@@ -695,7 +793,9 @@ window.DESCRIPTIONS = {
 "deuxMains": "les deux mains bougent",
 "visage": [
 "la bouche articule le mot"
-]
+],
+"tDebut": 0.92,
+"tFin": 1.33
 },
 "colere": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/8/8d/Colere_Nf_1_1_1_-_Elix.webm",
@@ -711,7 +811,9 @@ window.DESCRIPTIONS = {
 "deuxMains": "les deux mains bougent",
 "visage": [
 "la bouche articule le mot"
-]
+],
+"tDebut": 2,
+"tFin": 2.42
 },
 "peur": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/a/a9/LL-Q33302_%28fsl%29-Caroline_%28Guilhelma%29-peur.webm",
@@ -722,7 +824,9 @@ window.DESCRIPTIONS = {
 "taillePx": 100,
 "emplacement": "devant la poitrine",
 "emplacementFin": "devant la poitrine",
-"mouvement": "la main reste presque immobile (signe tenu)"
+"mouvement": "la main reste presque immobile (signe tenu)",
+"tDebut": 1.17,
+"tFin": 1.92
 },
 "rire": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/7/7a/LL-Q33302_%28fsl%29-Laura_Jauvert-Rire.webm",
@@ -737,7 +841,9 @@ window.DESCRIPTIONS = {
 "deuxMains": "l'autre main reste immobile, elle sert de base",
 "visage": [
 "la bouche articule le mot"
-]
+],
+"tDebut": 0.58,
+"tFin": 0.83
 },
 "pleurer": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/1/17/LL-Q33302_%28fsl%29-Laura_Jauvert-Pleurer.webm",
@@ -750,7 +856,9 @@ window.DESCRIPTIONS = {
 "emplacement": "à hauteur de la taille",
 "emplacementFin": "à hauteur de la taille",
 "mouvement": "la main reste presque immobile (signe tenu)",
-"deuxMains": "l'autre main reste immobile, elle sert de base"
+"deuxMains": "l'autre main reste immobile, elle sert de base",
+"tDebut": 0.42,
+"tFin": 0.92
 },
 "sourire": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/8/83/LL-Q33302_%28fsl%29-Laura_Jauvert-Sourire.webm",
@@ -766,7 +874,9 @@ window.DESCRIPTIONS = {
 "deuxMains": "les deux mains bougent",
 "visage": [
 "sourire"
-]
+],
+"tDebut": 0,
+"tFin": 1.08
 },
 "fier": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/a/a0/LL-Q33302_%28fsl%29-Laura_Jauvert-Fier.webm",
@@ -777,7 +887,9 @@ window.DESCRIPTIONS = {
 "taillePx": 103,
 "emplacement": "devant la poitrine",
 "emplacementFin": "devant la poitrine",
-"mouvement": "la main reste presque immobile (signe tenu)"
+"mouvement": "la main reste presque immobile (signe tenu)",
+"tDebut": 2.67,
+"tFin": 3.08
 },
 "honte": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/3/3f/Honte.webm",
@@ -794,7 +906,9 @@ window.DESCRIPTIONS = {
 "visage": [
 "la bouche articule le mot",
 "sourire"
-]
+],
+"tDebut": 0,
+"tFin": 3.42
 },
 "gentil": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/4/40/LL-Q33302_%28fsl%29-Laura_Jauvert-Gentil.webm",
@@ -808,7 +922,9 @@ window.DESCRIPTIONS = {
 "mouvement": "vers le bas",
 "visage": [
 "sourire"
-]
+],
+"tDebut": 0.42,
+"tFin": 1.42
 },
 "mechant": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/e/ed/LL-Q33302_%28fsl%29-Laura_Jauvert-M%C3%A9chant.webm",
@@ -824,7 +940,9 @@ window.DESCRIPTIONS = {
 "deuxMains": "l'autre main reste immobile, elle sert de base",
 "visage": [
 "la bouche articule le mot"
-]
+],
+"tDebut": 1,
+"tFin": 1.92
 },
 "blanc": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/2/2d/LL-Q33302_%28fsl%29-Laura_Jauvert-Blanc.webm",
@@ -838,7 +956,9 @@ window.DESCRIPTIONS = {
 "mouvement": "la main reste presque immobile (signe tenu)",
 "visage": [
 "la bouche articule le mot"
-]
+],
+"tDebut": 0,
+"tFin": 0.33
 },
 "noir": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/0/0d/LL-Q33302_%28fsl%29-Laura_Jauvert-Noir.webm",
@@ -852,7 +972,9 @@ window.DESCRIPTIONS = {
 "visage": [
 "la bouche articule le mot",
 "yeux plissés"
-]
+],
+"tDebut": 0,
+"tFin": 0.25
 },
 "rouge": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/2/2e/LL-Q33302_%28fsl%29-Laura_Jauvert-Rouge.webm",
@@ -866,7 +988,9 @@ window.DESCRIPTIONS = {
 "mouvement": "la main reste presque immobile (signe tenu)",
 "visage": [
 "la bouche articule le mot"
-]
+],
+"tDebut": 0,
+"tFin": 0.92
 },
 "bleu": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/f/fe/LL-Q33302_%28fsl%29-Laura_Jauvert-Bleu.webm",
@@ -880,7 +1004,9 @@ window.DESCRIPTIONS = {
 "mouvement": "la main reste presque immobile (signe tenu)",
 "visage": [
 "la bouche articule le mot"
-]
+],
+"tDebut": 0,
+"tFin": 0.5
 },
 "vert": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/4/44/LL-Q33302_%28fsl%29-Laura_Jauvert-Vert.webm",
@@ -891,7 +1017,9 @@ window.DESCRIPTIONS = {
 "taillePx": 144,
 "emplacement": "au niveau des épaules, sur le côté",
 "emplacementFin": "au niveau des épaules, sur le côté",
-"mouvement": "la main reste presque immobile (signe tenu)"
+"mouvement": "la main reste presque immobile (signe tenu)",
+"tDebut": 0,
+"tFin": 1.17
 },
 "jaune": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/0/07/Jaune.webm",
@@ -904,7 +1032,9 @@ window.DESCRIPTIONS = {
 "mouvement": "la main reste presque immobile (signe tenu)",
 "visage": [
 "la bouche articule le mot"
-]
+],
+"tDebut": 0,
+"tFin": 0.25
 },
 "orange": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/9/92/LL-Q33302_%28fsl%29-Laura_Jauvert-Orange.webm",
@@ -918,7 +1048,9 @@ window.DESCRIPTIONS = {
 "mouvement": "la main reste presque immobile (signe tenu)",
 "visage": [
 "la bouche articule le mot"
-]
+],
+"tDebut": 0.08,
+"tFin": 0.92
 },
 "rose": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/3/37/LL-Q33302_%28fsl%29-Laura_Jauvert-Rose.webm",
@@ -932,7 +1064,9 @@ window.DESCRIPTIONS = {
 "mouvement": "vers sa gauche",
 "visage": [
 "la bouche articule le mot"
-]
+],
+"tDebut": 0,
+"tFin": 0.83
 },
 "violet": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/8/8c/LL-Q33302_%28fsl%29-Laura_Jauvert-Violet.webm",
@@ -942,7 +1076,9 @@ window.DESCRIPTIONS = {
 "formeSure": 0.67,
 "taillePx": 112,
 "emplacement": "au niveau des épaules",
-"mouvement": "vers sa droite"
+"mouvement": "vers sa droite",
+"tDebut": 0,
+"tFin": 0.25
 },
 "gris": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/6/69/Gris.webm",
@@ -955,7 +1091,9 @@ window.DESCRIPTIONS = {
 "mouvement": "la main reste presque immobile (signe tenu)",
 "visage": [
 "sourire"
-]
+],
+"tDebut": 0,
+"tFin": 0.25
 },
 "marron": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/0/00/LL-Q33302_%28fsl%29-Laura_Jauvert-Marron.webm",
@@ -969,7 +1107,9 @@ window.DESCRIPTIONS = {
 "mouvement": "la main reste presque immobile (signe tenu)",
 "visage": [
 "la bouche articule le mot"
-]
+],
+"tDebut": 0.5,
+"tFin": 0.92
 },
 "beige": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/7/72/Beige.webm",
@@ -980,7 +1120,9 @@ window.DESCRIPTIONS = {
 "taillePx": 159,
 "emplacement": "au niveau du menton",
 "emplacementFin": "devant la bouche",
-"mouvement": "la main reste presque immobile (signe tenu)"
+"mouvement": "la main reste presque immobile (signe tenu)",
+"tDebut": 0.33,
+"tFin": 0.92
 },
 "demain": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/f/fd/LL-Q33302_%28fsl%29-Laura_Jauvert-Demain.webm",
@@ -994,7 +1136,9 @@ window.DESCRIPTIONS = {
 "mouvement": "vers le haut",
 "visage": [
 "la bouche articule le mot"
-]
+],
+"tDebut": 1.42,
+"tFin": 1.83
 },
 "hier": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/5/5e/Hier.webm",
@@ -1009,7 +1153,9 @@ window.DESCRIPTIONS = {
 "visage": [
 "sourire",
 "la bouche articule le mot"
-]
+],
+"tDebut": 1.67,
+"tFin": 2.25
 },
 "maintenant": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/3/34/LL-Q33302_%28fsl%29-Laura_Jauvert-Maintenant.webm",
@@ -1025,7 +1171,9 @@ window.DESCRIPTIONS = {
 "deuxMains": "les deux mains bougent",
 "visage": [
 "la bouche articule le mot"
-]
+],
+"tDebut": 1.5,
+"tFin": 2.42
 },
 "matin": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/0/0a/LL-Q33302_%28fsl%29-Laura_Jauvert-Matin.webm",
@@ -1041,7 +1189,9 @@ window.DESCRIPTIONS = {
 "deuxMains": "les deux mains bougent",
 "visage": [
 "sourire"
-]
+],
+"tDebut": 1.83,
+"tFin": 2.5
 },
 "midi": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/e/e0/LL-Q33302_%28fsl%29-Laura_Jauvert-Midi.webm",
@@ -1052,7 +1202,9 @@ window.DESCRIPTIONS = {
 "taillePx": 110,
 "emplacement": "devant la poitrine",
 "emplacementFin": "au niveau du menton",
-"mouvement": "vers le haut"
+"mouvement": "vers le haut",
+"tDebut": 1.92,
+"tFin": 2.92
 },
 "soir": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/3/34/LL-Q33302_%28fsl%29-Laura_Jauvert-Soir.webm",
@@ -1068,7 +1220,9 @@ window.DESCRIPTIONS = {
 "deuxMains": "l'autre main reste immobile, elle sert de base",
 "visage": [
 "la bouche articule le mot"
-]
+],
+"tDebut": 1.75,
+"tFin": 2.5
 },
 "bientot": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/e/e2/LL-Q33302_%28fsl%29-Laura_Jauvert-Bient%C3%B4t.webm",
@@ -1082,7 +1236,9 @@ window.DESCRIPTIONS = {
 "mouvement": "la main reste presque immobile (signe tenu)",
 "visage": [
 "la bouche articule le mot"
-]
+],
+"tDebut": 1.58,
+"tFin": 2.25
 },
 "toujours": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/5/56/Toujours.webm",
@@ -1093,7 +1249,9 @@ window.DESCRIPTIONS = {
 "taillePx": 117,
 "emplacement": "au niveau des épaules, sur le côté",
 "emplacementFin": "au niveau des épaules",
-"mouvement": "petit mouvement"
+"mouvement": "petit mouvement",
+"tDebut": 0.92,
+"tFin": 2.5
 },
 "jamais": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/a/a6/Jamais.webm",
@@ -1107,7 +1265,9 @@ window.DESCRIPTIONS = {
 "mouvement": "mouvement circulaire, vers sa gauche",
 "visage": [
 "la bouche articule le mot"
-]
+],
+"tDebut": 1.25,
+"tFin": 3.33
 },
 "week-end": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/2/2b/LL-Q33302_%28fsl%29-Laura_Jauvert-Week-end.webm",
@@ -1124,7 +1284,9 @@ window.DESCRIPTIONS = {
 "visage": [
 "sourire",
 "la bouche articule le mot"
-]
+],
+"tDebut": 0.08,
+"tFin": 2.42
 },
 "vacances": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/6/60/LL-Q33302_%28fsl%29-Laura_Jauvert-Vacances.webm",
@@ -1137,7 +1299,9 @@ window.DESCRIPTIONS = {
 "emplacement": "sous le menton, au niveau du cou",
 "emplacementFin": "à côté du visage (joue)",
 "mouvement": "petit mouvement",
-"deuxMains": "les deux mains bougent en miroir"
+"deuxMains": "les deux mains bougent en miroir",
+"tDebut": 1.42,
+"tFin": 2.5
 },
 "manger": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/9/9a/LL-Q33302_%28fsl%29-Hugo_en_r%C3%A9sidence-manger.webm",
@@ -1151,7 +1315,9 @@ window.DESCRIPTIONS = {
 "mouvement": "la main reste presque immobile (signe tenu)",
 "visage": [
 "la bouche articule le mot"
-]
+],
+"tDebut": 1.42,
+"tFin": 1.83
 },
 "boire": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/8/81/LL-Q33302_%28fsl%29-Laura_Jauvert-Boire.webm",
@@ -1166,7 +1332,9 @@ window.DESCRIPTIONS = {
 "visage": [
 "la bouche articule le mot",
 "sourcils levés"
-]
+],
+"tDebut": 0.83,
+"tFin": 1.83
 },
 "eau": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/8/89/LL-Q33302_%28fsl%29-Laura_Jauvert-Eau.webm",
@@ -1180,7 +1348,9 @@ window.DESCRIPTIONS = {
 "mouvement": "petit mouvement",
 "visage": [
 "la bouche articule le mot"
-]
+],
+"tDebut": 1.17,
+"tFin": 2.58
 },
 "pain": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/4/41/LL-Q33302_%28fsl%29-Laura_Jauvert-Pain.webm",
@@ -1193,7 +1363,9 @@ window.DESCRIPTIONS = {
 "emplacement": "au niveau des épaules",
 "emplacementFin": "au niveau des épaules",
 "mouvement": "la main reste presque immobile (signe tenu)",
-"deuxMains": "les deux mains bougent"
+"deuxMains": "les deux mains bougent",
+"tDebut": 1.25,
+"tFin": 2.17
 },
 "cafe": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/0/0b/LL-Q33302_%28fsl%29-Laura_Jauvert-Caf%C3%A9.webm",
@@ -1205,7 +1377,9 @@ window.DESCRIPTIONS = {
 "formeAutre": "poing fermé",
 "emplacement": "à hauteur de la taille",
 "mouvement": "la main reste presque immobile (signe tenu)",
-"deuxMains": "l'autre main reste immobile, elle sert de base"
+"deuxMains": "l'autre main reste immobile, elle sert de base",
+"tDebut": 0.5,
+"tFin": 0.75
 },
 "the": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/c/cb/LL-Q33302_%28fsl%29-Laura_Jauvert-Th%C3%A9.webm",
@@ -1221,7 +1395,9 @@ window.DESCRIPTIONS = {
 "deuxMains": "l'autre main reste immobile, elle sert de base",
 "visage": [
 "sourire"
-]
+],
+"tDebut": 0.42,
+"tFin": 2
 },
 "fromage": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/5/56/LL-Q33302_%28fsl%29-Laura_Jauvert-Fromage.webm",
@@ -1232,7 +1408,9 @@ window.DESCRIPTIONS = {
 "taillePx": 84,
 "emplacement": "à hauteur de la taille",
 "emplacementFin": "à hauteur de la taille",
-"mouvement": "la main reste presque immobile (signe tenu)"
+"mouvement": "la main reste presque immobile (signe tenu)",
+"tDebut": 0.33,
+"tFin": 0.83
 },
 "pomme": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/5/5a/LL-Q33302_%28fsl%29-Laura_Jauvert-Pomme.webm",
@@ -1246,7 +1424,9 @@ window.DESCRIPTIONS = {
 "mouvement": "vers le bas",
 "visage": [
 "la bouche articule le mot"
-]
+],
+"tDebut": 1.33,
+"tFin": 2.25
 },
 "banane": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/4/44/LL-Q33302_%28fsl%29-Laura_Jauvert-Banane.webm",
@@ -1259,7 +1439,9 @@ window.DESCRIPTIONS = {
 "emplacement": "au niveau des épaules",
 "emplacementFin": "sous le menton, au niveau du cou",
 "mouvement": "va-et-vient répété (5 fois environ)",
-"deuxMains": "les deux mains bougent en miroir"
+"deuxMains": "les deux mains bougent en miroir",
+"tDebut": 0.17,
+"tFin": 2.08
 },
 "gateau": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/4/41/LL-Q33302_%28fsl%29-Laura_Jauvert-G%C3%A2teau.webm",
@@ -1273,7 +1455,9 @@ window.DESCRIPTIONS = {
 "mouvement": "la main reste presque immobile (signe tenu)",
 "visage": [
 "la bouche articule le mot"
-]
+],
+"tDebut": 0.92,
+"tFin": 2.58
 },
 "chocolat": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/7/7e/LL-Q33302_%28fsl%29-Laura_Jauvert-Chocolat.webm",
@@ -1289,7 +1473,9 @@ window.DESCRIPTIONS = {
 "deuxMains": "les deux mains bougent en miroir",
 "visage": [
 "la bouche articule le mot"
-]
+],
+"tDebut": 1.08,
+"tFin": 2.83
 },
 "restaurant": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/e/ed/LL-Q33302_%28fsl%29-Laura_Jauvert-Restaurant.webm",
@@ -1305,7 +1491,9 @@ window.DESCRIPTIONS = {
 "deuxMains": "l'autre main reste immobile, elle sert de base",
 "visage": [
 "la bouche articule le mot"
-]
+],
+"tDebut": 1.42,
+"tFin": 1.83
 },
 "chat": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/5/5e/LL-Q33302_%28fsl%29-Laura_Jauvert-Chat.webm",
@@ -1321,7 +1509,9 @@ window.DESCRIPTIONS = {
 "deuxMains": "les deux mains bougent en miroir",
 "visage": [
 "la bouche articule le mot"
-]
+],
+"tDebut": 1.08,
+"tFin": 2.5
 },
 "chien": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/1/1b/LL-Q33302_%28fsl%29-Laura_Jauvert-Chien.webm",
@@ -1334,7 +1524,9 @@ window.DESCRIPTIONS = {
 "emplacement": "devant le ventre",
 "emplacementFin": "devant la poitrine",
 "mouvement": "vers le haut et vers sa gauche",
-"deuxMains": "l'autre main reste immobile, elle sert de base"
+"deuxMains": "l'autre main reste immobile, elle sert de base",
+"tDebut": 2,
+"tFin": 3.17
 },
 "poisson": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/2/2f/LL-Q33302_%28fsl%29-Laura_Jauvert-Poisson.webm",
@@ -1347,7 +1539,9 @@ window.DESCRIPTIONS = {
 "emplacement": "à hauteur de la taille",
 "emplacementFin": "à hauteur de la taille",
 "mouvement": "vers sa gauche",
-"deuxMains": "l'autre main reste immobile, elle sert de base"
+"deuxMains": "l'autre main reste immobile, elle sert de base",
+"tDebut": 0.67,
+"tFin": 1.25
 },
 "lapin": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/6/65/LL-Q33302_%28fsl%29-Caroline_%28Guilhelma%29-lapin.webm",
@@ -1360,7 +1554,9 @@ window.DESCRIPTIONS = {
 "emplacement": "au niveau des yeux",
 "emplacementFin": "au niveau du front",
 "mouvement": "la main reste presque immobile (signe tenu)",
-"deuxMains": "l'autre main reste immobile, elle sert de base"
+"deuxMains": "l'autre main reste immobile, elle sert de base",
+"tDebut": 1.17,
+"tFin": 1.92
 },
 "cochon": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/4/4f/Cochon_Nm_1_1_1_-_Elix.webm",
@@ -1376,7 +1572,9 @@ window.DESCRIPTIONS = {
 "deuxMains": "l'autre main reste immobile, elle sert de base",
 "visage": [
 "la bouche articule le mot"
-]
+],
+"tDebut": 1.5,
+"tFin": 2.42
 },
 "vache": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/8/89/LL-Q33302_%28fsl%29-Laura_Jauvert-Vache.webm",
@@ -1392,7 +1590,9 @@ window.DESCRIPTIONS = {
 "deuxMains": "les deux mains bougent en miroir",
 "visage": [
 "la bouche articule le mot"
-]
+],
+"tDebut": 1.17,
+"tFin": 2.42
 },
 "mouton": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/3/3f/LL-Q33302_%28fsl%29-Laura_Jauvert-Mouton.webm",
@@ -1408,7 +1608,9 @@ window.DESCRIPTIONS = {
 "deuxMains": "les deux mains bougent",
 "visage": [
 "la bouche articule le mot"
-]
+],
+"tDebut": 1.5,
+"tFin": 3.08
 },
 "poule": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/c/cf/LL-Q33302_%28fsl%29-Laura_Jauvert-Poule.webm",
@@ -1422,7 +1624,9 @@ window.DESCRIPTIONS = {
 "mouvement": "petit mouvement",
 "visage": [
 "la bouche articule le mot"
-]
+],
+"tDebut": 1.25,
+"tFin": 2.83
 },
 "canard": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/1/18/LL-Q33302_%28fsl%29-Laura_Jauvert-Canard.webm",
@@ -1433,7 +1637,9 @@ window.DESCRIPTIONS = {
 "taillePx": 71,
 "emplacement": "devant la poitrine",
 "emplacementFin": "au niveau du menton",
-"mouvement": "vers le haut"
+"mouvement": "vers le haut",
+"tDebut": 0.92,
+"tFin": 2.5
 },
 "souris": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/1/1f/LL-Q33302_%28fsl%29-Laura_Jauvert-Souris.webm",
@@ -1450,7 +1656,9 @@ window.DESCRIPTIONS = {
 "visage": [
 "la bouche articule le mot",
 "sourire"
-]
+],
+"tDebut": 1.25,
+"tFin": 3.17
 },
 "ours": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/5/50/LL-Q33302_%28fsl%29-Laura_Jauvert-Ours.webm",
@@ -1466,7 +1674,9 @@ window.DESCRIPTIONS = {
 "deuxMains": "les deux mains bougent en miroir",
 "visage": [
 "la bouche articule le mot"
-]
+],
+"tDebut": 1.5,
+"tFin": 2.67
 },
 "girafe": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/3/3c/LL-Q33302_%28fsl%29-Laura_Jauvert-Girafe.webm",
@@ -1479,7 +1689,9 @@ window.DESCRIPTIONS = {
 "emplacement": "au niveau du nez",
 "emplacementFin": "à côté de la tête (tempe)",
 "mouvement": "vers sa droite et vers le haut",
-"deuxMains": "l'autre main reste immobile, elle sert de base"
+"deuxMains": "l'autre main reste immobile, elle sert de base",
+"tDebut": 2.08,
+"tFin": 3.08
 },
 "maison": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/a/ae/Maison.webm",
@@ -1495,7 +1707,9 @@ window.DESCRIPTIONS = {
 "deuxMains": "les deux mains bougent en miroir",
 "visage": [
 "la bouche articule le mot"
-]
+],
+"tDebut": 1.08,
+"tFin": 2.25
 },
 "ecole": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/2/2d/LL-Q33302_%28fsl%29-Laura_Jauvert-%C3%89cole.webm",
@@ -1512,7 +1726,9 @@ window.DESCRIPTIONS = {
 "visage": [
 "sourire",
 "la bouche articule le mot"
-]
+],
+"tDebut": 1.08,
+"tFin": 1.92
 },
 "ville": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/4/48/LL-Q33302_%28fsl%29-Laura_Jauvert-Ville.webm",
@@ -1525,7 +1741,9 @@ window.DESCRIPTIONS = {
 "emplacement": "à hauteur de la taille",
 "emplacementFin": "à hauteur de la taille",
 "mouvement": "la main reste presque immobile (signe tenu)",
-"deuxMains": "l'autre main reste immobile, elle sert de base"
+"deuxMains": "l'autre main reste immobile, elle sert de base",
+"tDebut": 0.67,
+"tFin": 1
 },
 "gare": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/1/1d/LL-Q33302_%28fsl%29-Laura_Jauvert-Gare.webm",
@@ -1536,7 +1754,9 @@ window.DESCRIPTIONS = {
 "taillePx": 101,
 "emplacement": "à hauteur de la tête, sur le côté",
 "emplacementFin": "devant la bouche",
-"mouvement": "vers sa gauche"
+"mouvement": "vers sa gauche",
+"tDebut": 0,
+"tFin": 2.5
 },
 "hopital": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/1/11/H%C3%B4pital.webm",
@@ -1549,7 +1769,9 @@ window.DESCRIPTIONS = {
 "emplacement": "devant la poitrine",
 "emplacementFin": "devant la poitrine",
 "mouvement": "la main reste presque immobile (signe tenu)",
-"deuxMains": "l'autre main reste immobile, elle sert de base"
+"deuxMains": "l'autre main reste immobile, elle sert de base",
+"tDebut": 0.25,
+"tFin": 0.83
 },
 "bibliotheque": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/c/c5/LL-Q33302_%28fsl%29-Hugo_en_r%C3%A9sidence-biblioth%C3%A8que.webm",
@@ -1562,7 +1784,9 @@ window.DESCRIPTIONS = {
 "emplacement": "au niveau du menton",
 "emplacementFin": "sous le menton, au niveau du cou",
 "mouvement": "vers sa droite",
-"deuxMains": "les deux mains bougent en miroir"
+"deuxMains": "les deux mains bougent en miroir",
+"tDebut": 1.5,
+"tFin": 2.25
 },
 "banque": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/5/5d/LL-Q33302_%28fsl%29-Laura_Jauvert-Banque.webm",
@@ -1578,7 +1802,9 @@ window.DESCRIPTIONS = {
 "visage": [
 "la bouche articule le mot",
 "sourcils levés"
-]
+],
+"tDebut": 1.83,
+"tFin": 2.08
 },
 "mairie": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Mairie.webm",
@@ -1589,7 +1815,9 @@ window.DESCRIPTIONS = {
 "taillePx": 82,
 "emplacement": "devant la poitrine",
 "emplacementFin": "sous le menton, au niveau du cou",
-"mouvement": "vers le haut et vers sa gauche"
+"mouvement": "vers le haut et vers sa gauche",
+"tDebut": 1.17,
+"tFin": 1.67
 },
 "plage": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/d/d9/LL-Q33302_%28fsl%29-Laura_Jauvert-Plage.webm",
@@ -1602,7 +1830,9 @@ window.DESCRIPTIONS = {
 "emplacement": "au niveau des épaules, sur le côté",
 "emplacementFin": "au niveau des épaules, sur le côté",
 "mouvement": "mouvement circulaire, vers le haut",
-"deuxMains": "les deux mains bougent en miroir"
+"deuxMains": "les deux mains bougent en miroir",
+"tDebut": 0,
+"tFin": 3.08
 },
 "piscine": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/f/f2/LL-Q33302_%28fsl%29-Laura_Jauvert-Piscine.webm",
@@ -1618,7 +1848,9 @@ window.DESCRIPTIONS = {
 "deuxMains": "les deux mains bougent en miroir",
 "visage": [
 "sourire"
-]
+],
+"tDebut": 1,
+"tFin": 2.42
 },
 "cinema": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/9/93/LL-Q33302_%28fsl%29-Laura_Jauvert-Cin%C3%A9ma.webm",
@@ -1631,7 +1863,9 @@ window.DESCRIPTIONS = {
 "emplacement": "à hauteur de la tête, sur le côté",
 "emplacementFin": "sous le menton, au niveau du cou",
 "mouvement": "mouvement répété, vers sa gauche et vers le bas et vers soi",
-"deuxMains": "les deux mains bougent en miroir"
+"deuxMains": "les deux mains bougent en miroir",
+"tDebut": 1.42,
+"tFin": 2.67
 },
 "bus": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/c/cb/LL-Q33302_%28fsl%29-Laura_Jauvert-Bus.webm",
@@ -1642,7 +1876,9 @@ window.DESCRIPTIONS = {
 "taillePx": 99,
 "emplacement": "devant la bouche",
 "emplacementFin": "sous le menton, au niveau du cou",
-"mouvement": "petit mouvement"
+"mouvement": "petit mouvement",
+"tDebut": 0,
+"tFin": 0.92
 },
 "aller": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/a/aa/LL-Q33302_%28fsl%29-Laura_Jauvert-Aller.webm",
@@ -1655,7 +1891,9 @@ window.DESCRIPTIONS = {
 "emplacement": "devant la poitrine",
 "emplacementFin": "devant la poitrine",
 "mouvement": "la main reste presque immobile (signe tenu)",
-"deuxMains": "l'autre main reste immobile, elle sert de base"
+"deuxMains": "l'autre main reste immobile, elle sert de base",
+"tDebut": 1.58,
+"tFin": 1.92
 },
 "venir": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/7/71/LL-Q33302_%28fsl%29-Laura_Jauvert-Venir.webm",
@@ -1666,7 +1904,9 @@ window.DESCRIPTIONS = {
 "taillePx": 117,
 "emplacement": "au niveau des épaules",
 "emplacementFin": "au niveau des épaules",
-"mouvement": "la main reste presque immobile (signe tenu)"
+"mouvement": "la main reste presque immobile (signe tenu)",
+"tDebut": 1.75,
+"tFin": 2.25
 },
 "partir": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/8/8d/LL-Q33302_%28fsl%29-Laura_Jauvert-Partir.webm",
@@ -1676,7 +1916,9 @@ window.DESCRIPTIONS = {
 "formeSure": 1,
 "taillePx": 118,
 "emplacement": "au niveau du nez",
-"mouvement": "la main reste presque immobile (signe tenu)"
+"mouvement": "la main reste presque immobile (signe tenu)",
+"tDebut": 0.83,
+"tFin": 1.08
 },
 "attendre": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/8/84/LL-Q33302_%28fsl%29-Laura_Jauvert-Attendre.webm",
@@ -1692,7 +1934,9 @@ window.DESCRIPTIONS = {
 "deuxMains": "l'autre main reste immobile, elle sert de base",
 "visage": [
 "sourcils levés"
-]
+],
+"tDebut": 0.83,
+"tFin": 1.83
 },
 "travailler": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/b/be/LL-Q33302_%28fsl%29-Laura_Jauvert-Travailler.webm",
@@ -1705,7 +1949,9 @@ window.DESCRIPTIONS = {
 "emplacement": "devant la poitrine",
 "emplacementFin": "devant la poitrine",
 "mouvement": "vers sa gauche et vers le bas",
-"deuxMains": "l'autre main reste immobile, elle sert de base"
+"deuxMains": "l'autre main reste immobile, elle sert de base",
+"tDebut": 1.08,
+"tFin": 2
 },
 "dormir": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/1/11/LL-Q33302_%28fsl%29-Laura_Jauvert-Dormir.webm",
@@ -1721,7 +1967,9 @@ window.DESCRIPTIONS = {
 "deuxMains": "les deux mains bougent ensemble, dans le même sens",
 "visage": [
 "la bouche articule le mot"
-]
+],
+"tDebut": 1.25,
+"tFin": 2.25
 },
 "lire": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/d/d9/LL-Q33302_%28fsl%29-Hugo_en_r%C3%A9sidence-lire.webm",
@@ -1737,7 +1985,9 @@ window.DESCRIPTIONS = {
 "deuxMains": "les deux mains bougent",
 "visage": [
 "yeux plissés"
-]
+],
+"tDebut": 1.42,
+"tFin": 2.17
 },
 "ecrire": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/4/41/LL-Q33302_%28fsl%29-Laura_Jauvert-%C3%89crire.webm",
@@ -1753,7 +2003,9 @@ window.DESCRIPTIONS = {
 "deuxMains": "l'autre main reste immobile, elle sert de base",
 "visage": [
 "sourire"
-]
+],
+"tDebut": 1.25,
+"tFin": 2.58
 },
 "regarder": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/7/7c/LL-Q33302_%28fsl%29-Laura_Jauvert-Regarder.webm",
@@ -1767,7 +2019,9 @@ window.DESCRIPTIONS = {
 "mouvement": "petit mouvement",
 "visage": [
 "sourire"
-]
+],
+"tDebut": 0.83,
+"tFin": 2
 },
 "jouer": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/f/f5/Jouer.webm",
@@ -1783,7 +2037,9 @@ window.DESCRIPTIONS = {
 "deuxMains": "les deux mains bougent en miroir",
 "visage": [
 "la bouche articule le mot"
-]
+],
+"tDebut": 1.17,
+"tFin": 2.83
 },
 "acheter": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/c/c7/LL-Q33302_%28fsl%29-Hugo_en_r%C3%A9sidence-acheter.webm",
@@ -1798,7 +2054,9 @@ window.DESCRIPTIONS = {
 "deuxMains": "l'autre main reste immobile, elle sert de base",
 "visage": [
 "yeux plissés"
-]
+],
+"tDebut": 1.25,
+"tFin": 1.5
 },
 "apprendre": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/e/e7/LL-Q33302_%28fsl%29-Laura_Jauvert-Apprendre.webm",
@@ -1814,7 +2072,9 @@ window.DESCRIPTIONS = {
 "deuxMains": "l'autre main reste immobile, elle sert de base",
 "visage": [
 "la bouche articule le mot"
-]
+],
+"tDebut": 1.25,
+"tFin": 1.92
 },
 "sourd": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/2/2c/LL-Q33302_%28fsl%29-Laura_Jauvert-Sourd.webm",
@@ -1828,7 +2088,9 @@ window.DESCRIPTIONS = {
 "mouvement": "vers le haut",
 "visage": [
 "la bouche articule le mot"
-]
+],
+"tDebut": 1.25,
+"tFin": 1.67
 },
 "entendant": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/a/a5/LL-Q33302_%28fsl%29-Laura_Jauvert-Entendant.webm",
@@ -1842,7 +2104,9 @@ window.DESCRIPTIONS = {
 "mouvement": "vers le haut et vers l'avant",
 "visage": [
 "la bouche articule le mot"
-]
+],
+"tDebut": 1.25,
+"tFin": 2.25
 },
 "lsf": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/5/5a/LSF.webm",
@@ -1853,7 +2117,9 @@ window.DESCRIPTIONS = {
 "taillePx": 117,
 "emplacement": "devant la poitrine",
 "emplacementFin": "devant la bouche",
-"mouvement": "vers l'avant et vers le haut"
+"mouvement": "vers l'avant et vers le haut",
+"tDebut": 1.58,
+"tFin": 3.25
 },
 "signer": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/5/57/Signer.webm",
@@ -1866,7 +2132,9 @@ window.DESCRIPTIONS = {
 "emplacement": "devant la bouche",
 "emplacementFin": "devant la poitrine",
 "mouvement": "va-et-vient répété (5 fois environ), vers le haut et vers l'avant et vers sa droite",
-"deuxMains": "les deux mains bougent en miroir"
+"deuxMains": "les deux mains bougent en miroir",
+"tDebut": 0.92,
+"tFin": 2.58
 },
 "comprendre": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/3/34/LL-Q33302_%28fsl%29-Laura_Jauvert-Comprendre.webm",
@@ -1880,7 +2148,9 @@ window.DESCRIPTIONS = {
 "mouvement": "la main reste presque immobile (signe tenu)",
 "visage": [
 "la bouche articule le mot"
-]
+],
+"tDebut": 1.33,
+"tFin": 2.17
 },
 "je ne comprends pas": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/5/50/LL-Q33302_%28fsl%29-Hugo_en_r%C3%A9sidence-je_ne_comprends_pas.webm",
@@ -1895,7 +2165,9 @@ window.DESCRIPTIONS = {
 "visage": [
 "sourcils levés",
 "yeux plissés"
-]
+],
+"tDebut": 0.83,
+"tFin": 1.75
 },
 "je sais": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/4/44/Je_sais.webm",
@@ -1909,7 +2181,9 @@ window.DESCRIPTIONS = {
 "mouvement": "la main reste presque immobile (signe tenu)",
 "visage": [
 "la bouche articule le mot"
-]
+],
+"tDebut": 1.58,
+"tFin": 1.92
 },
 "je ne sais pas": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/2/27/Je_ne_sais_pas.webm",
@@ -1923,7 +2197,9 @@ window.DESCRIPTIONS = {
 "mouvement": "vers le haut et vers sa droite",
 "visage": [
 "la bouche articule le mot"
-]
+],
+"tDebut": 1.33,
+"tFin": 2.67
 },
 "habiter": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/7/7d/Habiter.webm",
@@ -1936,7 +2212,9 @@ window.DESCRIPTIONS = {
 "emplacement": "devant la poitrine",
 "emplacementFin": "devant la poitrine",
 "mouvement": "petit mouvement",
-"deuxMains": "les deux mains bougent en miroir"
+"deuxMains": "les deux mains bougent en miroir",
+"tDebut": 1.08,
+"tFin": 2.08
 },
 "oui": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/d/d9/LL-Q33302_%28fsl%29-Hugo_en_r%C3%A9sidence-oui.webm",
@@ -1950,7 +2228,9 @@ window.DESCRIPTIONS = {
 "mouvement": "vers le bas",
 "visage": [
 "la bouche articule le mot"
-]
+],
+"tDebut": 0.92,
+"tFin": 1.58
 },
 "aujourd'hui": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/7/76/LL-Q33302_%28fsl%29-Laura_Jauvert-Aujourd%27hui.webm",
@@ -1966,6 +2246,8 @@ window.DESCRIPTIONS = {
 "deuxMains": "les deux mains bougent en miroir",
 "visage": [
 "la bouche articule le mot"
-]
+],
+"tDebut": 1.42,
+"tFin": 2.5
 }
 };

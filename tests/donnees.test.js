@@ -71,3 +71,23 @@ test("les directions des descriptions deviennent « votre droite / gauche », in
   assert.equal(directions("vers sa gauche"), 'vers votre <span class="dir" data-d="gauche"></span>');
   assert.equal(directions("devant la poitrine"), "devant la poitrine");
 });
+
+test("chaque signe des phrases d'exercice existe dans le dictionnaire, avec un rôle expliqué", () => {
+  const { PHRASES, REGLES_PHRASES } = site;
+  assert.ok(PHRASES.length >= 30);
+  const absents = [];
+  for (const p of PHRASES) {
+    assert.equal(p.signes.length, p.roles.length, p.fr);
+    for (const s of p.signes) if (!Dico.trouver(s)) absents.push(`${s} (${p.fr})`);
+    assert.match(p.fr, /^[A-ZÀ-Ý].*[.?]$/, p.fr);
+  }
+  assert.deepEqual(absents, []);
+  assert.equal(new Set(PHRASES.map(p => p.fr)).size, PHRASES.length, "phrases en double");
+  // le temps est toujours en premier, la question toujours en dernier
+  for (const p of PHRASES) {
+    if (p.roles.includes("temps")) assert.equal(p.roles[0], "temps", p.fr);
+    if (p.roles.includes("question")) assert.equal(p.roles.at(-1), "question", p.fr);
+  }
+  const rolesExpliques = PHRASES.flatMap(p => p.roles).filter(r => !["qui", "chose", "sujet"].includes(r));
+  for (const r of rolesExpliques) assert.ok(REGLES_PHRASES[r], `règle manquante pour « ${r} »`);
+});

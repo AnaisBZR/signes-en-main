@@ -32,7 +32,12 @@ const ICONES = {
   reviser: '<path d="M4 12a8 8 0 0 1 14-5.3M20 12a8 8 0 0 1-14 5.3M18 3v4h-4M6 21v-4h4"/>',
   flamme: '<path d="M12 21c-3.9 0-6.5-2.6-6.5-6.2 0-3.3 2.2-5.4 3.6-7.6.4 1.6 1.2 2.6 2.2 3.1-.2-2.9 1.1-5.7 3.4-7.3-.3 2.9 1 4.8 2.4 6.6 1.1 1.4 1.4 2.8 1.4 4.3C18.5 18.4 15.9 21 12 21z" fill="currentColor" stroke="none"/>',
   coche: '<path d="M5 12.5l4.5 4.5L19 7.5" stroke-width="3"/>',
-  etoile: '<path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/>'
+  etoile: '<path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/>',
+  chrono: '<circle cx="12" cy="13.5" r="7.5"/><path d="M12 9.5v4l2.5 1.5M10 3h4M12 3v3M18.5 6.5l1.5-1.5"/>',
+  paires: '<rect x="3" y="5" width="9" height="13" rx="2"/><path d="M15 6.5l3.5 1a2 2 0 0 1 1.4 2.4l-2.4 8.7a2 2 0 0 1-2.4 1.4L12 19"/>',
+  crayon: '<path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16v4zM13.5 6.5l4 4"/>',
+  blocs: '<rect x="3" y="14" width="7" height="6" rx="1.5"/><rect x="14" y="14" width="7" height="6" rx="1.5"/><rect x="8.5" y="4" width="7" height="6" rx="1.5"/>',
+  cible: '<circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r=".8" fill="currentColor"/>'
 };
 
 /** Compteurs de la barre du haut : série de jours et signes appris. */
@@ -158,6 +163,16 @@ function pageAccueil() {
         <span class="petit">signe${aReviser > 1 ? "s" : ""} à réviser aujourd'hui</span>
       </a>
     </section>
+    ${(() => {
+      const d = Records.defiDuJour();
+      return `<a class="defi-carte ${d != null ? "fait" : ""}" href="#/entrainement/defi">
+        <span class="carte-icone">${icone("cible")}</span>
+        <span class="defi-texte"><span class="surtitre">Défi du jour</span>
+          <strong>${d != null ? `Réussi aujourd'hui : ${d} / 10` : "10 questions variées pour garder la forme"}</strong>
+          <span class="petit">${d != null ? "Revenez demain pour un nouveau défi." : "Environ 5 minutes · vidéos, mots et phrases"}</span></span>
+        <span class="btn">${d != null ? "Refaire" : "C'est parti"}</span>
+      </a>`;
+    })()}
     ${Sauvegarde.conseillee() ? `
       <a class="rappel-sauvegarde" href="#/progression/sauvegarde">
         <strong>Pensez à sauvegarder votre progression</strong>
@@ -738,6 +753,7 @@ function page404() {
 let premiereVisite = true;
 function route() {
   clearTimeout(minuteurEpeler);
+  quitterPage(); // arrête l'exercice en cours (minuteurs, clavier) : voir exercices.js
   const [, page, p1, p2] = (location.hash || "#/").slice(1).split("/");
   const rubrique = { theme: "lecons", signe: "lecons", mot: "dictionnaire", quiz: "reviser" }[page] || page || "";
   document.querySelectorAll(".topbar nav a").forEach(a => {
@@ -779,6 +795,7 @@ function afficherPage(page, p1, p2) {
     case "progression": return pageProgression();
     case "dictionnaire": return pageDictionnaire(p1);
     case "mot": return pageMot(p1);
+    case "entrainement": return pageEntrainement(p1, p2);
     default: return page404();
   }
 }

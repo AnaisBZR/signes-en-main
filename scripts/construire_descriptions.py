@@ -7,15 +7,17 @@ RACINE = Path(__file__).resolve().parent.parent
 ENTREE = RACINE / "data" / "descriptions-brutes.jsonl"
 SORTIE = RACINE / "js" / "descriptions.js"
 CHAMPS = ["video", "mains", "dominante", "forme", "formeSure", "taillePx", "formeAutre",
-          "emplacement", "emplacementFin", "mouvement", "deuxMains", "visage", "erreur"]
+          "emplacement", "emplacementFin", "mouvement", "deuxMains", "visage", "erreur",
+          "tDebut", "tFin"]  # début et fin du geste dans la vidéo (en secondes) : phrases enchaînées sans temps mort
 
 resultats = {}
 for ligne in ENTREE.read_text(encoding="utf-8").splitlines():
     if ligne.strip():
         d = json.loads(ligne)
         r = {c: d[c] for c in CHAMPS if d.get(c) not in (None, "", [])}
-        if "formeSure" in r:
-            r["formeSure"] = round(r["formeSure"], 2)
+        for c in ("formeSure", "tDebut", "tFin"):
+            if c in r:
+                r[c] = round(r[c], 2)
         resultats[d["k"]] = r  # la dernière analyse d'un signe remplace les précédentes
 
 ok = sum(1 for r in resultats.values() if "erreur" not in r)
