@@ -22,7 +22,7 @@ if errorlevel 1 (
 )
 echo.
 
-choice /c ON /n /m "  3. Verifier aussi que les 881 videos et photos sont en ligne ? (environ 3 min) [O/N] "
+choice /c ON /n /m "  3. Verifier aussi que les 881 videos et photos sont en ligne ? (environ 30 s) [O/N] "
 if errorlevel 2 goto fin
 python scripts\verifier_videos.py
 
