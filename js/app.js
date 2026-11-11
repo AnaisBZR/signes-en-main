@@ -46,6 +46,25 @@ function majCompteurs() {
     <a class="compteur appris" href="#/progression" title="Signes appris">${icone("etoile")}${appris}<span>/${TOUS_LES_SIGNES.length}</span></a>`;
 }
 
+/**
+ * Mode gaucher : la classe « gaucher » sur <html> retourne vidéos et photos (style.css).
+ * On met à jour la page en place, sans la recharger (un quiz en cours n'est pas perdu).
+ */
+function appliquerReglages() {
+  const gaucher = Reglages.gaucher;
+  document.documentElement.classList.toggle("gaucher", gaucher);
+  document.querySelectorAll(".btn-gaucher").forEach(b => b.setAttribute("aria-pressed", gaucher));
+  document.querySelectorAll(".video-lsf video").forEach(v => (v.controls = !gaucher));
+  const opt = document.getElementById("opt-gaucher");
+  if (opt) opt.checked = gaucher;
+}
+function basculerGaucher() {
+  Reglages.changer("gaucher", !Reglages.gaucher);
+  appliquerReglages();
+}
+document.addEventListener("click", ev => { if (ev.target.closest(".btn-gaucher")) basculerGaucher(); });
+appliquerReglages();
+
 /** Thème à travailler ensuite : le premier qui n'est pas entièrement appris. */
 const themeSuivant = () => THEMES.find(t => t.entrees.some(e => !Progression.estAppris(e.k))) || THEMES[0];
 const nbAppris = t => t.entrees.filter(e => Progression.estAppris(e.k)).length;
@@ -406,6 +425,7 @@ function pageAlphabet(mode) {
     <div class="actions-theme">
       <a class="btn" href="#/alphabet/quiz">Quiz des lettres</a>
       <a class="btn btn-second" href="#/alphabet/epeler">Lire un mot épelé</a>
+      ${boutonGaucher("btn btn-second")}
     </div>
     <div class="alphabet">${ALPHA.map(a => `
       <button class="lettre" data-l="${a.lettre}"><img src="${echapper(a.image)}" alt="Lettre ${a.lettre} en LSF" loading="lazy"><strong>${a.lettre}</strong></button>`).join("")}
@@ -530,7 +550,16 @@ function pageProgression() {
     ${vus ? `<h2>Mémorisation</h2>${htmlBoites(Progression.parBoite())}` : ""}
     <h2>Par thème</h2>
     <div class="grille">${THEMES.map(carteTheme).join("")}</div>
+    <h2>Réglages</h2>
+    <label class="reglage">
+      <input type="checkbox" id="opt-gaucher" ${Reglages.gaucher ? "checked" : ""}>
+      <span class="interrupteur" aria-hidden="true"></span>
+      <span><strong>Je signe de la main gauche</strong>
+        <span class="petit">Les vidéos et les photos sont retournées comme dans un miroir : vous voyez les signes faits avec la main gauche.
+        Les directions des descriptions (« vers votre droite ») sont inversées aussi.</span></span>
+    </label>
     <button class="btn btn-second" id="reset">Réinitialiser ma progression</button>`;
+  document.getElementById("opt-gaucher").onchange = basculerGaucher;
   document.getElementById("reset").onclick = () => {
     if (confirm("Effacer toute votre progression ?")) { Progression.reinitialiser(); pageProgression(); }
   };

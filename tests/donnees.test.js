@@ -64,3 +64,10 @@ test("la recherche du dictionnaire trouve un mot sans accent ni majuscule", () =
   assert.equal(Dico.trouver("bonjour")?.mot, "Bonjour");
   assert.ok(Dico.trouver("Pourquoi ?"), "un « ? » final est toléré");
 });
+
+test("les directions des descriptions deviennent « votre droite / gauche », inversables en mode gaucher", () => {
+  const { directions } = site;
+  assert.equal(directions("vers sa droite et vers le haut"), 'vers votre <span class="dir" data-d="droite"></span> et vers le haut');
+  assert.equal(directions("vers sa gauche"), 'vers votre <span class="dir" data-d="gauche"></span>');
+  assert.equal(directions("devant la poitrine"), "devant la poitrine");
+});

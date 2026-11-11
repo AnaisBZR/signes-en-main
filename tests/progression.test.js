@@ -74,3 +74,12 @@ test("réinitialiser efface tout", () => {
   P.reinitialiser();
   assert.deepEqual(P.lire(), P.vide());
 });
+
+test("le mode gaucher est mémorisé, et n'est pas effacé avec la progression", () => {
+  const { Progression: P, Reglages: R } = chargerSite();
+  assert.equal(R.gaucher, false, "désactivé par défaut");
+  R.changer("gaucher", true);
+  assert.equal(R.gaucher, true);
+  P.reinitialiser();
+  assert.equal(R.gaucher, true);
+});

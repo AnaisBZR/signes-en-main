@@ -89,3 +89,21 @@ const Progression = {
   },
   reinitialiser() { this.sauver(this.vide()); }
 };
+
+// Réglages de l'apprenant, rangés à part : « Réinitialiser ma progression » ne les efface pas.
+//  - gaucher : vidéos et photos retournées comme dans un miroir, directions inversées.
+const Reglages = {
+  CLE: "lsf-reglages",
+  DEFAUT: { gaucher: false },
+  lire() {
+    try { return { ...this.DEFAUT, ...JSON.parse(localStorage.getItem(this.CLE) || "{}") }; }
+    catch { return { ...this.DEFAUT }; }
+  },
+  changer(cle, valeur) {
+    const r = this.lire();
+    r[cle] = valeur;
+    try { localStorage.setItem(this.CLE, JSON.stringify(r)); } catch { /* navigation privée */ }
+    return r;
+  },
+  get gaucher() { return !!this.lire().gaucher; }
+};

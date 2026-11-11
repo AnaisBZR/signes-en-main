@@ -161,21 +161,42 @@ function htmlDescription(e) {
         <strong>Comment faire le signe</strong>
         <span class="etiquette-auto" title="Description produite par un ordinateur qui a analysé la vidéo">Automatique · à vérifier</span>
       </div>
-      <dl>${lignes.map(([t, v]) => `<dt>${t}</dt><dd>${echapper(v)}</dd>`).join("")}</dl>
+      <dl>${lignes.map(([t, v]) => `<dt>${t}</dt><dd>${directions(echapper(v))}</dd>`).join("")}</dl>
       <p class="petit">Analyse automatique de la première vidéo${video ? ` (${echapper(video.auteur.split(/Video editing|:|,/)[0].trim())})` : ""}. Elle peut se tromper :
-      en cas de doute, fiez-vous à la vidéo (« sa droite » = la droite de la personne qui signe).</p>
+      en cas de doute, fiez-vous à la vidéo.
+      <span class="si-droitier">Les directions sont celles de la personne qui signe : ce sont les vôtres quand vous l'imitez.</span>
+      <span class="si-gaucher">Mode gaucher : la vidéo est retournée comme dans un miroir et les directions sont inversées, pour signer de la main gauche.</span></p>
     </div>`;
 }
 
+/**
+ * « vers sa droite » -> « vers votre droite », écrit de façon à s'inverser tout seul en
+ * mode gaucher (la feuille de style choisit le mot : voir .dir dans style.css).
+ */
+const directions = html => html.replace(/\bsa (droite|gauche)\b/g, 'votre <span class="dir" data-d="$1"></span>');
+
+/** Bouton « Gaucher » : retourne vidéos et photos comme dans un miroir (voir basculerGaucher). */
+const boutonGaucher = (classe = "") => `
+  <button class="btn-gaucher ${classe}" aria-pressed="${Reglages.gaucher}"
+    title="Retourner les vidéos comme dans un miroir, pour signer de la main gauche">Mode gaucher</button>`;
+
 /** Lecteur vidéo réutilisable (vraie vidéo LSF + crédits). */
 function htmlVideo(v, { autoplay = true } = {}) {
+  // En mode gaucher, l'image est retournée : les commandes du navigateur le seraient aussi
+  // (barre de temps à l'envers), on les remplace donc par les nôtres (.video-lecture).
+  const gaucher = Reglages.gaucher;
   return `
     <div class="video-lsf">
-      <video src="${echapper(v.url)}" ${autoplay ? "autoplay" : ""} muted loop playsinline controls preload="metadata"></video>
+      <video src="${echapper(v.url)}" ${autoplay ? "autoplay" : ""} muted loop playsinline ${gaucher ? "" : "controls"} preload="metadata"></video>
       <div class="video-barre">
+        <div class="video-lecture">
+          <button class="lire" aria-label="Pause">❚❚</button>
+          <input type="range" min="0" max="1000" value="0" step="1" aria-label="Position dans la vidéo">
+        </div>
         <div class="vitesses video-vitesses">
           <button data-v="0.5">0,5×</button><button data-v="0.75">0,75×</button><button data-v="1" class="actif">1×</button>
         </div>
+        ${boutonGaucher()}
         <span class="video-credit">
           ${echapper(v.auteur)} · ${echapper(v.source)} ·
           <a href="${echapper(v.page)}" target="_blank" rel="noopener">${echapper(v.licence || "licence")}</a>
@@ -190,6 +211,22 @@ function brancherVitesses(zone) {
     video.playbackRate = parseFloat(b.dataset.v);
     zone.querySelectorAll(".video-vitesses button").forEach(x => x.classList.toggle("actif", x === b));
   }));
+  // Commandes maison (mode gaucher) : lecture/pause et barre de temps
+  const lire = zone.querySelector(".video-lecture .lire"), barre = zone.querySelector(".video-lecture input");
+  if (!lire) return;
+  const majBouton = () => {
+    lire.textContent = video.paused ? "▶" : "❚❚";
+    lire.setAttribute("aria-label", video.paused ? "Lire" : "Pause");
+  };
+  const basculer = () => (video.paused ? video.play().catch(() => {}) : video.pause());
+  lire.onclick = basculer;
+  video.addEventListener("click", () => { if (!video.controls) basculer(); });
+  video.addEventListener("play", majBouton);
+  video.addEventListener("pause", majBouton);
+  video.addEventListener("timeupdate", () => {
+    if (video.duration && document.activeElement !== barre) barre.value = Math.round((1000 * video.currentTime) / video.duration);
+  });
+  barre.oninput = () => { if (video.duration) video.currentTime = (barre.value / 1000) * video.duration; };
 }
 
 function pageMot(k) {

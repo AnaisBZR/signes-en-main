@@ -14,13 +14,13 @@
 </head>
 <body>
   <h1>Tests du site dans le navigateur</h1>
-  <p>Ouvre chaque page du site et vérifie qu'elle s'affiche sans erreur. Votre progression est mise de côté pendant le test, puis remise à l'identique.</p>
+  <p>Ouvre chaque page du site et vérifie qu'elle s'affiche sans erreur. Votre progression et vos réglages sont mis de côté pendant le test, puis remise à l'identique.</p>
   <div id="resume">Test en cours…</div>
   <div id="journal"></div>
   <iframe id="site" src="../index.html"></iframe>
 
   <script>
-    const CLE = "lsf-progression-v2";
+    const CLES = ["lsf-progression-v2", "lsf-reglages"]; // mises de côté pendant le test
     const journal = document.getElementById("journal");
     const ecrire = t => { journal.textContent += t + "\n"; journal.scrollTop = 1e9; };
     const attendre = ms => new Promise(r => setTimeout(r, ms));
@@ -45,8 +45,8 @@
     }
 
     cadre.addEventListener("load", async () => {
-      const sauvegarde = localStorage.getItem(CLE);
-      localStorage.removeItem(CLE);
+      const sauvegarde = CLES.map(c => localStorage.getItem(c));
+      CLES.forEach(c => localStorage.removeItem(c));
       const w = cadre.contentWindow;
       w.addEventListener("error", e => (w.__erreurs || []).push(e.message));
       w.addEventListener("unhandledrejection", e => (w.__erreurs || []).push(String(e.reason)));
@@ -94,7 +94,7 @@
         RESULTAT.echecs.push({ hash: "(test)", problemes: [e.message] });
         ecrire("✗ Le test lui-même a planté : " + e.message);
       } finally {
-        if (sauvegarde === null) localStorage.removeItem(CLE); else localStorage.setItem(CLE, sauvegarde);
+        CLES.forEach((c, i) => (sauvegarde[i] === null ? localStorage.removeItem(c) : localStorage.setItem(c, sauvegarde[i])));
         cadre.contentWindow.location.hash = "#/";
         RESULTAT.fini = true;
         const r = document.getElementById("resume");

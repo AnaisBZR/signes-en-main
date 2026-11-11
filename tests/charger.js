@@ -21,7 +21,7 @@ function fauxStockage() {
 /** Renvoie les objets globaux du site : LSF_DATA, Progression, Dico, ALPHABET, DESCRIPTIONS… */
 // (chaque appel recharge tout : chaque test part d'une progression vide)
 const CODE = FICHIERS.map(f => fs.readFileSync(path.join(RACINE, f), "utf8")).join("\n;\n")
-  + "\n;return { Progression, Dico };";
+  + "\n;return { Progression, Reglages, Dico, directions };";
 
 function chargerSite() {
   const contexte = { localStorage: fauxStockage() };
