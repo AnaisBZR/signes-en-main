@@ -240,6 +240,32 @@ html.gaucher .dir[data-d="droite"]::before { content: "gauche"; }
 html.gaucher .dir[data-d="gauche"]::before { content: "droite"; }
 .si-gaucher, html.gaucher .si-droitier { display: none; }
 html.gaucher .si-gaucher { display: inline; }
+/* ---------- Sauvegarde de la progression ---------- */
+.sauvegarde {
+  background: var(--surface); border-radius: var(--rayon); padding: 20px 22px; box-shadow: var(--ombre); margin-bottom: 28px; max-width: 720px;
+}
+.sauvegarde > p:first-child { margin-top: 0; }
+.sauvegarde .a-faire { color: var(--chaud-fonce); font-weight: 600; }
+.sauvegarde .hero-actions { margin: 14px 0 4px; }
+.transfert { margin-top: 16px; border-top: 1px solid var(--bord); padding-top: 14px; }
+.transfert summary { cursor: pointer; font-weight: 600; color: var(--accent-fonce); }
+.transfert textarea {
+  width: 100%; box-sizing: border-box; margin-top: 12px; border: 2px solid var(--bord); border-radius: 14px; padding: 10px 12px;
+  font: .8rem/1.4 ui-monospace, monospace; color: var(--texte); background: var(--fond); resize: vertical; word-break: break-all;
+}
+.transfert textarea:focus { outline: none; border-color: var(--accent); }
+.message-sauvegarde { margin: 14px 0 0; padding: 12px 14px; border-radius: 14px; }
+.message-sauvegarde.ok { background: var(--ok-pale); color: var(--ok-fonce); }
+.message-sauvegarde.ko { background: var(--ko-pale); color: var(--ko-fonce); }
+.carte-restauration { margin-top: 16px; padding: 16px; border-radius: 16px; background: var(--fond); }
+.carte-restauration p { margin: 0; }
+.rappel-sauvegarde {
+  display: flex; flex-direction: column; gap: 2px; margin-top: 16px; padding: 14px 18px; border-radius: 18px; text-decoration: none;
+  background: var(--chaud-pale); color: var(--chaud-fonce); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--chaud) 30%, transparent);
+}
+.rappel-sauvegarde .petit { color: var(--chaud-fonce); opacity: .85; }
+.rappel-sauvegarde:hover { box-shadow: inset 0 0 0 2px var(--chaud); }
+
 /* Réglage avec interrupteur (page Progression) */
 .reglage {
   display: flex; align-items: flex-start; gap: 14px; background: var(--surface); border-radius: var(--rayon); padding: 18px 20px;

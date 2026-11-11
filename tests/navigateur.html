@@ -20,7 +20,7 @@
   <iframe id="site" src="../index.html"></iframe>
 
   <script>
-    const CLES = ["lsf-progression-v2", "lsf-reglages"]; // mises de côté pendant le test
+    const CLES = ["lsf-progression-v2", "lsf-reglages", "lsf-derniere-sauvegarde"]; // mises de côté pendant le test
     const journal = document.getElementById("journal");
     const ecrire = t => { journal.textContent += t + "\n"; journal.scrollTop = 1e9; };
     const attendre = ms => new Promise(r => setTimeout(r, ms));

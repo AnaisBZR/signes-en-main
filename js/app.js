@@ -116,6 +116,11 @@ function pageAccueil() {
         <span class="petit">signe${aReviser > 1 ? "s" : ""} à réviser aujourd'hui</span>
       </a>
     </section>
+    ${Sauvegarde.conseillee() ? `
+      <a class="rappel-sauvegarde" href="#/progression/sauvegarde">
+        <strong>Pensez à sauvegarder votre progression</strong>
+        <span class="petit">Elle n'est enregistrée que dans ce navigateur. Une sauvegarde prend deux secondes →</span>
+      </a>` : ""}
     <section>
       <h2>Thèmes</h2>
       <div class="grille">${THEMES.slice(0, 4).map(carteTheme).join("")}${carteAlphabet()}</div>
@@ -558,10 +563,108 @@ function pageProgression() {
         <span class="petit">Les vidéos et les photos sont retournées comme dans un miroir : vous voyez les signes faits avec la main gauche.
         Les directions des descriptions (« vers votre droite ») sont inversées aussi.</span></span>
     </label>
+    <h2 id="sauvegarde">Sauvegarde</h2>
+    ${htmlSauvegarde()}
     <button class="btn btn-second" id="reset">Réinitialiser ma progression</button>`;
   document.getElementById("opt-gaucher").onchange = basculerGaucher;
+  brancherSauvegarde();
+  if (location.hash.endsWith("/sauvegarde")) document.getElementById("sauvegarde").scrollIntoView();
   document.getElementById("reset").onclick = () => {
     if (confirm("Effacer toute votre progression ?")) { Progression.reinitialiser(); pageProgression(); }
+  };
+}
+
+// ---------------------------------------------------------------------
+// Sauvegarde de la progression (fichier ou code de transfert)
+// ---------------------------------------------------------------------
+const dateFr = iso => new Date(iso).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
+
+function htmlSauvegarde() {
+  const d = Sauvegarde.derniereDate();
+  return `
+    <div class="sauvegarde">
+      <p>Votre progression est enregistrée <strong>dans ce navigateur uniquement</strong>. Si vous videz l'historique
+        ou changez d'appareil, elle est perdue : gardez-en une sauvegarde.</p>
+      <p class="petit ${Sauvegarde.conseillee() ? "a-faire" : ""}">Dernière sauvegarde : ${d ? `le ${dateFr(d)}` : "jamais"}.</p>
+      <div class="hero-actions">
+        <button class="btn" id="exporter">Télécharger une sauvegarde</button>
+        <button class="btn btn-second" id="importer">Restaurer une sauvegarde</button>
+        <input type="file" id="fichier-sauvegarde" accept=".json,application/json" hidden>
+      </div>
+      <details class="transfert">
+        <summary>Passer sur un autre appareil avec un code</summary>
+        <p class="petit">Copiez votre code, envoyez-le-vous (message, e-mail…), puis collez-le ici sur l'autre appareil.</p>
+        <div class="hero-actions"><button class="btn btn-second" id="copier-code">Copier mon code</button></div>
+        <textarea id="code-transfert" rows="3" placeholder="Collez ici un code qui commence par SEM1." spellcheck="false" aria-label="Code de transfert"></textarea>
+        <div class="hero-actions"><button class="btn btn-second" id="utiliser-code">Utiliser ce code</button></div>
+      </details>
+      <div id="choix-restauration" aria-live="polite"></div>
+    </div>`;
+}
+
+function brancherSauvegarde() {
+  const zone = document.getElementById("choix-restauration");
+  const message = (html, classe = "") => (zone.innerHTML = `<p class="message-sauvegarde ${classe}">${html}</p>`);
+
+  document.getElementById("exporter").onclick = () => {
+    const url = URL.createObjectURL(new Blob([JSON.stringify(Sauvegarde.creer(), null, 1)], { type: "application/json" }));
+    const a = Object.assign(document.createElement("a"), { href: url, download: Sauvegarde.nomFichier() });
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    Sauvegarde.noterExport();
+    message(`Sauvegarde téléchargée : <strong>${echapper(Sauvegarde.nomFichier())}</strong> (dans vos Téléchargements). Gardez-la précieusement.`, "ok");
+    document.querySelector(".sauvegarde .a-faire")?.classList.remove("a-faire");
+  };
+
+  // Une sauvegarde lue (fichier ou code) : on montre ce qu'elle contient, puis on demande quoi faire.
+  const proposer = brute => {
+    let s;
+    try { s = Sauvegarde.verifier(brute); } catch (err) { return message(echapper(err.message), "ko"); }
+    const r = Sauvegarde.resume(s.progression), actuel = Sauvegarde.resume(Progression.lire());
+    const quoi = `${r.vus} signe(s) vu(s), dont ${r.appris} appris, ${r.jours} jour(s) d'activité`;
+    const appliquer = mode => {
+      Sauvegarde.restaurer(s, mode);
+      appliquerReglages(); majCompteurs(); pageProgression();
+      document.getElementById("choix-restauration").innerHTML =
+        `<p class="message-sauvegarde ok">Progression restaurée${mode === "fusionner" ? " et fusionnée avec celle de cet appareil" : ""}.</p>`;
+      document.getElementById("sauvegarde").scrollIntoView({ block: "start" });
+    };
+    if (!actuel.vus) return appliquer("remplacer"); // rien à perdre ici : on restaure directement
+    zone.innerHTML = `
+      <div class="carte-restauration">
+        <p><strong>Sauvegarde${s.date ? ` du ${dateFr(s.date)}` : ""}</strong> : ${quoi}.<br>
+        <span class="petit">Sur cet appareil : ${actuel.vus} signe(s) vu(s), dont ${actuel.appris} appris.</span></p>
+        <div class="hero-actions">
+          <button class="btn" data-mode="fusionner">Fusionner les deux</button>
+          <button class="btn btn-second" data-mode="remplacer">Remplacer par la sauvegarde</button>
+          <button class="btn btn-second" data-mode="">Annuler</button>
+        </div>
+        <p class="petit">« Fusionner » garde, pour chaque signe, la version la plus travaillée : rien n'est perdu.</p>
+      </div>`;
+    zone.querySelectorAll("[data-mode]").forEach(b => (b.onclick = () => (b.dataset.mode ? appliquer(b.dataset.mode) : (zone.innerHTML = ""))));
+  };
+
+  const fichier = document.getElementById("fichier-sauvegarde");
+  document.getElementById("importer").onclick = () => fichier.click();
+  fichier.onchange = async () => {
+    const f = fichier.files[0];
+    fichier.value = "";
+    if (!f) return;
+    try { proposer(JSON.parse(await f.text())); }
+    catch { message("Ce fichier est illisible : choisissez le fichier <em>signes-en-main-sauvegarde-….json</em>.", "ko"); }
+  };
+
+  document.getElementById("copier-code").onclick = async ev => {
+    const code = await Sauvegarde.versCode();
+    const champ = document.getElementById("code-transfert");
+    try { await navigator.clipboard.writeText(code); ev.target.textContent = "Code copié ✓"; }
+    catch { champ.value = code; champ.select(); ev.target.textContent = "Code affiché ci-dessous : copiez-le"; }
+    Sauvegarde.noterExport();
+  };
+  document.getElementById("utiliser-code").onclick = async () => {
+    const code = document.getElementById("code-transfert").value.trim();
+    if (!code) return message("Collez d'abord un code dans la case.", "ko");
+    try { proposer(await Sauvegarde.depuisCode(code)); } catch (err) { message(echapper(err.message), "ko"); }
   };
 }
 
