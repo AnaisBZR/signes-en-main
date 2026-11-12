@@ -17,3 +17,7 @@ data/verification-videos.txt
 
 # Jeton personnel Hugging Face : secret, ne jamais le versionner ni le publier
 animateur-video/config-ia.json
+
+# Essais expérimentaux (avatar 3D) : gardés sur cet ordinateur, pas publiés
+animateur-video/
+studio/
