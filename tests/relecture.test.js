@@ -23,7 +23,8 @@ test("le texte d'un signalement et le lien GitHub (seulement s'il est configuré
   const site = chargerSite();
   const s = site.Signalements.ajouter({ k: "chat", mot: "Chat", points: ["mouvement"], texte: "Le geste est répété" });
   assert.match(site.Signalements.versTexte(s), /Signe : Chat\nProblème : le mouvement\nDétails : Le geste est répété/);
-  assert.equal(site.Signalements.lienGithub(s), "", "pas de lien tant que le site n'est pas en ligne");
+  site.CONFIG_SITE.depotGithub = "";
+  assert.equal(site.Signalements.lienGithub(s), "", "pas de lien sans dépôt GitHub");
   site.CONFIG_SITE.depotGithub = "moi/signes-en-main";
   const lien = site.Signalements.lienGithub(s);
   assert.ok(lien.startsWith("https://github.com/moi/signes-en-main/issues/new?title="));

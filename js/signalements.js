@@ -4,7 +4,7 @@
 // Une fois le site en ligne, ils pourront aussi être envoyés sur GitHub (CONFIG_SITE.depotGithub).
 
 const CONFIG_SITE = {
-  depotGithub: "" // « nom-utilisateur/nom-du-depot » : rempli à la mise en ligne
+  depotGithub: "AnaisBZR/signes-en-main" // dépôt GitHub du site : les signalements peuvent y être envoyés
 };
 
 const Signalements = {
