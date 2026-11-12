@@ -41,6 +41,16 @@ Double-cliquez sur **« Vérifier le site.bat »**. Il :
 Pour tester toutes les pages dans le navigateur (environ 900 pages, et un quiz complet par
 thème) : site ouvert, allez sur http://127.0.0.1:8766/tests/navigateur.html.
 
+## Mise en ligne (GitHub Pages)
+
+Le site est publié automatiquement par GitHub à chaque `git push` sur la branche `main`
+(`.github/workflows/publier.yml`) : les tests passent d'abord, puis seuls `index.html`, `css/`
+et `js/` sont mis en ligne. Si un test échoue, l'ancienne version reste en ligne ; le détail
+est dans l'onglet « Actions » du dépôt sur GitHub.
+
+Pour publier une modification : `git add -A`, `git commit -m "…"`, puis `git push`.
+Le site en ligne est à jour une à deux minutes plus tard.
+
 ## Historique des versions (Git)
 
 Le dossier est suivi par Git : chaque étape importante est enregistrée et peut être annulée.

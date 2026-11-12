@@ -810,9 +810,13 @@ function afficherPage(page, p1, p2) {
     case "mot": return pageMot(p1);
     case "entrainement": return pageEntrainement(p1, p2);
     case "comprendre": return pageComprendre(p1);
+    case "credits": return pageCredits();
     default: return page404();
   }
 }
+
+// Le studio 3D (expérimental) n'existe que sur l'ordinateur où le site est développé, pas en ligne
+if (["127.0.0.1", "localhost", ""].includes(location.hostname)) document.getElementById("lien-studio")?.removeAttribute("hidden");
 
 window.addEventListener("hashchange", route);
 route();

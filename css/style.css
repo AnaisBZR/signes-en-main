@@ -796,3 +796,17 @@ html.gaucher .vignette-signe video { transform: scaleX(-1); }
 .message-signaler:empty { display: none; }
 .merci-signaler { margin: 0; }
 .form-signaler .btn { justify-self: start; }
+
+/* ------------------------------------------------------------------ */
+/* Crédits et licences                                                  */
+/* ------------------------------------------------------------------ */
+.grille-credits { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
+.credit-carte { background: var(--surface); border-radius: var(--rayon); box-shadow: var(--ombre); padding: 14px 16px; display: grid; gap: 4px; align-content: start; }
+.credit-carte a, .liste-sources a, .table-credits a, main section > p a, .hero-sous a { color: var(--accent-texte); font-weight: 600; }
+.liste-sources { padding-left: 20px; max-width: 760px; }
+.liste-sources li { margin: 8px 0; }
+.liste-complete summary { cursor: pointer; font-weight: 700; color: var(--accent-texte); padding: 6px 0; }
+.table-defile { overflow-x: auto; margin-top: 10px; border-radius: var(--rayon); box-shadow: var(--ombre); }
+.table-credits { width: 100%; border-collapse: collapse; background: var(--surface); font-size: .9rem; }
+.table-credits th, .table-credits td { text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--bord); }
+.table-credits th { position: sticky; top: 0; background: var(--fond-2); }

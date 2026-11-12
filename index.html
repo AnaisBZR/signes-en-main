@@ -6,6 +6,11 @@
   <title>Signes en main</title>
   <meta name="description" content="Apprendre la Langue des Signes Française (LSF) avec de vraies vidéos de personnes qui signent : leçons, quiz, révisions et dictionnaire.">
   <meta name="theme-color" content="#f5f3ee">
+  <meta property="og:title" content="Signes en main – apprendre la LSF">
+  <meta property="og:description" content="Leçons, exercices, révisions et dictionnaire de la Langue des Signes Française, avec de vraies vidéos de personnes qui signent.">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="fr_FR">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%231f6f64'/%3E%3Ctext x='32' y='45' font-family='Arial,sans-serif' font-size='38' font-weight='700' fill='white' text-anchor='middle'%3ES%3C/text%3E%3C/svg%3E">
   <script>
     // Apparence choisie (clair / sombre doux / auto), appliquée avant l'affichage pour éviter un éclair blanc
     try { document.documentElement.dataset.theme = JSON.parse(localStorage.getItem("lsf-reglages") || "{}").theme || "clair"; } catch (e) {}
@@ -13,7 +18,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=a6c1fc89">
+  <link rel="stylesheet" href="css/style.css?v=bb43a6b9">
 </head>
 <body>
   <a class="lien-evitement" href="#app" onclick="event.preventDefault(); const h = document.querySelector('#app h1') || document.getElementById('app'); h.setAttribute('tabindex', '-1'); h.focus();">Aller au contenu</a>
@@ -36,7 +41,8 @@
 
   <footer class="footer">
     Apprendre la Langue des Signes Française (LSF) · Vidéos de signeurs sous licences libres (Wikimedia Commons :
-    Lingua Libre, Elix, Laura Jauvert…) · <a href="studio/">Studio 3D (expérimental)</a>
+    Lingua Libre, Elix, Laura Jauvert…) · <a href="#/credits">Crédits et licences</a>
+    <span id="lien-studio" hidden> · <a href="studio/">Studio 3D (expérimental)</a></span>
   </footer>
 
   <!-- Pas de modules : le site s'ouvre aussi en double-cliquant sur index.html (vidéos lues en ligne) -->
@@ -50,7 +56,8 @@
   <script src="js/phrases.js?v=d8cfab4e"></script>
   <script src="js/exercices.js?v=be856c77"></script>
   <script src="js/comprendre.js?v=8f681499"></script>
-  <script src="js/app.js?v=eb804589"></script>
+  <script src="js/credits.js?v=a79e6a01"></script>
+  <script src="js/app.js?v=3f071850"></script>
   <script>
     // Si les fichiers du site n'ont pas pu être chargés (page ouverte en « aperçu » dans un
     // autre logiciel), on explique comment l'ouvrir au lieu d'afficher une page blanche.
