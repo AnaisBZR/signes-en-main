@@ -104,7 +104,7 @@ test("une sauvegarde ancienne (sans records) reste valable", () => {
   const s = S.verifier({ app: "signes-en-main", version: 1, progression: { cartes: {}, quiz: {}, jours: [] } });
   assert.deepEqual(s.records, R.vide());
   assert.deepEqual(R.verifier({ meilleurs: { sprint: "abc", inconnu: 3, paires: 7 }, defis: { "pas-une-date": 3, "2026-01-01": 50 } }),
-    { meilleurs: { paires: 7 }, defis: { "2026-01-01": 10 } });
+    { meilleurs: { paires: 7 }, defis: { "2026-01-01": 10 }, lecons: {} });
 });
 
 test("réinitialiser la progression efface aussi les records", () => {

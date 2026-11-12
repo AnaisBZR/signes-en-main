@@ -683,8 +683,8 @@ html.gaucher .photo-lettre img { transform: scaleX(-1); }
 .role-question { --rc: #b84f38; }
 .role-chose, .role-sujet { --rc: #55707a; }
 .role-avis { --rc: #a2546d; }
-html[data-theme="sombre"] .glose small { filter: brightness(1.7); }
-@media (prefers-color-scheme: dark) { html[data-theme="auto"] .glose small { filter: brightness(1.7); } }
+html[data-theme="sombre"] .glose small { color: color-mix(in srgb, var(--rc, var(--doux)) 45%, #fff); }
+@media (prefers-color-scheme: dark) { html[data-theme="auto"] .glose small { color: color-mix(in srgb, var(--rc, var(--doux)) 45%, #fff); } }
 .regles { margin: 0 0 18px; padding-left: 20px; color: var(--doux); font-size: .92rem; max-width: 760px; }
 .regles li { margin: 4px 0; }
 #explication .lecteur-phrase { max-width: 420px; }
@@ -713,4 +713,62 @@ html[data-theme="sombre"] .glose small { filter: brightness(1.7); }
   .defi-carte .btn { width: 100%; text-align: center; }
   .grille-photos { grid-template-columns: repeat(4, 1fr); gap: 6px; }
   .mot-paire { font-size: .9rem; }
+}
+
+/* ------------------------------------------------------------------ */
+/* Mini-leçons « Comprendre la LSF »                                    */
+/* ------------------------------------------------------------------ */
+.carte-lecon .surtitre { margin: 4px 0 0; }
+.carte-lecon .etat-lecon { margin-top: auto; font-weight: 700; }
+.carte-lecon.lue .carte-icone { background: var(--c); color: #fff; }
+.etape-lecon .pastille { width: 70px; height: 70px; background: none; border: 3px dashed color-mix(in srgb, var(--c) 55%, var(--fond)); }
+.etape-lecon .pastille::before { inset: 4px; box-shadow: none; }
+.etape-lecon .pastille svg { width: 26px; height: 26px; }
+.etape-lecon.fini .pastille { border-style: solid; border-color: var(--c); }
+
+.lecon { max-width: 780px; }
+.lecon > p { font-size: 1.05rem; line-height: 1.65; }
+.lecon > p strong { color: var(--accent-texte); }
+.lecon .titre-icone .carte-icone { --c: inherit; }
+.astuce {
+  background: var(--chaud-pale); border-radius: var(--rayon); padding: 14px 18px; margin: 22px 0;
+  border-left: 5px solid var(--chaud);
+}
+.astuce strong { display: block; color: var(--chaud-texte); font-size: .8rem; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 2px; }
+.liens-lecon { display: flex; flex-wrap: wrap; gap: 10px; }
+
+.bloc-signes { margin: 18px 0 24px; }
+.vignettes { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+.vignette-signe {
+  display: flex; flex-direction: column; border-radius: var(--rayon); overflow: hidden; text-decoration: none;
+  background: var(--surface); box-shadow: var(--ombre); color: inherit; transition: transform .15s;
+}
+.vignette-signe:hover { transform: translateY(-2px); }
+.vignette-signe video { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; background: var(--fond-2); display: block; }
+html.gaucher .vignette-signe video { transform: scaleX(-1); }
+.vignette-mot { padding: 8px 10px; font-weight: 700; text-align: center; }
+.vignette-signe.sans-video { aspect-ratio: auto; min-height: 112px; justify-content: center; align-items: center; gap: 4px; border: 2px dashed var(--bord); box-shadow: none; background: transparent; }
+.sans-video-mot { font-weight: 800; font-size: 1.1rem; }
+.sans-video .petit { color: var(--accent-texte); font-weight: 700; }
+.bloc-signes figcaption { margin-top: 8px; text-align: center; }
+
+.bloc-phrase { margin: 20px 0 26px; padding: 18px; background: var(--surface); border-radius: var(--rayon); box-shadow: var(--ombre); }
+.bloc-phrase .zone-phrase { max-width: 420px; }
+.bloc-phrase .phrase-fr { display: block; margin: 14px 0 0; }
+.bloc-phrase .gloses { margin: 10px 0 6px; }
+.bloc-phrase .regles { display: none; }
+
+.verifier-lecon { margin-top: 40px; padding-top: 8px; border-top: 2px solid var(--bord); }
+.question-lecon { border: 0; padding: 0; margin: 0 0 24px; }
+.question-lecon legend { font-weight: 700; font-size: 1.05rem; margin-bottom: 10px; padding: 0; }
+.choix-lecon { display: grid; gap: 10px; }
+.choix-lecon .btn-choix { text-align: left; font-size: 1rem; min-height: 0; padding: 12px 16px; }
+.pourquoi { margin: 10px 0 0; color: var(--doux); }
+.pourquoi:empty { display: none; }
+.fin-lecon { background: var(--ok-pale); border-radius: var(--rayon); padding: 18px 20px; display: grid; gap: 6px; }
+.fin-lecon strong { color: var(--ok-texte); font-size: 1.15rem; }
+.fin-lecon .hero-actions { margin-top: 8px; }
+@media (max-width: 760px) {
+  .vignettes { grid-template-columns: repeat(2, 1fr); }
+  .bloc-phrase { padding: 12px; }
 }

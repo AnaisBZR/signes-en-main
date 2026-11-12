@@ -104,11 +104,11 @@ const Progression = {
 const Records = {
   CLE: "lsf-records",
   SENS: { sprint: "max", paires: "min", ecrire: "max", epeler: "max", comprendre: "max", construire: "max" },
-  vide() { return { meilleurs: {}, defis: {} }; },
+  vide() { return { meilleurs: {}, defis: {}, lecons: {} }; },
   lire() {
     try {
       const r = JSON.parse(localStorage.getItem(this.CLE));
-      return r && r.meilleurs && r.defis ? r : this.vide();
+      return r && r.meilleurs && r.defis ? { lecons: {}, ...r } : this.vide();
     } catch { return this.vide(); }
   },
   sauver(r) { try { localStorage.setItem(this.CLE, JSON.stringify(r)); } catch { /* navigation privée */ } },
@@ -127,9 +127,15 @@ const Records = {
     this.sauver(r);
   },
   nbDefis() { return Object.keys(this.lire().defis).length; },
+  /** Mini-leçons « Comprendre la LSF » terminées : identifiant -> date de la première lecture. */
+  leconFaite(id) { return !!this.lire().lecons[id]; },
+  noterLecon(id) {
+    const r = this.lire();
+    if (!r.lecons[id]) { r.lecons[id] = Progression.jour(); this.sauver(r); }
+  },
   /** Fusion de deux jeux de records (sauvegarde) : on garde le meilleur de chaque. */
   fusionner(a, b) {
-    const r = { meilleurs: { ...a.meilleurs }, defis: { ...a.defis } };
+    const r = { meilleurs: { ...a.meilleurs }, defis: { ...a.defis }, lecons: { ...b.lecons, ...a.lecons } };
     for (const [nom, v] of Object.entries(b.meilleurs)) {
       const x = r.meilleurs[nom];
       r.meilleurs[nom] = x == null ? v : (this.SENS[nom] === "min" ? Math.min(x, v) : Math.max(x, v));
@@ -143,6 +149,7 @@ const Records = {
     if (!r || typeof r !== "object") return propre;
     for (const [nom, v] of Object.entries(r.meilleurs || {})) if (nom in this.SENS && Number.isFinite(+v) && +v >= 0) propre.meilleurs[nom] = +v;
     for (const [j, s] of Object.entries(r.defis || {})) if (/^\d{4}-\d{2}-\d{2}$/.test(j) && Number.isFinite(+s)) propre.defis[j] = Math.max(0, Math.min(10, +s));
+    for (const [id, j] of Object.entries(r.lecons || {})) if (/^[a-z0-9-]{1,40}$/.test(id) && /^\d{4}-\d{2}-\d{2}$/.test(j)) propre.lecons[id] = j;
     return propre;
   },
   reinitialiser() { this.sauver(this.vide()); }

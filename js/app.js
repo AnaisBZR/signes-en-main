@@ -37,6 +37,7 @@ const ICONES = {
   paires: '<rect x="3" y="5" width="9" height="13" rx="2"/><path d="M15 6.5l3.5 1a2 2 0 0 1 1.4 2.4l-2.4 8.7a2 2 0 0 1-2.4 1.4L12 19"/>',
   crayon: '<path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16v4zM13.5 6.5l4 4"/>',
   blocs: '<rect x="3" y="14" width="7" height="6" rx="1.5"/><rect x="14" y="14" width="7" height="6" rx="1.5"/><rect x="8.5" y="4" width="7" height="6" rx="1.5"/>',
+  livre: '<path d="M3 5.5C5.5 4 8.5 4 12 6c3.5-2 6.5-2 9-.5V19c-2.5-1.5-5.5-1.5-9 .5-3.5-2-6.5-2-9-.5z"/><path d="M12 6v13.5"/>',
   cible: '<circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r=".8" fill="currentColor"/>'
 };
 
@@ -191,6 +192,7 @@ function pageAccueil() {
         <li>Un même mot peut se signer de plusieurs façons selon les régions : comparez les signeurs quand il y en a plusieurs.</li>
         <li>Rien ne remplace la pratique avec des personnes sourdes ou un cours avec un enseignant.</li>
       </ul>
+      <p><a class="lien-plus" href="#/comprendre">Comprendre la LSF : ${MINI_LECONS.length} mini-leçons de grammaire et de culture →</a></p>
     </section>`;
   if (bonjour) {
     const zone = document.getElementById("video-accueil");
@@ -243,7 +245,9 @@ function pageLecons() {
   };
   app.innerHTML = `
     <h1>Votre parcours</h1>
-    <p class="hero-sous">Avancez étape par étape. Chaque pastille est un thème : elle se remplit à mesure que vous apprenez ses signes.</p>
+    <p class="hero-sous">Avancez étape par étape. Chaque pastille est un thème : elle se remplit à mesure que vous apprenez ses signes.
+      Les pastilles en pointillés sont des mini-leçons de grammaire et de culture.</p>
+    <p><a class="lien-plus" href="#/comprendre">Toutes les mini-leçons « Comprendre la LSF » →</a></p>
     ${Object.entries(NIVEAUX).map(([n, nom]) => {
       const ths = THEMES.filter(t => String(t.niveau) === n);
       const total = ths.reduce((s, t) => s + t.entrees.length, 0), faits = ths.reduce((s, t) => s + nbAppris(t), 0);
@@ -260,6 +264,12 @@ function pageLecons() {
           <span class="etape-nom">L'alphabet</span>
           <span class="etape-info">26 lettres · épeler</span>
         </a>` : ""}
+        ${MINI_LECONS.filter(l => String(l.niveau) === n).map(l => `
+        <a class="etape etape-lecon ${Records.leconFaite(l.id) ? "fini" : ""}" href="#/comprendre/${l.id}" style="--c:${COULEURS_LECONS[l.type]};--p:${Records.leconFaite(l.id) ? 100 : 0}">
+          <span class="pastille">${icone(Records.leconFaite(l.id) ? "coche" : l.icone)}</span>
+          <span class="etape-nom">${echapper(l.titre)}</span>
+          <span class="etape-info">Mini-leçon · ${l.type}</span>
+        </a>`).join("")}
       </div>`;
     }).join("")}
     <p style="text-align:center"><a class="btn btn-second" href="#/quiz/tout">Quiz sur tous les thèmes</a></p>`;
@@ -796,6 +806,7 @@ function afficherPage(page, p1, p2) {
     case "dictionnaire": return pageDictionnaire(p1);
     case "mot": return pageMot(p1);
     case "entrainement": return pageEntrainement(p1, p2);
+    case "comprendre": return pageComprendre(p1);
     default: return page404();
   }
 }
