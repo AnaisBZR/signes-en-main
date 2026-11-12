@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Relecture des descriptions · Signes en main</title>
+  <meta name="robots" content="noindex">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="relecture.css">
+</head>
+<body>
+  <header class="rl-entete">
+    <div>
+      <h1>Relecture des descriptions</h1>
+      <p class="petit">Regardez la vidéo, corrigez ce qui est faux, validez. Le site affichera « ✓ Vérifiée ».</p>
+    </div>
+    <div class="rl-avancement">
+      <span id="rl-compte" class="petit"></span>
+      <span class="barre"><span id="rl-barre"></span></span>
+      <span id="rl-sauvegarde" class="rl-sauvegarde" role="status" aria-live="polite"></span>
+    </div>
+  </header>
+
+  <div class="rl-page">
+    <aside class="rl-liste">
+      <label class="rl-filtre">Afficher
+        <select id="rl-filtre">
+          <option value="a-relire">À relire</option>
+          <option value="signales">Signalés</option>
+          <option value="corrigee">Corrigés</option>
+          <option value="verifiee">Validés tels quels</option>
+          <option value="fausse">Inutilisables</option>
+          <option value="tout">Tous</option>
+        </select>
+      </label>
+      <input id="rl-recherche" type="search" placeholder="Chercher un signe…" aria-label="Chercher un signe">
+      <nav id="rl-signes" aria-label="Signes à relire"></nav>
+    </aside>
+    <main id="rl-principal"></main>
+  </div>
+
+  <div id="rl-telecharger" class="rl-telecharger" hidden>
+    <p><strong>Enregistrement automatique indisponible</strong> : le site n'a pas été ouvert avec « Ouvrir le site.bat ».
+      Téléchargez le fichier, rangez-le dans le dossier <code>data</code> du site, puis lancez « Vérifier le site.bat ».
+      Votre travail reste gardé dans ce navigateur en attendant.</p>
+    <button class="btn" id="rl-btn-telecharger">Télécharger relecture-descriptions.json</button>
+  </div>
+
+  <script>
+    // fonctions du site dont l'outil a besoin (définies dans js/app.js, non chargé ici)
+    const echapper = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  </script>
+  <script src="../js/progress.js"></script>
+  <script src="../js/dictionnaire.js"></script>
+  <script src="../js/descriptions.js"></script>
+  <script src="../js/page-dictionnaire.js"></script>
+  <script src="../js/signalements.js"></script>
+  <script src="relecture.js"></script>
+</body>
+</html>

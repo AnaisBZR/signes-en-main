@@ -27,7 +27,7 @@ if not defined PY (
 )
 
 start "" "http://127.0.0.1:8766/"
-%PY% -m http.server 8766 --bind 127.0.0.1
+%PY% scripts\serveur.py 8766
 echo.
 echo   Si le site ne s'ouvre pas, il est peut-etre deja ouvert dans une autre fenetre.
 pause

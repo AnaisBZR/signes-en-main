@@ -1,5 +1,6 @@
 // Descriptions générées automatiquement en analysant la première vidéo de chaque signe
-// (outils/descriptions.html + scripts/construire_descriptions.py). À VÉRIFIER : elles peuvent contenir des erreurs.
+// (outils/descriptions.html + scripts/construire_descriptions.py), puis relues dans outils/relecture.html.
+// « verifiee » : relue par une personne ; sinon, À VÉRIFIER : elles peuvent contenir des erreurs.
 window.DESCRIPTIONS = {
 "bonjour": {
 "video": "https://upload.wikimedia.org/wikipedia/commons/5/5e/Bonjour_Nm_1_1_1_-_Elix.webm",

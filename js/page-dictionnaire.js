@@ -141,7 +141,7 @@ function htmlDescription(e) {
   let mains = d.mains === "deux mains" ? "Les deux mains" : "Une seule main";
   if (d.deuxMains) mains += ` — ${d.deuxMains}`;
   lignes.push(["Mains", mains + "."]);
-  const fiable = d.taillePx >= 45 && d.formeSure >= 0.6;
+  const fiable = !!d.verifiee || (d.taillePx >= 45 && d.formeSure >= 0.6);
   let forme = fiable ? maj(d.forme) : "Difficile à voir sur cette vidéo : regardez-la au ralenti.";
   if (fiable && d.mains === "deux mains" && d.formeAutre && d.formeAutre !== d.forme) forme += ` (autre main : ${d.formeAutre})`;
   lignes.push(["Forme de la main", forme + (fiable ? "." : "")]);
@@ -154,16 +154,20 @@ function htmlDescription(e) {
     : d.mouvement === "petit mouvement" ? "Petit mouvement, peu marqué." : maj(d.mouvement) + ".";
   lignes.push(["Mouvement", mouvement]);
   lignes.push(["Visage", d.visage && d.visage.length ? maj(d.visage.join(", ")) + "." : "Pas d'expression particulière repérée."]);
+  if (d.conseil) lignes.push(["Conseil", maj(d.conseil)]);
   const video = e.videos.find(v => v.url === d.video);
   return `
     <div class="description-auto">
       <div class="description-tete">
         <strong>Comment faire le signe</strong>
-        <span class="etiquette-auto" title="Description produite par un ordinateur qui a analysé la vidéo">Automatique · à vérifier</span>
+        ${d.verifiee
+          ? `<span class="etiquette-verifiee" title="Relue par une personne en regardant la vidéo">✓ Vérifiée</span>`
+          : `<span class="etiquette-auto" title="Description produite par un ordinateur qui a analysé la vidéo">Automatique · à vérifier</span>`}
       </div>
       <dl>${lignes.map(([t, v]) => `<dt>${t}</dt><dd>${directions(echapper(v))}</dd>`).join("")}</dl>
-      <p class="petit">Analyse automatique de la première vidéo${video ? ` (${echapper(video.auteur.split(/Video editing|:|,/)[0].trim())})` : ""}. Elle peut se tromper :
-      en cas de doute, fiez-vous à la vidéo.
+      <p class="petit">${d.verifiee ? "Description de la première vidéo" : "Analyse automatique de la première vidéo"}${video ? ` (${echapper(video.auteur.split(/Video editing|:|,/)[0].trim())})` : ""}${d.verifiee
+        ? ", relue et corrigée si besoin par une personne."
+        : ". Elle peut se tromper : en cas de doute, fiez-vous à la vidéo."}
       <span class="si-droitier">Les directions sont celles de la personne qui signe : ce sont les vôtres quand vous l'imitez.</span>
       <span class="si-gaucher">Mode gaucher : la vidéo est retournée comme dans un miroir et les directions sont inversées, pour signer de la main gauche.</span></p>
     </div>`;
@@ -264,6 +268,7 @@ function pageMot(k) {
         <p class="hero-sous">Regardez le signe plusieurs fois, au ralenti si besoin, puis reproduisez-le face à un miroir.
         Observez la forme de la main, son mouvement, son emplacement et l'expression du visage.</p>
         ${htmlDescription(e)}
+        ${htmlSignaler(e)}
         ${liensExternes(e.mot)}
         <div class="nav-signes">
           ${i > 0 ? `<a href="#/mot/${encodeURIComponent(Dico.entrees[i - 1].k)}">← ${echapper(Dico.entrees[i - 1].mot)}</a>` : "<span></span>"}
@@ -278,8 +283,10 @@ function pageMot(k) {
       </div>` : ""}`;
 
   const zone = document.getElementById("zone-video");
-  const montrer = n => { zone.innerHTML = htmlVideo(e.videos[n], { label: `Vidéo du signe « ${e.mot} »` }); brancherVitesses(zone); };
+  let actuelle = 0;
+  const montrer = n => { actuelle = n; zone.innerHTML = htmlVideo(e.videos[n], { label: `Vidéo du signe « ${e.mot} »` }); brancherVitesses(zone); };
   montrer(0);
+  brancherSignaler(app, e, () => e.videos[actuelle].page);
   app.querySelectorAll(".signeurs .puce").forEach(b => (b.onclick = () => {
     app.querySelectorAll(".signeurs .puce").forEach(x => x.classList.toggle("actif", x === b));
     montrer(+b.dataset.n);

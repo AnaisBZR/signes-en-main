@@ -9,7 +9,8 @@ echo     Signes en main - verifications du site
 echo   ===============================================
 echo.
 
-echo   1. Mise a jour des versions des fichiers (plus besoin de Ctrl+F5)
+echo   1. Descriptions des signes (avec la relecture) et versions des fichiers
+python scripts\construire_descriptions.py
 python scripts\versionner.py
 echo.
 

@@ -326,6 +326,7 @@ function pageSigne(themeId, k) {
           <li>Reproduisez-le face à un miroir, puis sans regarder la vidéo.</li>
         </ol>`}
         <button class="btn" id="btn-appris"></button>
+        ${htmlSignaler(e)}
         ${liensExternes(e.mot)}
         <div class="nav-signes">
           ${prec ? `<a href="${lien(prec)}">← ${echapper(prec.mot)}</a>` : "<span></span>"}
@@ -335,8 +336,10 @@ function pageSigne(themeId, k) {
     </div>`;
 
   const zone = document.getElementById("zone-video");
-  const montrer = n => { zone.innerHTML = htmlVideo(e.videos[n], { label: `Vidéo du signe « ${e.mot} »` }); brancherVitesses(zone); };
+  let actuelle = 0;
+  const montrer = n => { actuelle = n; zone.innerHTML = htmlVideo(e.videos[n], { label: `Vidéo du signe « ${e.mot} »` }); brancherVitesses(zone); };
   montrer(0);
+  brancherSignaler(app, e, () => e.videos[actuelle].page);
   app.querySelectorAll(".signeurs .puce").forEach(b => (b.onclick = () => {
     app.querySelectorAll(".signeurs .puce").forEach(x => x.classList.toggle("actif", x === b));
     montrer(+b.dataset.n);

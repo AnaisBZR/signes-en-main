@@ -772,3 +772,27 @@ html.gaucher .vignette-signe video { transform: scaleX(-1); }
   .vignettes { grid-template-columns: repeat(2, 1fr); }
   .bloc-phrase { padding: 12px; }
 }
+
+/* ------------------------------------------------------------------ */
+/* Descriptions vérifiées et « Signaler une erreur »                    */
+/* ------------------------------------------------------------------ */
+.etiquette-verifiee { font-size: 12px; font-weight: 700; color: var(--ok-texte); background: var(--ok-pale); border-radius: 999px; padding: 3px 10px; }
+.signaler { margin: 4px 0 18px; }
+.signaler summary { cursor: pointer; color: var(--doux); font-weight: 600; font-size: .92rem; width: fit-content; padding: 4px 0; }
+.signaler summary:hover { color: var(--accent-texte); }
+.signaler[open] summary { color: var(--accent-texte); margin-bottom: 10px; }
+.form-signaler { background: var(--surface); border-radius: var(--rayon); box-shadow: var(--ombre); padding: 16px 18px; display: grid; gap: 12px; }
+.form-signaler fieldset { border: 0; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 6px 14px; }
+.form-signaler legend { font-weight: 700; margin-bottom: 8px; padding: 0; }
+.form-signaler .case { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+.form-signaler input[type=checkbox] { width: 18px; height: 18px; accent-color: var(--accent); }
+.champ-texte { display: grid; gap: 6px; font-weight: 600; }
+.champ-texte textarea {
+  font: inherit; font-weight: 400; padding: 10px 12px; border-radius: 12px; border: 2px solid var(--bord);
+  background: var(--fond); color: var(--texte); resize: vertical;
+}
+.champ-texte textarea:focus { outline: none; border-color: var(--accent); }
+.message-signaler { margin: 0; color: var(--ko-texte); font-weight: 600; }
+.message-signaler:empty { display: none; }
+.merci-signaler { margin: 0; }
+.form-signaler .btn { justify-self: start; }
