@@ -43,6 +43,8 @@ thème) : site ouvert, allez sur http://127.0.0.1:8766/tests/navigateur.html.
 
 ## Mise en ligne (GitHub Pages)
 
+**Le site en ligne : https://anaisbzr.github.io/signes-en-main/** (dépôt : https://github.com/AnaisBZR/signes-en-main)
+
 Le site est publié automatiquement par GitHub à chaque `git push` sur la branche `main`
 (`.github/workflows/publier.yml`) : les tests passent d'abord, puis seuls `index.html`, `css/`
 et `js/` sont mis en ligne. Si un test échoue, l'ancienne version reste en ligne ; le détail
