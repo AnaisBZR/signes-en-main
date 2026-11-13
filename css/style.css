@@ -488,7 +488,7 @@ html.gaucher .si-gaucher { display: inline; }
 .zoom-carte img { width: 100%; border-radius: 12px; }
 .zoom-carte strong { display: block; font-size: 2rem; }
 .lettre-grande { background: var(--surface); border-radius: var(--rayon); padding: 12px; display: grid; place-items: center; min-height: 300px; box-shadow: var(--ombre); }
-.lettre-grande img { width: min(100%, 340px); height: auto; border-radius: 12px; }
+.lettre-grande img { width: min(100%, 340px); height: auto; aspect-ratio: 4 / 3; object-fit: contain; border-radius: 12px; }
 .fin-mot { font-family: var(--titre); font-size: 5rem; font-weight: 500; color: var(--tres-doux); }
 .choix-lettres .btn-choix { font-size: 1.6rem; }
 .epeler { max-width: 520px; }

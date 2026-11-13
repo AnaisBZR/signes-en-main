@@ -490,6 +490,110 @@ const ALPHA = (window.ALPHABET || []).map(a => ({ ...a, image: a.image.split("?"
 const lettre = l => ALPHA.find(a => a.lettre === l);
 const sansAccents = s => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toUpperCase();
 
+// ---------------------------------------------------------------------
+// Photos de l'alphabet SANS la lettre écrite dessus, pour les exercices
+// (« Lire un mot épelé », quiz des lettres, « Épeler avec les doigts ») :
+// les photos d'origine portent la lettre en haut à gauche, ce qui donnait la réponse.
+// La zone du texte est repeinte avec la couleur du mur autour, puis chaque photo est
+// posée dans le même cadre 200 × 150, pour que la taille ne change pas d'une lettre à l'autre.
+// ---------------------------------------------------------------------
+// [x0, y0, x1, y1] : zone du texte, en pixels de la photo d'origine.
+// bloc : étiquette blanche à effacer en entier ; largeur : colonnes utiles (R a une marge blanche à droite).
+const TEXTE_PHOTOS = {
+  A: [8, 0, 52, 25], B: [3, 9, 36, 30], C: [6, 12, 55, 42], D: [2, 14, 50, 44], E: [8, 12, 58, 42],
+  F: [10, 10, 54, 42], G: [4, 14, 50, 44], H: [14, 18, 58, 43], I: [10, 13, 34, 38], J: [6, 10, 39, 44],
+  K: [15, 15, 58, 40], L: [18, 18, 48, 43], M: [0, 0, 79, 41, { bloc: true }], N: [0, 0, 77, 40, { bloc: true }],
+  O: [18, 12, 64, 37], P: [70, 10, 120, 44], Q: [26, 18, 78, 52], R: [5, 12, 45, 37, { largeur: 132 }],
+  S: [8, 10, 47, 35], T: [0, 6, 40, 36], U: [13, 15, 57, 40], V: [9, 16, 54, 41], W: [8, 16, 65, 41],
+  X: [4, 17, 50, 46], Y: [3, 13, 47, 43], Z: [19, 16, 60, 40]
+};
+const CADRE_PHOTO = { l: 200, h: 150 };
+const photosSansLettre = new Map();
+
+/** Promesse de l'adresse (data:) de la photo sans sa lettre ; l'originale si le traitement échoue. */
+function photoSansLettre(a) {
+  if (!photosSansLettre.has(a.lettre)) photosSansLettre.set(a.lettre, new Promise(ok => {
+    const img = new Image();
+    img.crossOrigin = "anonymous"; // Wikimedia autorise la lecture des pixels (CORS)
+    img.onload = () => { try { ok(effacerLettre(img, a.lettre)); } catch (e) { ok(a.image); } };
+    img.onerror = () => ok(a.image);
+    img.src = a.image;
+  }));
+  return photosSansLettre.get(a.lettre);
+}
+
+function effacerLettre(img, l) {
+  const [x0, y0, x1, y1, opt = {}] = TEXTE_PHOTOS[l] || [0, 0, -1, -1];
+  const W = Math.min(img.naturalWidth, opt.largeur || Infinity), H = img.naturalHeight;
+  const c = document.createElement("canvas");
+  c.width = W; c.height = H;
+  const ctx = c.getContext("2d");
+  ctx.drawImage(img, 0, 0);
+  const image = ctx.getImageData(0, 0, W, H), d = image.data;
+  // 1. Masque : les pixels sombres et gris (le texte) dans la zone, élargis de 2 pixels pour l'antialiasing
+  const m = new Uint8Array(W * H);
+  for (let y = y0; y <= y1; y++) for (let x = x0; x <= x1; x++) {
+    const k = (y * W + x) * 4, r = d[k], g = d[k + 1], b = d[k + 2];
+    if (opt.bloc || (0.3 * r + 0.59 * g + 0.11 * b < 185 && Math.max(r, g, b) - Math.min(r, g, b) < 40)) m[y * W + x] = 1;
+  }
+  const voisins = [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [1, -1], [-1, 1], [-1, -1]];
+  const dedans = (x, y) => x >= 0 && y >= 0 && x < W && y < H;
+  if (!opt.bloc) for (let passe = 0; passe < 2; passe++) {
+    const m2 = m.slice();
+    for (let y = y0; y <= y1; y++) for (let x = x0; x <= x1; x++)
+      if (!m[y * W + x] && voisins.slice(0, 4).some(([dx, dy]) => dedans(x + dx, y + dy) && m[(y + dy) * W + x + dx])) m2[y * W + x] = 1;
+    m.set(m2);
+  }
+  // 2. Remplissage de l'extérieur vers l'intérieur avec la moyenne des pixels voisins déjà connus
+  for (let reste = true; reste;) {
+    const fixes = [];
+    for (let y = Math.max(0, y0 - 2); y <= Math.min(H - 1, y1 + 2); y++) for (let x = Math.max(0, x0 - 2); x <= Math.min(W - 1, x1 + 2); x++) {
+      if (!m[y * W + x]) continue;
+      let r = 0, g = 0, b = 0, n = 0;
+      for (const [dx, dy] of voisins) {
+        const xx = x + dx, yy = y + dy;
+        if (!dedans(xx, yy) || m[yy * W + xx]) continue;
+        const k = (yy * W + xx) * 4;
+        r += d[k]; g += d[k + 1]; b += d[k + 2]; n++;
+      }
+      if (n) fixes.push([y * W + x, r / n, g / n, b / n]);
+    }
+    for (const [p, r, g, b] of fixes) { d[p * 4] = r; d[p * 4 + 1] = g; d[p * 4 + 2] = b; m[p] = 0; }
+    reste = fixes.length > 0;
+  }
+  ctx.putImageData(image, 0, 0);
+  // 3. Même cadre pour toutes les lettres. Photo presque au format : on l'agrandit un peu et on
+  //    coupe le bas (le poignet) ; photo en hauteur : centrée, bords prolongés sur les côtés.
+  const { l: CL, h: CH } = CADRE_PHOTO;
+  const s = document.createElement("canvas");
+  s.width = CL; s.height = CH;
+  const sx = s.getContext("2d");
+  const remplir = W / H >= 1.15;
+  const k = (remplir ? Math.max : Math.min)(CL / W, CH / H), w = Math.round(W * k), h = Math.round(H * k);
+  const ox = Math.round((CL - w) / 2), oy = remplir ? 0 : Math.round((CH - h) / 2);
+  sx.drawImage(c, ox, oy, w, h);
+  if (ox > 0) {
+    sx.drawImage(s, ox, 0, 1, CH, 0, 0, ox, CH);
+    sx.drawImage(s, ox + w - 1, 0, 1, CH, ox + w, 0, CL - ox - w, CH);
+  }
+  if (oy > 0) {
+    sx.drawImage(s, 0, oy, CL, 1, 0, 0, CL, oy);
+    sx.drawImage(s, 0, oy + h - 1, CL, 1, 0, oy + h, CL, CH - oy - h);
+  }
+  return s.toDataURL("image/jpeg", 0.92);
+}
+
+/** Prépare les photos sans lettre, puis lance « suite » (sauf si on a changé de page entre-temps). */
+function avecPhotosSansLettre(lettres, suite) {
+  const ici = location.hash;
+  app.innerHTML = `<p class="petit" role="status">Préparation des photos…</p>`;
+  Promise.all(lettres.map(photoSansLettre)).then(urls => {
+    if (location.hash !== ici) return;
+    const parLettre = Object.fromEntries(lettres.map((a, i) => [a.lettre, urls[i]]));
+    suite(parLettre);
+  });
+}
+
 function pageAlphabet(mode) {
   if (mode === "quiz") return quizAlphabet();
   if (mode === "epeler") return exerciceEpeler();
@@ -526,6 +630,10 @@ function pageAlphabet(mode) {
 }
 
 function quizAlphabet() {
+  avecPhotosSansLettre(ALPHA.slice(), photos => quizAlphabetPret(photos));
+}
+
+function quizAlphabetPret(photos) {
   const questions = melanger(ALPHA).slice(0, 10);
   let n = 0, score = 0;
   const afficher = () => {
@@ -545,7 +653,7 @@ function quizAlphabet() {
       <span class="surtitre">Quiz des lettres</span>
       <p class="consigne">Quelle lettre est représentée ?</p>
       <div class="quiz">
-        <div class="lettre-grande"><img src="${echapper(q.image)}" alt="Lettre de l'alphabet à deviner" width="200" height="150"></div>
+        <div class="lettre-grande"><img src="${echapper(photos[q.lettre])}" alt="Lettre de l'alphabet à deviner" width="200" height="150"></div>
         <div class="choix choix-lettres">${choix.map(c => `<button class="btn-choix" data-l="${c.lettre}">${c.lettre}</button>`).join("")}</div>
       </div>
       <div id="retour-quiz" role="status" aria-live="polite"></div>`;
@@ -569,6 +677,10 @@ function exerciceEpeler() {
   const mots = TOUS_LES_SIGNES.map(e => e.mot).filter(m => /^[A-Za-zÀ-ÿ]{3,7}$/.test(m));
   const mot = auHasard(mots);
   const lettres = [...sansAccents(mot)];
+  avecPhotosSansLettre([...new Set(lettres)].map(lettre), photos => lireMotEpele(mot, lettres, photos));
+}
+
+function lireMotEpele(mot, lettres, photos) {
   let vitesse = 1200;
   app.innerHTML = `
     <a class="retour" href="#/alphabet">← Alphabet</a>
@@ -594,7 +706,7 @@ function exerciceEpeler() {
     const etape = () => {
       app.querySelectorAll(".pastilles span").forEach(p => p.classList.toggle("actif", +p.dataset.i === i));
       if (i >= lettres.length) { zone.innerHTML = `<span class="fin-mot">?</span>`; return; }
-      zone.innerHTML = `<img src="${echapper(lettre(lettres[i]).image)}" alt="Lettre ${i + 1} sur ${lettres.length}" width="200" height="150">`;
+      zone.innerHTML = `<img src="${echapper(photos[lettres[i]])}" alt="Lettre ${i + 1} sur ${lettres.length}" width="200" height="150">`;
       i++;
       minuteurEpeler = setTimeout(etape, vitesse);
     };

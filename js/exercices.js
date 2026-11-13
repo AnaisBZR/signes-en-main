@@ -699,6 +699,11 @@ function exoPaires(filtre) {
 
 /** Épeler : retrouver les photos de l'alphabet, dans l'ordre, pour 5 mots. */
 function exoEpeler() {
+  // photos sans la lettre écrite dessus (voir photoSansLettre dans app.js)
+  avecPhotosSansLettre(ALPHA.slice(), exoEpelerPret);
+}
+
+function exoEpelerPret(photos) {
   const mots = melanger(motsEpelables(TOUS_LES_SIGNES.map(e => e.mot))).slice(0, 5);
   const ordrePhotos = melanger(ALPHA);
   let n = 0, sansFaute = 0;
@@ -713,7 +718,7 @@ function exoEpeler() {
     app.innerHTML = `${enteteExo("Épeler avec les doigts", n, mots.length)}
       <p class="consigne">Épelez « <strong>${echapper(mot)}</strong> » : touchez les lettres dans l'ordre</p>
       <div class="mot-cases" aria-live="polite">${lettres.map((l, i) => `<span class="case" data-i="${i}"></span>`).join("")}</div>
-      <div class="grille-photos">${ordrePhotos.map(a => `<button class="photo-lettre" data-l="${a.lettre}" aria-label="Une configuration de la main"><img src="${echapper(a.image)}" alt="" width="200" height="150" loading="lazy" decoding="async"></button>`).join("")}</div>
+      <div class="grille-photos">${ordrePhotos.map(a => `<button class="photo-lettre" data-l="${a.lettre}" aria-label="Une configuration de la main"><img src="${echapper(photos[a.lettre])}" alt="" width="200" height="150" decoding="async"></button>`).join("")}</div>
       <p class="petit">Les lettres ne sont pas écrites sous les photos : c'est à vous de les reconnaître. Après deux erreurs, la bonne photo s'allume.</p>
       <div id="retour-quiz" role="status" aria-live="polite"></div>`;
     const cases = [...app.querySelectorAll(".case")];
