@@ -98,8 +98,9 @@ function pageCredits() {
     <section>
       <h2>Le reste du site</h2>
       <ul class="liste-sources">
-        <li>Police de caractères : <a href="https://fonts.google.com/specimen/Plus+Jakarta+Sans" target="_blank" rel="noopener">Plus Jakarta Sans</a>
-          (Tokotype), licence <a href="https://openfontlicense.org" target="_blank" rel="noopener">SIL Open Font License</a>.</li>
+        <li>Polices de caractères : <a href="https://fonts.google.com/specimen/Fraunces" target="_blank" rel="noopener">Fraunces</a>
+          (Undercase Type) pour les titres et <a href="https://fonts.google.com/specimen/Inter" target="_blank" rel="noopener">Inter</a>
+          (Rasmus Andersson) pour le texte, licence <a href="https://openfontlicense.org" target="_blank" rel="noopener">SIL Open Font License</a>.</li>
         <li>Descriptions « Comment faire le signe » : produites automatiquement par analyse des vidéos, puis relues
           (celles marquées « ✓ Vérifiée »).</li>
         <li>Textes, leçons, exercices et icônes : écrits et dessinés pour ce site.</li>
