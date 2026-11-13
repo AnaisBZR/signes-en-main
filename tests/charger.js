@@ -6,7 +6,7 @@ const vm = require("node:vm");
 
 const RACINE = path.join(__dirname, "..");
 const FICHIERS = ["js/data.js", "js/progress.js", "js/avatar.js", "js/dictionnaire.js", "js/alphabet.js", "js/phrases.js", "js/exercices.js", "js/comprendre.js",
-  "js/descriptions.js", "js/page-dictionnaire.js", "js/signalements.js", "js/credits.js"];
+  "js/descriptions.js", "js/page-dictionnaire.js", "js/signalements.js", "js/credits.js", "js/en-ligne.js"];
 
 function fauxStockage() {
   const m = new Map();
@@ -21,7 +21,7 @@ function fauxStockage() {
 /** Renvoie les objets globaux du site : LSF_DATA, Progression, Dico, ALPHABET, DESCRIPTIONS… */
 // (chaque appel recharge tout : chaque test part d'une progression vide)
 const CODE = FICHIERS.map(f => fs.readFileSync(path.join(RACINE, f), "utf8")).join("\n;\n")
-  + "\n;return { Profils, Avatar, Progression, Reglages, Sauvegarde, Records, Dico, directions, normaliserReponse, comparerReponse, distanceMots, aleaGraine, melangerAvec, motsEpelables, phrasesVoisines, EXERCICES, signesDesLecons, Signalements, CONFIG_SITE, LICENCES, auteursVideos, nomAuteur };";
+  + "\n;return { EnLigne, Profils, Avatar, Progression, Reglages, Sauvegarde, Records, Dico, directions, normaliserReponse, comparerReponse, distanceMots, aleaGraine, melangerAvec, motsEpelables, phrasesVoisines, EXERCICES, signesDesLecons, Signalements, CONFIG_SITE, LICENCES, auteursVideos, nomAuteur };";
 
 function chargerSite() {
   const contexte = { localStorage: fauxStockage() };

@@ -4,7 +4,11 @@
 // Une fois le site en ligne, ils pourront aussi être envoyés sur GitHub (CONFIG_SITE.depotGithub).
 
 const CONFIG_SITE = {
-  depotGithub: "AnaisBZR/signes-en-main" // dépôt GitHub du site : les signalements peuvent y être envoyés
+  depotGithub: "AnaisBZR/signes-en-main", // dépôt GitHub du site : les signalements peuvent y être envoyés
+  // Comptes en ligne et amis (js/en-ligne.js) : projet Supabase. La clé « anon » est publique
+  // (faite pour être dans le site) ; la sécurité est assurée par supabase/schema.sql.
+  // Tant que url et cle sont vides, la connexion et les amis restent cachés.
+  supabase: { url: "https://mjslicisogujmwyphuxo.supabase.co", cle: "sb_publishable_GwuefTn4OQHVrt823VM91Q_RCWJGnQq", domaine: "pseudo.signes-en-main.invalid" }
 };
 
 const Signalements = {

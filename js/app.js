@@ -923,6 +923,8 @@ function afficherPage(page, p1, p2) {
     case "alphabet": return pageAlphabet(p1);
     case "progression": return pageProgression();
     case "compte": return pageCompte(p1);
+    case "connexion": return pageConnexion(p1);
+    case "amis": return pageAmis();
     case "dictionnaire": return pageDictionnaire(p1);
     case "mot": return pageMot(p1);
     case "entrainement": return pageEntrainement(p1, p2);
@@ -937,3 +939,16 @@ if (["127.0.0.1", "localhost", ""].includes(location.hostname)) document.getElem
 
 window.addEventListener("hashchange", route);
 route();
+
+// Compte en ligne : au chargement, on récupère la progression du compte (autre appareil) ;
+// quand on quitte la page, on envoie ce qui n'est pas encore parti.
+if (EnLigne.connecte()) {
+  EnLigne.synchroniser().then(() => {
+    majCompteurs();
+    const page = (location.hash || "#/").split("/")[1] || "";
+    if (["", "compte", "amis", "progression", "lecons"].includes(page)) route();
+  }).catch(() => {});
+}
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "hidden" && EnLigne.minuteur) EnLigne.envoyer(true).catch(() => {});
+});

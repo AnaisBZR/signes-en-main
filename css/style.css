@@ -864,3 +864,25 @@ html[data-theme="sombre"] .calendrier { --cal-max: var(--accent-texte); }
   .calendrier { --case: 13px; padding: 14px; }
   .entete-profil { gap: 16px; }
 }
+
+/* Compte en ligne et amis */
+.encart-en-ligne { margin-top: 36px; padding: 4px 24px 20px; background: var(--surface); border-radius: var(--rayon); box-shadow: var(--ombre); }
+.formulaire-compte { max-width: 520px; }
+.formulaire-compte .champ-nom input { max-width: none; width: 100%; box-sizing: border-box; }
+.case-simple { display: flex; gap: 10px; align-items: flex-start; margin: 0 0 16px; cursor: pointer; }
+.case-simple input { margin-top: 4px; accent-color: var(--accent); }
+.ajout-ami { max-width: 520px; margin-bottom: 8px; }
+.ajout-ami .reponse-epeler { margin-top: 8px; }
+.liste-amis { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+.carte-ami { position: relative; padding: 16px; background: var(--surface); border-radius: var(--rayon); box-shadow: var(--ombre); }
+.carte-ami-tete { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+.carte-ami-tete > div { display: grid; }
+.chiffres-ami { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 12px; margin: 0; }
+.chiffres-ami dt { font-size: .78rem; color: var(--doux); }
+.chiffres-ami dd { margin: 0; font-family: var(--titre); font-size: 1.25rem; font-weight: 500; }
+.lien-discret { position: absolute; top: 14px; right: 14px; background: none; border: none; padding: 4px; font: inherit; font-size: .8rem;
+  color: var(--tres-doux); text-decoration: underline; cursor: pointer; }
+.lien-discret:hover { color: var(--ko-texte); }
+.carte-demande { flex-wrap: wrap; }
+.carte-profil > .carte-actions { display: flex; flex: 0 0 100%; gap: 8px; }
+.carte-actions .btn { flex: 1; }

@@ -42,8 +42,11 @@ function editeurProfil(profil) {
       <div class="editeur-options">
         <label class="champ-nom">
           <span>Prénom ou pseudo</span>
-          <input id="nom-profil" maxlength="${Profils.NOM_MAX}" required value="${creation ? "" : echapper(profil.nom)}" placeholder="Ex. : Camille">
-          <span class="petit">Votre prénom et votre personnage restent dans ce navigateur : rien n'est envoyé sur Internet.</span>
+          <input id="nom-profil" maxlength="${Profils.NOM_MAX}" required value="${creation ? "" : echapper(profil.nom)}" placeholder="Ex. : Camille"
+            ${profil?.compte ? "readonly" : ""} aria-describedby="aide-nom">
+          <span class="petit" id="aide-nom">${profil?.compte
+            ? "C'est votre pseudo en ligne : il ne peut pas être changé. Votre personnage sera mis à jour pour vos amis."
+            : "Votre prénom et votre personnage restent dans ce navigateur : rien n'est envoyé sur Internet."}</span>
         </label>
         ${Object.keys(Avatar.ETIQUETTES).map(trait => `
           <fieldset class="trait" data-trait="${trait}">
@@ -91,6 +94,7 @@ function editeurProfil(profil) {
       if (!Profils.creer(nom, avatar)) { erreur.textContent = `Pas plus de ${Profils.MAX} profils sur un même appareil.`; return; }
     } else {
       Profils.modifier(profil.id, { nom, avatar });
+      EnLigne.changement(); // personnage à jour pour les amis
     }
     profilChange();
     location.hash = "#/compte";
@@ -111,7 +115,7 @@ function pageProfils() {
       ${liste.map(p => `
         <div class="carte-profil ${p.id === actif ? "actif" : ""}">
           ${Avatar.svg(p.avatar, 64)}
-          <div><strong>${echapper(p.nom)}</strong><span class="petit">${p.id === actif ? "Profil en cours" : "Depuis le " + jourFr(p.cree)}</span></div>
+          <div><strong>${echapper(p.nom)}</strong><span class="petit">${p.id === actif ? "Profil en cours" : "Depuis le " + jourFr(p.cree)}${p.compte ? " · compte en ligne" : ""}</span></div>
           ${p.id === actif ? "" : `<button class="btn btn-second" data-choisir="${p.id}">Utiliser</button>`}
         </div>`).join("")}
     </div>
@@ -212,8 +216,10 @@ function pageMesChiffres(profil) {
     </div>
 
     <h2>Mon activité</h2>
-    ${htmlCalendrier()}`;
+    ${htmlCalendrier()}
+    ${htmlEnLigne()}`;
   brancherCalendrier();
+  brancherEnLigne();
 }
 
 // ---------------------------------------------------------------------
@@ -291,4 +297,234 @@ function brancherCalendrier() {
     app.querySelectorAll(".jour.survol").forEach(x => x.classList.remove("survol"));
     info.textContent = defaut;
   });
+}
+
+// ---------------------------------------------------------------------
+// En ligne : connexion par pseudo, amis (js/en-ligne.js)
+// ---------------------------------------------------------------------
+const heureFr = iso => new Date(iso).toLocaleString("fr-FR", { day: "numeric", month: "long", hour: "2-digit", minute: "2-digit" });
+
+/** Encart « En ligne » de la page Mon profil. */
+function htmlEnLigne() {
+  if (!EnLigne.disponible()) return "";
+  const s = EnLigne.connecte() ? EnLigne.session() : null;
+  if (!s) return `
+    <section class="encart-en-ligne">
+      <h2>En ligne</h2>
+      <p>Créez un compte en ligne avec un pseudo pour retrouver votre progression sur tous vos appareils et ajouter des amis.</p>
+      <div class="hero-actions">
+        <a class="btn" href="#/connexion/inscription">Créer mon compte en ligne</a>
+        <a class="btn btn-second" href="#/connexion">J'ai déjà un compte</a>
+      </div>
+    </section>`;
+  return `
+    <section class="encart-en-ligne">
+      <h2>En ligne</h2>
+      <p>Connecté avec le pseudo <strong>${echapper(s.pseudo)}</strong>. Votre progression est enregistrée en ligne${s.synchro ? ` (dernier envoi : ${heureFr(s.synchro)})` : ""}.</p>
+      <div class="hero-actions">
+        <a class="btn" href="#/amis">Mes amis</a>
+        <button class="btn btn-second" id="deconnexion">Se déconnecter</button>
+        <a class="btn btn-second" href="#/connexion/compte">Mot de passe et compte</a>
+      </div>
+    </section>`;
+}
+
+function brancherEnLigne() {
+  const b = document.getElementById("deconnexion");
+  if (b) b.onclick = async () => {
+    b.disabled = true;
+    await EnLigne.deconnecter();
+    majCompteurs();
+    route();
+  };
+}
+
+/** #/connexion (se connecter), #/connexion/inscription (créer un compte), #/connexion/compte (mot de passe, suppression). */
+function pageConnexion(mode) {
+  if (!EnLigne.disponible()) {
+    app.innerHTML = `<a class="retour" href="#/compte">← Mon profil</a><h1>Compte en ligne</h1>
+      <p>Les comptes en ligne ne sont pas encore ouverts sur ce site.</p>`;
+    return;
+  }
+  if (mode === "compte") return pageGererCompte();
+  const inscription = mode === "inscription";
+  const actif = Profils.actif();
+  if (EnLigne.connecte() && actif?.compte) { location.hash = "#/compte"; return; }
+  const proposerActif = !inscription && actif && !actif.compte && Object.keys(Progression.lire().cartes).length > 0;
+  const pseudoPropose = inscription && actif && !actif.compte ? actif.nom.normalize("NFD").replace(/[^A-Za-z0-9_-]/g, "").slice(0, 20) : "";
+  app.innerHTML = `
+    <a class="retour" href="#/compte">← Mon profil</a>
+    <h1>${inscription ? "Créer mon compte en ligne" : "Se connecter"}</h1>
+    <p class="hero-sous">${inscription
+      ? "Avec un pseudo et un mot de passe, vous retrouvez votre progression sur tous vos appareils et vous pouvez ajouter des amis."
+      : "Connectez-vous avec votre pseudo pour retrouver votre progression et vos amis."}</p>
+    <form class="formulaire-compte" id="form-compte" autocomplete="on">
+      <label class="champ-nom"><span>Pseudo</span>
+        <input id="pseudo" name="username" autocomplete="username" required maxlength="20" value="${echapper(pseudoPropose)}"
+          autocapitalize="off" spellcheck="false" aria-describedby="aide-pseudo">
+        <span class="petit" id="aide-pseudo">${inscription ? "3 à 20 caractères : lettres sans accent, chiffres, « _ » ou « - ». Vos amis vous trouveront avec ce pseudo, qui ne pourra plus être changé." : ""}</span>
+      </label>
+      <label class="champ-nom"><span>Mot de passe</span>
+        <input id="mdp" type="password" name="password" autocomplete="${inscription ? "new-password" : "current-password"}" required minlength="${inscription ? EnLigne.MDP_MIN : 1}">
+        ${inscription ? `<span class="petit">Au moins ${EnLigne.MDP_MIN} caractères. <strong>Notez-le bien</strong> : sans adresse e-mail, un mot de passe oublié ne peut pas être récupéré.</span>` : ""}
+      </label>
+      ${inscription ? `<label class="champ-nom"><span>Mot de passe, encore une fois</span>
+        <input id="mdp2" type="password" autocomplete="new-password" required></label>` : ""}
+      ${proposerActif ? `<label class="case-simple"><input type="checkbox" id="avec-actif">
+        <span>Ajouter à ce compte la progression du profil « ${echapper(actif.nom)} » de cet appareil</span></label>` : ""}
+      ${inscription && actif && !actif.compte ? `<p class="petit">Le compte reprendra le personnage et la progression du profil « ${echapper(actif.nom)} ».</p>` : ""}
+      <div class="hero-actions">
+        <button class="btn" type="submit">${inscription ? "Créer mon compte" : "Se connecter"}</button>
+        <a class="btn btn-second" href="${inscription ? "#/connexion" : "#/connexion/inscription"}">${inscription ? "J'ai déjà un compte" : "Créer un compte"}</a>
+      </div>
+      <p id="erreur-compte" class="msg-ko" role="alert"></p>
+      <p class="petit">Le compte en ligne enregistre votre pseudo, votre personnage et votre progression (sur le service Supabase).
+        Vos amis voient seulement votre pseudo, votre personnage, votre série, vos signes appris et vos jours de travail.
+        Vous pouvez supprimer votre compte à tout moment.</p>
+    </form>`;
+  const form = document.getElementById("form-compte"), erreur = document.getElementById("erreur-compte");
+  form.onsubmit = async ev => {
+    ev.preventDefault();
+    erreur.textContent = "";
+    const pseudo = document.getElementById("pseudo").value.trim(), mdp = document.getElementById("mdp").value;
+    if (inscription) {
+      const e = EnLigne.verifierPseudo(pseudo);
+      if (e) { erreur.textContent = e; return; }
+      if (mdp !== document.getElementById("mdp2").value) { erreur.textContent = "Les deux mots de passe sont différents."; return; }
+    }
+    const bouton = form.querySelector('button[type="submit"]');
+    bouton.disabled = true; bouton.textContent = inscription ? "Création…" : "Connexion…";
+    try {
+      if (inscription) await EnLigne.inscrire(pseudo, mdp);
+      else await EnLigne.connecter(pseudo, mdp, { avecProfilActif: !!document.getElementById("avec-actif")?.checked });
+      profilChange();
+      location.hash = "#/compte";
+    } catch (e) {
+      erreur.textContent = e.message;
+      bouton.disabled = false; bouton.textContent = inscription ? "Créer mon compte" : "Se connecter";
+    }
+  };
+  document.getElementById("pseudo").focus();
+}
+
+function pageGererCompte() {
+  const s = EnLigne.connecte() ? EnLigne.session() : null;
+  if (!s) { location.hash = "#/connexion"; return; }
+  app.innerHTML = `
+    <a class="retour" href="#/compte">← Mon profil</a>
+    <h1>Mon compte en ligne</h1>
+    <p>Pseudo : <strong>${echapper(s.pseudo)}</strong></p>
+    <h2>Changer de mot de passe</h2>
+    <form class="formulaire-compte" id="form-mdp">
+      <input type="text" name="username" autocomplete="username" value="${echapper(s.pseudo)}" hidden>
+      <label class="champ-nom"><span>Nouveau mot de passe</span>
+        <input id="nouveau-mdp" type="password" autocomplete="new-password" required minlength="${EnLigne.MDP_MIN}"></label>
+      <div class="hero-actions"><button class="btn" type="submit">Changer le mot de passe</button></div>
+      <p id="msg-mdp" role="status"></p>
+    </form>
+    <h2>Supprimer mon compte en ligne</h2>
+    <p class="petit">Efface votre compte, votre progression en ligne et vos amitiés. Votre progression reste sur cet appareil.</p>
+    <button class="btn btn-second" id="supprimer-compte">Supprimer mon compte en ligne</button>
+    <p id="msg-suppr" class="msg-ko" role="alert"></p>`;
+  document.getElementById("form-mdp").onsubmit = async ev => {
+    ev.preventDefault();
+    const msg = document.getElementById("msg-mdp");
+    try {
+      await EnLigne.changerMotDePasse(document.getElementById("nouveau-mdp").value);
+      msg.className = "msg-ok"; msg.textContent = "Mot de passe changé.";
+      ev.target.reset();
+    } catch (e) { msg.className = "msg-ko"; msg.textContent = e.message; }
+  };
+  document.getElementById("supprimer-compte").onclick = async () => {
+    if (!confirm(`Supprimer le compte en ligne « ${s.pseudo} » ? Votre progression en ligne et vos amitiés seront effacées. C'est définitif.`)) return;
+    try {
+      await EnLigne.supprimerCompte();
+      profilChange();
+      location.hash = "#/compte";
+    } catch (e) { document.getElementById("msg-suppr").textContent = e.message; }
+  };
+}
+
+/** #/amis : ajouter un ami par son pseudo, répondre aux demandes, voir les chiffres de ses amis. */
+function pageAmis() {
+  if (!EnLigne.disponible() || !EnLigne.connecte()) { location.hash = EnLigne.disponible() ? "#/connexion" : "#/compte"; return; }
+  const ici = location.hash;
+  app.innerHTML = `
+    <a class="retour" href="#/compte">← Mon profil</a>
+    <h1>Mes amis</h1>
+    <form class="ajout-ami" id="form-ami" autocomplete="off">
+      <label for="pseudo-ami"><strong>Ajouter un ami avec son pseudo</strong></label>
+      <div class="reponse-epeler">
+        <input id="pseudo-ami" maxlength="20" required placeholder="Son pseudo" autocapitalize="off" spellcheck="false">
+        <button class="btn" type="submit">Envoyer</button>
+      </div>
+      <p id="msg-ami" role="status"></p>
+    </form>
+    <div id="liste-amis"><p class="petit" role="status">Chargement…</p></div>`;
+  const msg = document.getElementById("msg-ami");
+  const charger = async () => {
+    let amis;
+    try { amis = await EnLigne.amis(); }
+    catch (e) { if (location.hash === ici) document.getElementById("liste-amis").innerHTML = `<p class="msg-ko">${echapper(e.message)}</p>`; return; }
+    if (location.hash !== ici) return;
+    document.getElementById("liste-amis").innerHTML = htmlListeAmis(amis);
+    app.querySelectorAll("[data-repondre]").forEach(b => (b.onclick = () => action(() => EnLigne.repondreAmi(b.dataset.id, b.dataset.repondre === "oui"))));
+    app.querySelectorAll("[data-retirer]").forEach(b => (b.onclick = () => {
+      if (b.dataset.confirmer && !confirm(b.dataset.confirmer)) return;
+      action(() => EnLigne.retirerAmi(b.dataset.id));
+    }));
+  };
+  const action = async f => {
+    try { await f(); } catch (e) { msg.className = "msg-ko"; msg.textContent = e.message; }
+    charger();
+  };
+  document.getElementById("form-ami").onsubmit = async ev => {
+    ev.preventDefault();
+    const champ = document.getElementById("pseudo-ami"), pseudo = champ.value.trim();
+    const textes = {
+      envoyee: [true, `Demande envoyée à ${pseudo}.`], acceptee: [true, `Vous êtes maintenant amis avec ${pseudo} !`],
+      deja: [true, `Vous avez déjà envoyé une demande à ${pseudo}.`], inconnu: [false, `Personne n'a le pseudo « ${pseudo} ».`],
+      soi: [false, "C'est votre propre pseudo !"], trop: [false, "Trop de demandes en attente : attendez des réponses."]
+    };
+    try {
+      const r = await EnLigne.demanderAmi(pseudo);
+      const [ok, texte] = textes[r] || [false, "Une erreur est survenue."];
+      msg.className = ok ? "msg-ok" : "msg-ko"; msg.textContent = texte;
+      if (ok) champ.value = "";
+    } catch (e) { msg.className = "msg-ko"; msg.textContent = e.message; }
+    charger();
+  };
+  charger();
+}
+
+function htmlListeAmis(amis) {
+  const recues = amis.filter(a => a.statut === "attente" && a.recue);
+  const envoyees = amis.filter(a => a.statut === "attente" && !a.recue);
+  const acceptes = amis.filter(a => a.statut === "acceptee");
+  const quand = iso => {
+    const jours = Math.floor((Date.now() - new Date(iso)) / 864e5);
+    return jours <= 0 ? "aujourd'hui" : jours === 1 ? "hier" : `il y a ${jours} jours`;
+  };
+  const s = (n, mot) => `${n} ${mot}${n > 1 ? "s" : ""}`;
+  return `
+    ${recues.length ? `<h2>Demandes reçues</h2><div class="liste-profils">${recues.map(a => `
+      <div class="carte-profil carte-demande">${Avatar.svg(a.avatar, 56)}<div><strong>${echapper(a.pseudo)}</strong><span class="petit">veut être votre ami</span></div>
+        <div class="carte-actions"><button class="btn" data-repondre="oui" data-id="${echapper(a.id)}" aria-label="Accepter la demande de ${echapper(a.pseudo)}">Accepter</button>
+        <button class="btn btn-second" data-repondre="non" data-id="${echapper(a.id)}" aria-label="Refuser la demande de ${echapper(a.pseudo)}">Refuser</button></div></div>`).join("")}</div>` : ""}
+    <h2>Amis${acceptes.length ? ` (${acceptes.length})` : ""}</h2>
+    ${acceptes.length ? `<div class="liste-amis">${acceptes.map(a => `
+      <div class="carte-ami">
+        <div class="carte-ami-tete">${Avatar.svg(a.avatar, 56)}<div><strong>${echapper(a.pseudo)}</strong><span class="petit">Actif ${quand(a.maj)}</span></div></div>
+        <dl class="chiffres-ami">
+          <div><dt>Série</dt><dd>${s(a.serie, "jour")}</dd></div>
+          <div><dt>Signes appris</dt><dd>${a.appris}</dd></div>
+          <div><dt>Jours de travail</dt><dd>${a.jours}</dd></div>
+          <div><dt>Meilleure série</dt><dd>${s(a.meilleure_serie, "jour")}</dd></div>
+        </dl>
+        <button class="lien-discret" data-retirer data-id="${echapper(a.id)}" data-confirmer="Retirer ${echapper(a.pseudo)} de vos amis ?">Retirer</button>
+      </div>`).join("")}</div>`
+      : `<p>Pas encore d'amis. Demandez leur pseudo à vos proches et ajoutez-les ci-dessus : ils verront votre demande ici.</p>`}
+    ${envoyees.length ? `<h2>Demandes envoyées</h2><div class="liste-profils">${envoyees.map(a => `
+      <div class="carte-profil">${Avatar.svg(a.avatar, 48)}<div><strong>${echapper(a.pseudo)}</strong><span class="petit">en attente de réponse</span></div>
+        <button class="btn btn-second" data-retirer data-id="${echapper(a.id)}" aria-label="Annuler la demande à ${echapper(a.pseudo)}">Annuler</button></div>`).join("")}</div>` : ""}`;
 }

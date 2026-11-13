@@ -17,7 +17,7 @@
 // ---------------------------------------------------------------------
 const Profils = {
   CLE: "lsf-profils",
-  CLES_PERSO: ["lsf-progression-v2", "lsf-records", "lsf-reglages", "lsf-derniere-sauvegarde"],
+  CLES_PERSO: ["lsf-progression-v2", "lsf-records", "lsf-reglages", "lsf-derniere-sauvegarde", "lsf-session"],
   NOM_MAX: 24,
   MAX: 8,
 
@@ -56,11 +56,13 @@ const Profils = {
     this.sauver(d);
     return profil;
   },
-  modifier(id, { nom, avatar } = {}) {
+  /** compte : { id, pseudo } du compte en ligne rattaché (js/en-ligne.js), ou null pour le détacher. */
+  modifier(id, { nom, avatar, compte } = {}) {
     const d = this.lire(), p = d.liste.find(x => x.id === id);
     if (!p) return null;
     if (nom !== undefined && this.nettoyerNom(nom)) p.nom = this.nettoyerNom(nom);
     if (avatar !== undefined) p.avatar = Avatar.verifier(avatar);
+    if (compte !== undefined) { if (compte) p.compte = { id: String(compte.id), pseudo: String(compte.pseudo) }; else delete p.compte; }
     this.sauver(d);
     return p;
   },
@@ -102,6 +104,11 @@ const Avatar = {
   }
 };
 
+/** Une donnée personnelle a changé : le compte en ligne (s'il y en a un) l'enverra bientôt. */
+function signalerChangement() {
+  if (typeof EnLigne !== "undefined") EnLigne.changement();
+}
+
 const Progression = {
   get CLE() { return Profils.cle("lsf-progression-v2"); },
   INTERVALLES: [0, 1, 3, 7, 14, 30], // jours d'attente selon la boîte (indice = n° de boîte)
@@ -121,6 +128,7 @@ const Progression = {
   vide() { return { cartes: {}, quiz: { bonnes: 0, total: 0 }, jours: [], journal: {} }; },
   sauver(p) {
     try { localStorage.setItem(this.CLE, JSON.stringify(p)); } catch { /* navigation privée */ }
+    signalerChangement();
   },
 
   // Dates en heure locale (« aujourd'hui » pour la personne, pas pour Greenwich)
@@ -232,7 +240,7 @@ const Records = {
       return r && r.meilleurs && r.defis ? { lecons: {}, ...r } : this.vide();
     } catch { return this.vide(); }
   },
-  sauver(r) { try { localStorage.setItem(this.CLE, JSON.stringify(r)); } catch { /* navigation privée */ } },
+  sauver(r) { try { localStorage.setItem(this.CLE, JSON.stringify(r)); } catch { /* navigation privée */ } signalerChangement(); },
   meilleur(nom) { return this.lire().meilleurs[nom] ?? null; },
   /** Enregistre un score ; renvoie true si c'est un nouveau record. */
   noter(nom, valeur) {
