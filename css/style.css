@@ -789,3 +789,78 @@ html.gaucher .vignette-signe video { transform: scaleX(-1); }
 .table-credits { width: 100%; border-collapse: collapse; background: var(--surface); font-size: .9rem; }
 .table-credits th, .table-credits td { text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--bord); }
 .table-credits th { position: sticky; top: 0; background: var(--fond-2); }
+
+/* ---------------------------------------------------------------------
+   Profil : avatar, éditeur du personnage, mes chiffres, calendrier d'activité
+   --------------------------------------------------------------------- */
+.avatar { display: block; border-radius: 50%; flex-shrink: 0; }
+.compteur.profil { padding: 2px; border-radius: 50%; }
+.compteur.profil svg { width: 32px; height: 32px; }
+.compteur.profil.sans { padding: 6px 12px; border-radius: 8px; color: var(--accent-texte); }
+.compteur.profil.sans svg { width: 18px; height: 18px; }
+.compteur.profil:hover { border-color: var(--accent); }
+
+.entete-profil { display: flex; align-items: center; gap: 24px; flex-wrap: wrap; margin-bottom: 8px; }
+.entete-profil h1 { margin: 0 0 4px; }
+.entete-profil .hero-actions .btn { margin-top: 4px; }
+.stat-val small { font-family: inherit; font-size: 1rem; color: var(--doux); margin-left: 2px; }
+.stat .petit { color: var(--tres-doux); margin-top: 4px; }
+
+.editeur-profil { display: grid; grid-template-columns: 200px 1fr; gap: 32px; align-items: start; }
+.apercu-avatar { position: sticky; top: 96px; display: grid; justify-items: center; gap: 4px;
+  background: var(--surface); border-radius: var(--rayon); padding: 20px; box-shadow: var(--ombre); }
+.champ-nom { display: grid; gap: 6px; font-weight: 600; margin-bottom: 22px; }
+.champ-nom input { font: inherit; font-weight: 400; font-size: 1.05rem; padding: 11px 14px; max-width: 360px;
+  border: 2px solid var(--bord); border-radius: 10px; background: var(--surface); color: var(--texte); }
+.champ-nom input:focus { outline: none; border-color: var(--accent); }
+.champ-nom .petit { font-weight: 400; }
+.trait { border: none; padding: 0; margin: 0 0 20px; }
+.trait legend { font-weight: 600; padding: 0; margin-bottom: 8px; }
+.trait-choix { display: flex; flex-wrap: wrap; gap: 8px; }
+.trait-choix label { cursor: pointer; }
+.trait-choix input { position: absolute; opacity: 0; pointer-events: none; }
+.trait-choix span { display: block; border-radius: 50%; padding: 3px; box-shadow: 0 0 0 1px var(--bord); transition: box-shadow .1s; }
+.trait-choix label:hover span { box-shadow: 0 0 0 1px var(--accent); }
+.trait-choix input:checked + span { box-shadow: 0 0 0 3px var(--accent); }
+.trait-choix input:focus-visible + span { outline: 3px solid var(--accent-texte); outline-offset: 3px; }
+.trait-choix i { display: block; width: 30px; height: 30px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(0,0,0,.12); }
+
+.liste-profils { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; margin: 20px 0 8px; }
+.carte-profil { display: flex; align-items: center; gap: 14px; padding: 14px; background: var(--surface);
+  border-radius: var(--rayon); box-shadow: var(--ombre); }
+.carte-profil > div { flex: 1; display: grid; }
+.carte-profil .btn { margin-top: 0; padding: 9px 14px; }
+.carte-profil.actif { box-shadow: 0 0 0 2px var(--accent) inset; }
+
+.calendrier { --case: 18px; --ecart: 4px; background: var(--surface); border-radius: var(--rayon); padding: 18px 20px;
+  box-shadow: var(--ombre); overflow-x: auto; }
+.cal-mois { display: grid; grid-template-columns: repeat(17, var(--case)); gap: var(--ecart); margin-left: 34px;
+  font-size: .72rem; color: var(--doux); height: 1.2em; }
+.cal-mois span { white-space: nowrap; }
+.cal-corps { display: flex; gap: 6px; }
+.cal-jours { display: grid; grid-template-rows: repeat(7, var(--case)); gap: var(--ecart); width: 28px; font-size: .68rem; color: var(--doux); }
+.cal-jours span { line-height: var(--case); }
+.cal-grille { display: grid; grid-template-rows: repeat(7, var(--case)); grid-auto-flow: column; grid-auto-columns: var(--case); gap: var(--ecart); }
+.jour { display: inline-block; width: var(--case); height: var(--case); border-radius: 3px; vertical-align: middle; }
+.jour.n0 { background: var(--bord); }
+.jour.n1 { background: color-mix(in srgb, var(--accent) 28%, var(--surface)); }
+.jour.n2 { background: color-mix(in srgb, var(--accent) 52%, var(--surface)); }
+.jour.n3 { background: color-mix(in srgb, var(--accent) 78%, var(--surface)); }
+.jour.n4 { background: var(--cal-max, var(--accent-fonce)); }
+.jour.futur { background: transparent; }
+.jour.survol { outline: 2px solid var(--texte); outline-offset: 1px; }
+.cal-pied { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px 20px; margin-top: 12px; }
+.cal-pied p { margin: 0; min-height: 1.4em; }
+.cal-legende { display: inline-flex; align-items: center; gap: 3px; white-space: nowrap; }
+.cal-legende .jour { width: 12px; height: 12px; }
+html[data-theme="sombre"] .calendrier { --cal-max: var(--accent-texte); }
+@media (prefers-color-scheme: dark) { html[data-theme="auto"] .calendrier { --cal-max: var(--accent-texte); } }
+
+@media (max-width: 760px) {
+  .editeur-profil { grid-template-columns: 1fr; gap: 20px; }
+  .apercu-avatar { position: static; grid-template-columns: auto auto; align-items: center; justify-content: center; gap: 16px; }
+  .apercu-avatar svg { width: 112px; height: 112px; }
+  .apercu-avatar .btn { margin-top: 0; }
+  .calendrier { --case: 13px; padding: 14px; }
+  .entete-profil { gap: 16px; }
+}

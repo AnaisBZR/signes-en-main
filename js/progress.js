@@ -6,19 +6,119 @@
 //  - mauvaise réponse -> retour en boîte 1, le signe revient tout de suite.
 // Les signes qu'on oublie reviennent donc souvent, ceux qu'on connaît de plus en plus rarement.
 
+// ---------------------------------------------------------------------
+// Profils : plusieurs personnes peuvent apprendre sur le même appareil (famille, classe).
+// Un profil = un prénom (ou pseudo) + un personnage, enregistrés dans ce navigateur
+// seulement : pas de mot de passe, pas d'e-mail, rien n'est envoyé sur Internet.
+// Chaque profil a sa propre progression, ses records et ses réglages :
+//  - le premier profil créé (« principal ») garde les clés d'origine, et donc la
+//    progression déjà faite avant l'arrivée des profils ;
+//  - les suivants utilisent les mêmes clés suivies de « @identifiant ».
+// ---------------------------------------------------------------------
+const Profils = {
+  CLE: "lsf-profils",
+  CLES_PERSO: ["lsf-progression-v2", "lsf-records", "lsf-reglages", "lsf-derniere-sauvegarde"],
+  NOM_MAX: 24,
+  MAX: 8,
+
+  lire() {
+    try {
+      const d = JSON.parse(localStorage.getItem(this.CLE));
+      if (d && Array.isArray(d.liste)) return { actif: d.actif ?? null, liste: d.liste };
+    } catch { /* illisible : aucun profil */ }
+    return { actif: null, liste: [] };
+  },
+  sauver(d) { try { localStorage.setItem(this.CLE, JSON.stringify(d)); } catch { /* navigation privée */ } },
+
+  /** Le profil en cours d'utilisation (ou null s'il n'y en a pas encore). */
+  actif() {
+    const d = this.lire();
+    return d.liste.find(p => p.id === d.actif) || null;
+  },
+  /** Clé de stockage d'une donnée personnelle pour le profil actif. */
+  cle(base) {
+    const p = this.actif();
+    return !p || p.principal ? base : `${base}@${p.id}`;
+  },
+  nettoyerNom(nom) {
+    return String(nom ?? "").replace(/[\u0000-\u001f<>]/g, "").replace(/\s+/g, " ").trim().slice(0, this.NOM_MAX);
+  },
+
+  /** Crée un profil et le rend actif. Renvoie le profil, ou null si le prénom est vide / trop de profils. */
+  creer(nom, avatar) {
+    nom = this.nettoyerNom(nom);
+    const d = this.lire();
+    if (!nom || d.liste.length >= this.MAX) return null;
+    const id = "p" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+    const profil = { id, nom, avatar: Avatar.verifier(avatar), cree: Progression.jour(), principal: !d.liste.some(p => p.principal) };
+    d.liste.push(profil);
+    d.actif = id;
+    this.sauver(d);
+    return profil;
+  },
+  modifier(id, { nom, avatar } = {}) {
+    const d = this.lire(), p = d.liste.find(x => x.id === id);
+    if (!p) return null;
+    if (nom !== undefined && this.nettoyerNom(nom)) p.nom = this.nettoyerNom(nom);
+    if (avatar !== undefined) p.avatar = Avatar.verifier(avatar);
+    this.sauver(d);
+    return p;
+  },
+  choisir(id) {
+    const d = this.lire();
+    if (!d.liste.some(p => p.id === id)) return false;
+    d.actif = id;
+    this.sauver(d);
+    return true;
+  },
+  /** Supprime un profil ET toutes ses données (progression, records, réglages). */
+  supprimer(id) {
+    const d = this.lire(), p = d.liste.find(x => x.id === id);
+    if (!p) return;
+    for (const base of this.CLES_PERSO) {
+      try { localStorage.removeItem(p.principal ? base : `${base}@${p.id}`); } catch { /* navigation privée */ }
+    }
+    d.liste = d.liste.filter(x => x.id !== id);
+    if (d.actif === id) d.actif = d.liste[0]?.id ?? null;
+    this.sauver(d);
+  }
+};
+
+// Personnage de l'avatar : chaque trait est un indice dans les listes de Avatar (js/avatar.js
+// pour le dessin). Ici, seulement la vérification, pour que les tests puissent s'en servir.
+const Avatar = {
+  TRAITS: { peau: 6, coiffure: 10, cheveux: 9, lunettes: 3, barbe: 3, haut: 3, tenue: 8, fond: 8 },
+  DEFAUT: { peau: 1, coiffure: 1, cheveux: 2, lunettes: 0, barbe: 0, haut: 0, tenue: 0, fond: 0 },
+  verifier(a) {
+    const propre = { ...this.DEFAUT };
+    if (a && typeof a === "object") for (const [t, n] of Object.entries(this.TRAITS)) {
+      const v = Math.round(+a[t]);
+      if (v >= 0 && v < n) propre[t] = v;
+    }
+    return propre;
+  },
+  auHasard() {
+    return Object.fromEntries(Object.entries(this.TRAITS).map(([t, n]) => [t, Math.floor(Math.random() * n)]));
+  }
+};
+
 const Progression = {
-  CLE: "lsf-progression-v2",
+  get CLE() { return Profils.cle("lsf-progression-v2"); },
   INTERVALLES: [0, 1, 3, 7, 14, 30], // jours d'attente selon la boîte (indice = n° de boîte)
 
   lire() {
     try {
       const p = JSON.parse(localStorage.getItem(this.CLE));
-      return p && p.cartes ? p : this.vide();
+      if (!p || !p.cartes) return this.vide();
+      p.journal ||= {}; // progressions enregistrées avant le journal
+      return p;
     } catch {
       return this.vide();
     }
   },
-  vide() { return { cartes: {}, quiz: { bonnes: 0, total: 0 }, jours: [] }; },
+  // journal : pour chaque jour, q = questions, j = bonnes réponses, n = nouveaux signes vus,
+  // a = signes appris, x = exercices sans signe précis (épeler, phrases…)
+  vide() { return { cartes: {}, quiz: { bonnes: 0, total: 0 }, jours: [], journal: {} }; },
   sauver(p) {
     try { localStorage.setItem(this.CLE, JSON.stringify(p)); } catch { /* navigation privée */ }
   },
@@ -32,18 +132,22 @@ const Progression = {
   noterActivite(p) {
     const auj = this.jour();
     if (!p.jours.includes(auj)) p.jours.push(auj);
+    p.journal ||= {};
+    return (p.journal[auj] ||= { q: 0, j: 0, n: 0, a: 0, x: 0 });
   },
+  appris(c) { return !!(c && (c.appris || c.boite >= 3)); },
 
   carte(k) { return this.lire().cartes[k] || null; },
-  estAppris(k) { const c = this.carte(k); return !!(c && (c.appris || c.boite >= 3)); },
+  estAppris(k) { return this.appris(this.carte(k)); },
 
   /** Bouton « Marquer comme appris » : le signe entre dans les révisions (premier rappel demain). */
   basculerAppris(k) {
     const p = this.lire();
-    const c = p.cartes[k];
-    if (!c) p.cartes[k] = { boite: 1, prochaine: this.jour(1), appris: true, vues: 0, justes: 0 };
+    const c = p.cartes[k], avant = this.appris(c);
+    const j = this.noterActivite(p);
+    if (!c) { p.cartes[k] = { boite: 1, prochaine: this.jour(1), appris: true, vues: 0, justes: 0 }; j.n++; }
     else c.appris = !c.appris;
-    this.noterActivite(p);
+    if (!avant && this.appris(p.cartes[k])) j.a++;
     this.sauver(p);
     return !!p.cartes[k].appris;
   },
@@ -51,7 +155,10 @@ const Progression = {
   /** Réponse à une question de quiz sur le signe k. */
   repondre(k, juste) {
     const p = this.lire();
+    const jr = this.noterActivite(p);
+    if (!p.cartes[k]) jr.n++;
     const c = p.cartes[k] ||= { boite: 1, prochaine: this.jour(), appris: false, vues: 0, justes: 0 };
+    const avant = this.appris(c);
     c.vues++;
     if (juste) {
       c.justes++;
@@ -63,7 +170,9 @@ const Progression = {
     }
     p.quiz.total++;
     if (juste) p.quiz.bonnes++;
-    this.noterActivite(p);
+    jr.q++;
+    if (juste) jr.j++;
+    if (!avant && this.appris(c)) jr.a++;
     this.sauver(p);
     return c;
   },
@@ -90,8 +199,20 @@ const Progression = {
   /** Activité sans signe précis (épeler, phrases…) : compte quand même pour la série de jours. */
   activite() {
     const p = this.lire();
-    this.noterActivite(p);
+    this.noterActivite(p).x++;
     this.sauver(p);
+  },
+  /** Plus longue suite de jours d'activité consécutifs. */
+  meilleureSerie() {
+    const jours = [...new Set(this.lire().jours)].sort();
+    let meilleure = 0, courante = 0, veille = null;
+    for (const j of jours) {
+      const d = new Date(j + "T12:00:00");
+      courante = veille && Math.round((d - veille) / 864e5) === 1 ? courante + 1 : 1;
+      meilleure = Math.max(meilleure, courante);
+      veille = d;
+    }
+    return meilleure;
   },
   reinitialiser() {
     this.sauver(this.vide());
@@ -102,7 +223,7 @@ const Progression = {
 // Records des exercices (page « S'entraîner ») et défis du jour réussis.
 //  sens « max » : plus c'est haut, mieux c'est ; « min » : plus c'est bas (ex. nombre de coups).
 const Records = {
-  CLE: "lsf-records",
+  get CLE() { return Profils.cle("lsf-records"); },
   SENS: { sprint: "max", paires: "min", ecrire: "max", epeler: "max", comprendre: "max", construire: "max" },
   vide() { return { meilleurs: {}, defis: {}, lecons: {} }; },
   lire() {
@@ -159,7 +280,7 @@ const Records = {
 //  - gaucher : vidéos et photos retournées comme dans un miroir, directions inversées ;
 //  - theme : « clair » (par défaut), « sombre » (gris-vert doux) ou « auto » (comme l'appareil).
 const Reglages = {
-  CLE: "lsf-reglages",
+  get CLE() { return Profils.cle("lsf-reglages"); },
   DEFAUT: { gaucher: false, theme: "clair" },
   THEMES: ["clair", "sombre", "auto"],
   lire() {
@@ -183,12 +304,14 @@ const Sauvegarde = {
   APP: "signes-en-main",
   VERSION: 1,
   PREFIXE_CODE: "SEM1.",
-  CLE_DATE: "lsf-derniere-sauvegarde",
+  get CLE_DATE() { return Profils.cle("lsf-derniere-sauvegarde"); },
   JOUR: /^\d{4}-\d{2}-\d{2}$/,
 
   creer() {
+    const profil = Profils.actif();
     return { app: this.APP, version: this.VERSION, date: new Date().toISOString(),
-      progression: Progression.lire(), reglages: Reglages.lire(), records: Records.lire() };
+      progression: Progression.lire(), reglages: Reglages.lire(), records: Records.lire(),
+      ...(profil ? { profil: { nom: profil.nom, avatar: profil.avatar, cree: profil.cree } } : {}) };
   },
   nomFichier() { return `signes-en-main-sauvegarde-${Progression.jour()}.json`; },
 
@@ -207,9 +330,17 @@ const Sauvegarde = {
     }
     const quiz = { bonnes: Math.max(0, +p.quiz?.bonnes || 0), total: Math.max(0, +p.quiz?.total || 0) };
     const jours = [...new Set((Array.isArray(p.jours) ? p.jours : []).filter(j => this.JOUR.test(j)))].sort();
+    const journal = {};
+    for (const [j, e] of Object.entries(p.journal && typeof p.journal === "object" ? p.journal : {})) {
+      if (!this.JOUR.test(j) || !e || typeof e !== "object") continue;
+      journal[j] = Object.fromEntries(["q", "j", "n", "a", "x"].map(c => [c, Math.max(0, Math.round(+e[c]) || 0)]));
+    }
+    const profil = s.profil && typeof s.profil === "object" && Profils.nettoyerNom(s.profil.nom)
+      ? { nom: Profils.nettoyerNom(s.profil.nom), avatar: Avatar.verifier(s.profil.avatar), cree: this.JOUR.test(s.profil.cree) ? s.profil.cree : null }
+      : null;
     const reglages = { ...Reglages.DEFAUT, ...(s.reglages && typeof s.reglages === "object" ? s.reglages : {}) };
-    return { app: this.APP, version: this.VERSION, date: s.date, progression: { cartes, quiz, jours }, reglages,
-      records: Records.verifier(s.records) };
+    return { app: this.APP, version: this.VERSION, date: s.date, progression: { cartes, quiz, jours, journal }, reglages,
+      records: Records.verifier(s.records), profil };
   },
 
   /**
@@ -225,12 +356,24 @@ const Sauvegarde = {
       cartes[k] = { ...garder, appris: ca.appris || cb.appris };
     }
     const quiz = (b.quiz.total > a.quiz.total ? b : a).quiz;
-    return { cartes, quiz: { ...quiz }, jours: [...new Set([...a.jours, ...b.jours])].sort() };
+    // journal : pour un même jour, on garde le plus grand nombre de chaque compteur
+    const journal = {};
+    for (const src of [a.journal || {}, b.journal || {}]) for (const [j, e] of Object.entries(src)) {
+      const x = journal[j] ||= { q: 0, j: 0, n: 0, a: 0, x: 0 };
+      for (const c of Object.keys(x)) x[c] = Math.max(x[c], e[c] || 0);
+    }
+    return { cartes, quiz: { ...quiz }, jours: [...new Set([...a.jours, ...b.jours])].sort(), journal };
   },
 
   /** mode « fusionner » (garde aussi la progression actuelle) ou « remplacer ». */
   restaurer(sauvegarde, mode = "fusionner") {
     const s = this.verifier(sauvegarde);
+    // le profil enregistré : recréé s'il n'y en a pas encore ici, repris en mode « remplacer »
+    if (s.profil) {
+      const actif = Profils.actif();
+      if (!actif) Profils.creer(s.profil.nom, s.profil.avatar);
+      else if (mode === "remplacer") Profils.modifier(actif.id, { nom: s.profil.nom, avatar: s.profil.avatar });
+    }
     const p = mode === "remplacer" ? s.progression : this.fusionner(Progression.lire(), s.progression);
     Progression.sauver(p);
     Records.sauver(mode === "remplacer" ? s.records : Records.fusionner(Records.lire(), s.records));

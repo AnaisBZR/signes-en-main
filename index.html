@@ -12,13 +12,17 @@
   <meta property="og:locale" content="fr_FR">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%232f6b5e'/%3E%3Ctext x='32' y='45' font-family='Arial,sans-serif' font-size='38' font-weight='700' fill='white' text-anchor='middle'%3ES%3C/text%3E%3C/svg%3E">
   <script>
-    // Apparence choisie (clair / sombre doux / auto), appliquée avant l'affichage pour éviter un éclair blanc
-    try { document.documentElement.dataset.theme = JSON.parse(localStorage.getItem("lsf-reglages") || "{}").theme || "clair"; } catch (e) {}
+    // Apparence choisie (clair / sombre doux / auto), appliquée avant l'affichage pour éviter un éclair blanc.
+    // Les réglages sont ceux du profil en cours (même règle que Profils.cle dans js/progress.js).
+    try {
+      const pr = JSON.parse(localStorage.getItem("lsf-profils") || "{}"), p = (pr.liste || []).find(x => x.id === pr.actif);
+      document.documentElement.dataset.theme = JSON.parse(localStorage.getItem(p && !p.principal ? "lsf-reglages@" + p.id : "lsf-reglages") || "{}").theme || "clair";
+    } catch (e) {}
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=a4b4b02e">
+  <link rel="stylesheet" href="css/style.css?v=565185ac">
 </head>
 <body>
   <a class="lien-evitement" href="#app" onclick="event.preventDefault(); const h = document.querySelector('#app h1') || document.getElementById('app'); h.setAttribute('tabindex', '-1'); h.focus();">Aller au contenu</a>
@@ -47,7 +51,8 @@
 
   <!-- Pas de modules : le site s'ouvre aussi en double-cliquant sur index.html (vidéos lues en ligne) -->
   <script src="js/data.js?v=5a6aa943"></script>
-  <script src="js/progress.js?v=fa27bdea"></script>
+  <script src="js/progress.js?v=6e4139ce"></script>
+  <script src="js/avatar.js?v=371f1e5d"></script>
   <script src="js/dictionnaire.js?v=caa1ed23"></script>
   <script src="js/alphabet.js?v=194b3d35"></script>
   <script src="js/descriptions.js?v=a6c470cd"></script>
@@ -56,8 +61,9 @@
   <script src="js/phrases.js?v=d8cfab4e"></script>
   <script src="js/exercices.js?v=72661479"></script>
   <script src="js/comprendre.js?v=8f681499"></script>
-  <script src="js/credits.js?v=69783db6"></script>
-  <script src="js/app.js?v=dd1c1bce"></script>
+  <script src="js/credits.js?v=af39c59e"></script>
+  <script src="js/compte.js?v=1b937987"></script>
+  <script src="js/app.js?v=00715541"></script>
   <script>
     // Si les fichiers du site n'ont pas pu être chargés (page ouverte en « aperçu » dans un
     // autre logiciel), on explique comment l'ouvrir au lieu d'afficher une page blanche.

@@ -47,9 +47,13 @@ function majCompteurs() {
   if (!zone) return;
   const serie = Progression.serie();
   const appris = TOUS_LES_SIGNES.filter(e => Progression.estAppris(e.k)).length;
+  const profil = Profils.actif();
   zone.innerHTML = `
-    <a class="compteur serie" href="#/progression" title="Jours d'affilée">${icone("flamme")}${serie}<span>j</span></a>
-    <a class="compteur appris" href="#/progression" title="Signes appris">${icone("etoile")}${appris}<span>/${TOUS_LES_SIGNES.length}</span></a>`;
+    <a class="compteur serie" href="#/compte" title="Jours d'affilée">${icone("flamme")}${serie}<span>j</span></a>
+    <a class="compteur appris" href="#/progression" title="Signes appris">${icone("etoile")}${appris}<span>/${TOUS_LES_SIGNES.length}</span></a>
+    ${profil
+      ? `<a class="compteur profil" href="#/compte" title="Mon profil : ${echapper(profil.nom)}">${Avatar.svg(profil.avatar, 30)}<span class="visuellement-cache">Mon profil : ${echapper(profil.nom)}</span></a>`
+      : `<a class="compteur profil sans" href="#/compte/nouveau">${icone("sourire")}Créer mon profil</a>`}`;
 }
 
 /**
@@ -131,7 +135,7 @@ function pageAccueil() {
   app.innerHTML = `
     <section class="hero">
       <div class="hero-texte">
-        <span class="surtitre">Langue des Signes Française</span>
+        <span class="surtitre">${Profils.actif() ? `Bonjour ${echapper(Profils.actif().nom)}` : "Langue des Signes Française"}</span>
         <h1>Apprenez à signer, un geste après l'autre.</h1>
         <p class="hero-sous">De vraies vidéos de personnes qui signent, des leçons par thème, des quiz,
           et des révisions qui reviennent au bon moment pour ne rien oublier.</p>
@@ -918,6 +922,7 @@ function afficherPage(page, p1, p2) {
     case "reviser": return pageReviser();
     case "alphabet": return pageAlphabet(p1);
     case "progression": return pageProgression();
+    case "compte": return pageCompte(p1);
     case "dictionnaire": return pageDictionnaire(p1);
     case "mot": return pageMot(p1);
     case "entrainement": return pageEntrainement(p1, p2);

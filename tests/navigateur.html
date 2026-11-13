@@ -20,7 +20,8 @@
   <iframe id="site" src="../index.html"></iframe>
 
   <script>
-    const CLES = ["lsf-progression-v2", "lsf-reglages", "lsf-derniere-sauvegarde", "lsf-records"]; // mises de côté pendant le test
+    // Données de l'apprenant (profils, progression, records, réglages…), mises de côté pendant le test
+    const CLES = Object.keys(localStorage).filter(c => c.startsWith("lsf-"));
     const journal = document.getElementById("journal");
     const ecrire = t => { journal.textContent += t + "\n"; journal.scrollTop = 1e9; };
     const attendre = ms => new Promise(r => setTimeout(r, ms));
@@ -61,7 +62,7 @@
           "#/dictionnaire/q=bonjour", "#/reviser", "#/progression", "#/quiz/tout",
           "#/entrainement", "#/entrainement/sprint/tout", "#/entrainement/paires/famille", "#/entrainement/ecrire/couleurs",
           "#/entrainement/epeler", "#/entrainement/comprendre", "#/entrainement/construire", "#/entrainement/defi", "#/entrainement/prenom",
-          "#/credits", "#/comprendre", "#/comprendre/vraie-langue", "#/comprendre/visage", "#/comprendre/questions", "#/comprendre/epeler-nom-signe", "#/comprendre/temps", "#/comprendre/negation", "#/comprendre/etre-articles", "#/comprendre/culture-sourde", "#/comprendre/pluriel", "#/comprendre/espace", "#/comprendre/histoire", "#/comprendre/nombres"];
+          "#/credits", "#/compte", "#/compte/nouveau", "#/compte/profils", "#/compte/personnage", "#/comprendre", "#/comprendre/vraie-langue", "#/comprendre/visage", "#/comprendre/questions", "#/comprendre/epeler-nom-signe", "#/comprendre/temps", "#/comprendre/negation", "#/comprendre/etre-articles", "#/comprendre/culture-sourde", "#/comprendre/pluriel", "#/comprendre/espace", "#/comprendre/histoire", "#/comprendre/nombres"];
         for (const p of pages) await verifier(p);
         ecrire(`Pages principales : ${pages.length} vérifiées`);
 
@@ -97,6 +98,7 @@
         RESULTAT.echecs.push({ hash: "(test)", problemes: [e.message] });
         ecrire("✗ Le test lui-même a planté : " + e.message);
       } finally {
+        Object.keys(localStorage).filter(c => c.startsWith("lsf-")).forEach(c => localStorage.removeItem(c)); // ce que le test a créé
         CLES.forEach((c, i) => (sauvegarde[i] === null ? localStorage.removeItem(c) : localStorage.setItem(c, sauvegarde[i])));
         cadre.contentWindow.location.hash = "#/";
         RESULTAT.fini = true;

@@ -103,7 +103,7 @@ function pageCredits() {
           (Rasmus Andersson) pour le texte, licence <a href="https://openfontlicense.org" target="_blank" rel="noopener">SIL Open Font License</a>.</li>
         <li>Descriptions « Comment faire le signe » : produites automatiquement par analyse des vidéos, puis relues
           (celles marquées « ✓ Vérifiée »).</li>
-        <li>Textes, leçons, exercices et icônes : écrits et dessinés pour ce site.</li>
+        <li>Textes, leçons, exercices, icônes et personnages des profils : écrits et dessinés pour ce site.</li>
         <li>Les liens vers Elix et Spread The Sign mènent à leurs propres sites : leurs vidéos ne sont pas copiées ici.</li>
       </ul>
     </section>
